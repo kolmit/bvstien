@@ -119,14 +119,14 @@ public class ServerUDP
 			return "shutdown -a";
 		}
 		else if (receiveUDP.matches("pc off \\d+")){
-	        boolean trouvÃ© = false;
+	        boolean trouvé = false;
 	        int timeBeforeShutdown = 0;
 	        Matcher m = pInt.matcher(receiveUDP);
 	        
-	        while (m.find() && !trouvÃ©){
+	        while (m.find() && !trouvé){
 	        	System.out.println("m group:"+m.group(0));
 	        	timeBeforeShutdown = Integer.parseInt(m.group(0));
-	        	trouvÃ© = true;
+	        	trouvé = true;
 	        }
 	        
 			return "shutdown -s -t "+String.valueOf(timeBeforeShutdown);
