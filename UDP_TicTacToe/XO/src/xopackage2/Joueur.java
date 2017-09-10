@@ -19,57 +19,50 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 
-public class Joueur extends JFrame implements ActionListener{
+
+public class Joueur {
 
 	/** Réseau */ 
 		public final int portServeur = 5555;
 		public final String ipServeur = "127.0.0.1";
 		private DatagramSocket socket_send;
 		private DatagramSocket socket_listen;
-		private InetSocketAddress adrDest;
-		private int portClient;
+		private static InetSocketAddress adrDest;
+		private static int portClient;
+		
+		public static String pathExec = System.getProperty("user.dir");
 
+
+		
+		static Map<Integer, String> mapSymboleJoueur;
+		public boolean cestMonTour;
+		private boolean tour;
+		private boolean tourValide;
+		
 		
 		private DatagramPacket dpR;
 		private byte[] bufR;
 	
 	/** Jeu */
 		private int dimension;
-		public boolean cestMonTour;
-	
-	/** La Fenêtre */
-		private Panneau pan = new Panneau();
-		private JButton[] tabButton;
-	    private JLabel label;
-	    private Joueur j;
-	    
-	    private int nbColonne;
-	    private int nbLigne;
-		private int lastX;
-		private int lastY;
-		
-		private boolean tour;
-		private Map<Integer, String> mapSymboleJoueur;
-		private boolean tourValide;
-	
+		private Fenetre frame;
+
+		private static String[] argz;
+
+
 		
 	/** 
 	 * ******************** MAIN ********************
 	 */
 	public static void main (String args[]) throws IOException, InterruptedException{
-		Joueur j = new Joueur(args);
-		
-		j.init(args[0]);
-		j.execute(j.getPortClient());
+		Joueur j = new Joueur();
+		j.init(args);
+
+		while (true){
+			j.execute(getPortClient());
+		}
 	}
 	
-	/** 
-	 * ******************** CONSTRUCTEUR ********************
-	 */
-	public Joueur (String args[]) throws SocketException{
-		System.out.println(args[0]);
-		this.setPortClient(Integer.parseInt(args[0]));
-	}
 	
 	/** 
 	 * ******************** ENVOYER ********************
@@ -85,28 +78,29 @@ public class Joueur extends JFrame implements ActionListener{
 	}
 		
 
-	
-
-	private void init(String port) throws IOException {
+	private void init(String args[]) throws IOException {
+		this.mapSymboleJoueur = new HashMap<Integer,String>();
 		this.socket_listen = new DatagramSocket(null);
 		this.socket_send = new DatagramSocket();
+		this.setPortClient( Integer.parseInt(args[0]) );
+
 		
 		if (socket_listen.isBound() || socket_send.isBound()){
-			socket_listen.close();
-			socket_send.close();
+			//socket_listen.close();
+			//socket_send.close();
 			this.socket_listen = new DatagramSocket(null);
 			this.socket_send = new DatagramSocket();
 		}
-		
 		this.socket_listen.bind(new InetSocketAddress(this.portClient));
-
-		System.out.println("Demarrage du client ...");
+		
+		
+		System.out.println("Demarrage du client ..." + pathExec);
 		this.adrDest = new InetSocketAddress(ipServeur, portServeur);
 		
 		byte[] bufR = new byte[2048];
 		DatagramPacket dpR = new DatagramPacket(bufR, bufR.length);
 		
-		bufR = new String(port+"Ready").getBytes();
+		bufR = new String(portClient+"Ready").getBytes();
 		dpR = new DatagramPacket(bufR, bufR.length, adrDest);
 		this.socket_send.send(dpR);
 		
@@ -117,13 +111,12 @@ public class Joueur extends JFrame implements ActionListener{
 	private void execute(int port) throws IOException, InterruptedException
 	{
 		// On attend les colonnes/lignes décidées par le serveur
-		String recu = recevoir();
-
-		Fenetre(Integer.parseInt(recu));
+		String nbColLin = recevoir();
+		frame = new Fenetre(nbColLin, getPortClient());
 		
 		// On attend le symbole décidé par le serveur
 		while(true){
-			recu = recevoir();
+			String recu = recevoir();
 			if (recu.matches("fin symbole")){
 				break;
 			}
@@ -134,13 +127,11 @@ public class Joueur extends JFrame implements ActionListener{
 			setSymbole(portRecu, symboleRecu);
 		}
 		
-		
-		setVisible(true);
-
+	
 		do{
-			jattendsMonTour();
-			// La méthode de Fenêtre envoie la case cliquée
-			
+			if ( jattendsMonTour() ){
+				return;
+			}		
 		}while(true);
 	}
 	
@@ -148,12 +139,12 @@ public class Joueur extends JFrame implements ActionListener{
 	private String recevoir() throws IOException{
 		byte[] bufR = new byte[2048];
 		DatagramPacket dpR = new DatagramPacket(bufR, bufR.length);		
-		this.socket_listen.receive(dpR);
+		socket_listen.receive(dpR);
 		return new String(bufR, dpR.getOffset(), dpR.getLength());
 	}
 
 	
-	private void jattendsMonTour() throws IOException {
+	private boolean jattendsMonTour() throws IOException, InterruptedException {
 		System.out.println(getPortClient()+": Je joue quand ?");
 		String recu = recevoir();
 		System.out.println("Recu :"+recu);
@@ -161,165 +152,65 @@ public class Joueur extends JFrame implements ActionListener{
 		setTour(false);
 
 		if (recu.matches("joue")){
-			System.out.println(getPortClient()+": C'est à moi!");
-			setTour(true);
-			
-			return;
+			System.out.println(getPortClient()+": C'est � moi!");
+			frame.setTour(true);
 		}
 		if (recu.matches("\\d:\\d")){
-			marquerActionAutreJoueur(recu,getPortClient());
+			frame.marquerActionAutreJoueur(recu, getPortClient(), mapSymboleJoueur.get(getSymboleAutreClient()));
 			jattendsMonTour();
 		}
 		if (recu.matches("ack")){
-			System.out.println(getPortClient()+": C'est à l'autre");
-			return;
+			System.out.println(getPortClient()+": C'est � l'autre");
 		}
 		if (recu.matches(".*win")){
 			System.out.println("Partie terminée");
 			finishGame();
-			fenetreRejouer();
+			return true;
 		}
-
+		return false;
 	}
 
 	
 	
 	private void finishGame() {
-		for (int i = 0 ; i < tabButton.length ; i++){
-			tabButton[i].setEnabled(false);
-		}
-		JButton yesButton = new JButton();
-    	this.getContentPane().add(yesButton);
+		(new Thread() {
+		    public void run() {
+		    	ReplayFrame r = new ReplayFrame();
+		    	r.setVisible(true);
+		    	r.toFront();
+		    	//r.setLocationRelativeTo();
+			    	/* Bouton OUI */
+			    	r.getButtonYes().addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							try {envoyer(portClient + "Ready", portServeur);} 
+							catch (IOException e1) {e1.printStackTrace();}	
+							r.setChoice(true);
+						}
+					});
+			    	
+		    		/* Bouton NON*/
+		    		r.getButtonNo().addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							try {envoyer(portClient + "NotReplay", portServeur);} 
+							catch (IOException e1) {e1.printStackTrace();}	
+							r.setChoice(true);
+						}
+					});
+				while (!r.getChoice()){
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+				}
+				r.dispose();
+		    }
+		}).start();		
 	}
 
-	public void actionPerformed(ActionEvent arg) {
-		if (!getTour()){return;}
-		ImageIcon image = new ImageIcon("C:\\Users\\utilisateur\\Desktop\\Cours\\eclipse\\Projets\\XO\\src\\xopackage\\"+mapSymboleJoueur.get(portClient));
-		
-		for (int i = 0 ; i < tabButton.length ; i++){
-			if (arg.getSource() == tabButton[i]){
-				tabButton[i].setIcon(
-						new ImageIcon(
-								image.getImage().getScaledInstance(this.getHeight()/this.getNbLigne(), this.getWidth()/this.getNbColonne(), 100)));
-				tabButton[i].setDisabledIcon(new ImageIcon (image.getImage().getScaledInstance(this.getHeight()/this.getNbLigne(), this.getWidth()/this.getNbColonne(), 100)));
-				tabButton[i].setEnabled(false);
-				
-				setLastButton(i);
-			
-			try {envoyer(getLastButton(), portServeur);} 
-			catch (IOException e) {e.printStackTrace();}
-
-			return;
-			}
-		}
-	}
-	
-	
-	/** 
-	 * ****************** Fenetre ********************
-	**/
-	
-	public void Fenetre(int nbColLin){
-		this.mapSymboleJoueur = new HashMap<Integer,String>();
-
-		setNbLigne(nbColLin);
-		setNbColonne(nbColLin);
-	    GridLayout grille = new GridLayout(nbColLin,nbColLin);
-		grille.setHgap(1);
-		grille.setVgap(1);
-	    int tailleGrille = nbColonne*nbLigne;
-	    
-		tabButton = new JButton[tailleGrille];
-	    this.setTitle("XO "+getPortClient());
-	    this.setSize(300, 300);
-	    this.setLocationRelativeTo(null);               
-	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    this.setContentPane(pan);     
-
-	    this.setLayout(grille);
-
-	    for (int i = 0; i < (tailleGrille)  ; i++){
-	    	tabButton[i] = new JButton();
-	    	this.getContentPane().add(tabButton[i]);
-	    	tabButton[i].addActionListener(this);
-	    }
-	
-	    this.setVisible(true);	
-	}
-	
-	
-	public void fenetreRejouer(){
-	    JButton yesButton = new JButton("Go");
-	    JButton noButton = new JButton("Stop");
-	    JOptionPane jop = new JOptionPane();
-	    
-
-
-	    class BoutonListener implements ActionListener{
-	      public void actionPerformed(ActionEvent arg0) {  
-	  	    
-	    	boolean animated = true;
-	        JOptionPane jop = new JOptionPane();    	
-	        
-	        int option = jop.showConfirmDialog(null, 
-	          "Voulez-vous lancer l'animation ?", 
-	          "Lancement de l'animation", 
-	          JOptionPane.YES_NO_OPTION, 
-	          JOptionPane.QUESTION_MESSAGE);
-
-	        if(option == JOptionPane.OK_OPTION){
-	          animated = true;
-	          noButton.setEnabled(false);
-	          noButton.setEnabled(true);    	
-	        }
-	      }    
-	    }
-
-	    class Bouton2Listener  implements ActionListener{
-	      public void actionPerformed(ActionEvent e) {
-	  	    
-	    	boolean animated = true;
-	        JOptionPane jop = new JOptionPane();    	
-	        int option = jop.showConfirmDialog(null, 
-	          "Voulez-vous arrêter l'animation ?",
-	          "Arrêt de l'animation", 
-	          JOptionPane.YES_NO_CANCEL_OPTION, 
-	          JOptionPane.QUESTION_MESSAGE);
-
-	        if(option != JOptionPane.NO_OPTION && 
-	        option != JOptionPane.CANCEL_OPTION && 
-	        option != JOptionPane.CLOSED_OPTION){
-	          animated = false;	
-	          yesButton.setEnabled(true);
-	          yesButton.setEnabled(false);
-	        }
-	      }    
-	    } 
-	}
-	
 
 	
 	
-	public void marquerActionAutreJoueur(String coord, int portClient){
-		int x = Integer.parseInt(coord.substring(0, coord.indexOf(":")));
-		int y = Integer.parseInt(coord.substring(coord.indexOf(":") + 1, coord.length()));
-		int i = (y-1)*getNbColonne() + (x-1);
-		
-		String symboleAutreJoueur = mapSymboleJoueur.get(getSymboleAutreClient());
-		
-		
-		ImageIcon image = new ImageIcon("C:\\Users\\utilisateur\\Desktop\\Cours\\eclipse\\Projets\\XO\\src\\xopackage\\"+symboleAutreJoueur);
-		
-		this.tabButton[i].setIcon(
-				new ImageIcon(
-						new ImageIcon("C:\\Users\\utilisateur\\Desktop\\Cours\\eclipse\\Projets\\XO\\src\\xopackage\\"+symboleAutreJoueur).getImage().getScaledInstance(this.getHeight()/this.getNbLigne(), this.getWidth()/this.getNbColonne(), 100)));
-		
-		tabButton[i].setDisabledIcon(new ImageIcon (image.getImage().getScaledInstance(this.getHeight()/this.getNbLigne(), this.getWidth()/this.getNbColonne(), 100)));
-		tabButton[i].setEnabled(false);
-		
-	}
-	
-
 	private int getSymboleAutreClient() {
 	    
 	    for (Map.Entry<Integer, String> entry : mapSymboleJoueur.entrySet())
@@ -330,33 +221,21 @@ public class Joueur extends JFrame implements ActionListener{
     	}
 		return 0;
 	}
-
-	public int getNbColonne() {return nbColonne;}
-	public int getNbLigne() {return nbLigne;}
-	public void setNbColonne(int nbColonne) {this.nbColonne = nbColonne;}
-	public void setNbLigne(int nbLigne) {this.nbLigne = nbLigne;}
-	
-	public void setTour(boolean b){this.tour = b;}
-	public boolean getTour(){return this.tour;}
-	public void setSymbole(int portClient, String s){ this.mapSymboleJoueur.put(portClient, s);}
-	/* ***********************/
 	
 	
 	
-	public int getPortClient() {return portClient;}
+	public static int getPortClient() {return portClient;}
 	public int getDimension() {return dimension;}
 	public boolean getCestMonTour() {return cestMonTour;}
 	public String getSymbole() { return this.mapSymboleJoueur.get(getPortClient()); }
 	private boolean getValide() { return this.tourValide; }
-	public String getLastButton(){return new String(this.lastX+":"+this.lastY); }
-	
+	public void setTour(boolean b){this.tour = b;}
+	public boolean getTour(){return this.tour;}
+	public void setSymbole(int portClient, String s){ this.mapSymboleJoueur.put(portClient, s);}
 
 	public void setPortClient(int portClient) {this.portClient = portClient;}
 	public void setDimension(int dimension) {this.dimension = dimension;}
 	public void setCestMonTour(boolean b) {cestMonTour = b;}
 	private void setValide(boolean b) { this.tourValide = b; }
-	private void setLastButton(int i) {
-		this.lastX = (i%getNbColonne()+1);
-		this.lastY = (i/getNbColonne())+1;
-	}
+
 }
