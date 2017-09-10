@@ -1,0 +1,6 @@
+#!/bin/bash
+
+rm main
+make all
+./main routes #&& echo $!
+
