@@ -27,6 +27,7 @@ public class ServeurJeu
 	private final String[] symboleJoueur = {"croix.png", "rond.png", "triangle.png"};
 	
 	private int[][] sauvegardePartie;
+	private boolean alreadyPlayed = false;
 
 
 	
@@ -34,33 +35,40 @@ public class ServeurJeu
 	{
 		ServeurJeu serveurUDP = new ServeurJeu();
 		serveurUDP.init();
-		serveurUDP.waitJoueur();
-		serveurUDP.execute();
+
+		while (true){
+			serveurUDP.waitJoueur();
+			serveurUDP.execute();
+		}
 	}
 	
 	public void init() throws SocketException{
-		
 		this.bufR = new byte[2048];
 		this.dpR = new DatagramPacket(this.bufR, this.bufR.length);
 		this.socket_listen = new DatagramSocket(null);
 		this.socket_send = new DatagramSocket();
 		
 		if (this.socket_listen.isBound() || this.socket_send.isBound()){
-			this.socket_listen.close();
-			this.socket_send.close();
+			//this.socket_listen.close();
+			//this.socket_send.close();
 			this.socket_listen = new DatagramSocket(null);
 			this.socket_send = new DatagramSocket();
 		}
+		/*if (!alreadyPlayed){
+			alreadyPlayed = true;
+		}*/
+		
 		this.socket_listen.bind(new InetSocketAddress(5555));
-		
-		
+
 		listePort = new ArrayList<Integer>();
-		sauvegardePartie = new int[Integer.parseInt(nbColLin)][Integer.parseInt(nbColLin)];
 		initSauvegarde();
+		return;
 	}
 	
 	
 	private void initSauvegarde() {
+		sauvegardePartie = new int[Integer.parseInt(nbColLin)][Integer.parseInt(nbColLin)];
+
 	    for(int i=0; i < this.sauvegardePartie.length; i++) {
 	        for(int j=0 ; j < this.sauvegardePartie[i].length; j++) {
 	        	this.sauvegardePartie[i][j] = 0;
@@ -74,27 +82,32 @@ public class ServeurJeu
 		this.bufE = msg.getBytes();
 		this.dpE = new DatagramPacket(bufE, bufE.length, adrDest);
 		this.socket_send.send(this.dpE);
-		System.out.println("Message Ã  "+port+" : "+new String(bufE, dpE.getOffset(), dpE.getLength()));
+		System.out.println("Message à "+port+" : "+new String(bufE, dpE.getOffset(), dpE.getLength()));
 
 		return;
 	}
 		
 
 	private void waitJoueur() throws IOException {
+		CompteurJoueur = 0;
+		listePort.clear();
 		System.out.println("En attente de joueur...\n");
 		
 		// On attend le nombre NBPLAYER de joueurs 
 		while (CompteurJoueur < NBPLAYER){
-			
 			this.socket_listen.receive(this.dpR);
-			String message = new String(bufR, dpR.getOffset(), dpR.getLength());
 
+			String message = new String(bufR, dpR.getOffset(), dpR.getLength());
+			
 			int portClient = Integer.parseInt(message.substring(0,5));	
 			this.listePort.add(portClient);
 			
 			System.out.println("Message: "+message+" de "+dpR.getAddress()+":"+dpR.getPort());
 			if (message.contains("Ready")){
-				System.out.println("Joueur nÂ°"+ ++CompteurJoueur+" prÃªt!");
+				System.out.println("Joueur n°"+ ++CompteurJoueur+" prêt!");
+			}
+			if (message.contains("NotReplay")){
+				System.out.println("Joueur déconnecté");
 			}
 		}
 		
@@ -128,21 +141,22 @@ public class ServeurJeu
 				
 				joueEtAck(p);
 				for (int portAutre : listePort){
-					if (portAutre != p){
+					if (portAutre != p)
 						repercuteActionAutreJoueur(portAutre);
-					}
 				}
-				checkWin(p);
+				if ( checkWin(p) ){
+					System.out.println("Partie terminée!");
+					return;
+				}
 				compteurCoup++;
 			}
-			
 		}
-		System.out.println("Partie terminÃ©e!");
+		return;
 	}
 	
 
 	private void repercuteActionAutreJoueur(int portAutre) throws IOException {
-		System.out.println("Repercute :"+new String(bufR, dpR.getOffset(), dpR.getLength())+" Ã  "+portAutre);
+		System.out.println("Repercute :"+new String(bufR, dpR.getOffset(), dpR.getLength())+" à "+portAutre);
 		envoyer(new String(bufR, dpR.getOffset(), dpR.getLength()), portAutre);
 	}
 	
@@ -150,7 +164,7 @@ public class ServeurJeu
 	private void joueEtAck(int p) throws IOException {
 		envoyer("joue", p);
 		
-		//On reÃ§oit ce que la fenÃªtre a envoyÃ©
+		//On reçoit ce que la fenêtre a envoyé
 		this.socket_listen.receive(this.dpR);
 		String recu = new String(bufR, dpR.getOffset(), dpR.getLength());
 
@@ -162,18 +176,25 @@ public class ServeurJeu
 
 
 
-	private void checkWin(int p) throws IOException {
+	private boolean checkWin(int p) throws IOException {
 
 		if (checkHorizontal() || checkVertical() || checkDiagonal() || checkDiagonal2()){
 			System.out.println("============Y'a un gagnant!=============");
 			for (int port : listePort){
 				envoyer(p+":win", port);
 			}
+			return true;
 		}
+		return false;
 	}
 	
 	
 	private boolean checkHorizontal() {
+		/** On check pour trouver :
+		 * 		
+		 * 	X X X 
+		 *  	
+		 */
 		for (int j = 0 ; j < this.sauvegardePartie.length ; j++){
 			for (int i = 0 ; i < this.sauvegardePartie[j].length ; i++){
 				if (i+2 > Integer.parseInt(nbColLin)-1){
@@ -191,6 +212,11 @@ public class ServeurJeu
 	
 	
 	private boolean checkVertical() {
+		/** On check pour trouver :
+		 * 	X	
+		 * 	X  
+		 *  X	
+		 */
 		for (int i = 0 ; i < this.sauvegardePartie.length ; i++){
 			for (int j = 0 ; j < this.sauvegardePartie[i].length ; j++){
 				System.out.println("save:"+this.sauvegardePartie[i][j]+" i="+i+" et j="+j);
