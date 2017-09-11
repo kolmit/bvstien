@@ -27,7 +27,6 @@ public class ServeurJeu
 	private final String[] symboleJoueur = {"croix.png", "rond.png", "triangle.png"};
 	
 	private int[][] sauvegardePartie;
-	private boolean alreadyPlayed = false;
 
 
 	
@@ -37,11 +36,18 @@ public class ServeurJeu
 		serveurUDP.init();
 
 		while (true){
+			serveurUDP.initGame();
 			serveurUDP.waitJoueur();
 			serveurUDP.execute();
 		}
 	}
 	
+	private void initGame() {
+		initSauvegarde();
+		CompteurJoueur = 0;
+		listePort.clear();
+	}
+
 	public void init() throws SocketException{
 		this.bufR = new byte[2048];
 		this.dpR = new DatagramPacket(this.bufR, this.bufR.length);
@@ -49,19 +55,14 @@ public class ServeurJeu
 		this.socket_send = new DatagramSocket();
 		
 		if (this.socket_listen.isBound() || this.socket_send.isBound()){
-			//this.socket_listen.close();
-			//this.socket_send.close();
 			this.socket_listen = new DatagramSocket(null);
 			this.socket_send = new DatagramSocket();
 		}
-		/*if (!alreadyPlayed){
-			alreadyPlayed = true;
-		}*/
+
 		
 		this.socket_listen.bind(new InetSocketAddress(5555));
 
 		listePort = new ArrayList<Integer>();
-		initSauvegarde();
 		return;
 	}
 	
@@ -88,9 +89,7 @@ public class ServeurJeu
 	}
 		
 
-	private void waitJoueur() throws IOException {
-		CompteurJoueur = 0;
-		listePort.clear();
+	private void waitJoueur() throws IOException, InterruptedException {		
 		System.out.println("En attente de joueur...\n");
 		
 		// On attend le nombre NBPLAYER de joueurs 

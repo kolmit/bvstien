@@ -46,8 +46,9 @@ public class Joueur {
 	/** Jeu */
 		private int dimension;
 		private Fenetre frame;
+		private WaitingPlayer wp;
+		private boolean playAgain;
 
-		private static String[] argz;
 
 
 		
@@ -59,11 +60,25 @@ public class Joueur {
 		j.init(args);
 
 		while (true){
+			j.initGame();
 			j.execute(getPortClient());
 		}
 	}
 	
 	
+	private void initGame() throws InterruptedException {
+		wp = new WaitingPlayer();
+
+		if (getPlayAgain()) {
+			frame.setVisible(false);
+			frame.dispose();
+			wp.setVisible(true);
+			wp.setLocationRelativeTo(frame);
+		}
+		setPlayAgain(false);
+	}
+
+
 	/** 
 	 * ******************** ENVOYER ********************
 	 */
@@ -112,6 +127,7 @@ public class Joueur {
 	{
 		// On attend les colonnes/lignes d√©cid√©es par le serveur
 		String nbColLin = recevoir();
+		wp.setVisible(false);
 		frame = new Fenetre(nbColLin, getPortClient());
 		
 		// On attend le symbole d√©cid√© par le serveur
@@ -129,11 +145,18 @@ public class Joueur {
 		
 	
 		do{
-			if ( jattendsMonTour() ){
+			/* Quand on est arrivÈ ‡ la fin d'une partie, on regarde si le joueur veut rejouer. 
+			 * Si oui, on return pour repartir dans execute */
+			if ( getPlayAgain() ){
+				System.out.println("Je disparaiiiiiiiiiiis !");
 				return;
-			}		
+			}
+			else {
+				jattendsMonTour();
+			}
 		}while(true);
 	}
+	
 	
 	
 	private String recevoir() throws IOException{
@@ -144,7 +167,7 @@ public class Joueur {
 	}
 
 	
-	private boolean jattendsMonTour() throws IOException, InterruptedException {
+	private void jattendsMonTour() throws IOException, InterruptedException {
 		System.out.println(getPortClient()+": Je joue quand ?");
 		String recu = recevoir();
 		System.out.println("Recu :"+recu);
@@ -154,6 +177,10 @@ public class Joueur {
 		if (recu.matches("joue")){
 			System.out.println(getPortClient()+": C'est ‡† moi!");
 			frame.setTour(true);
+			
+			while ( frame.getTour() ) { Thread.sleep(50); }
+			try {envoyer(frame.getLastButton(), portServeur);} 
+			catch (IOException e) {e.printStackTrace();}
 		}
 		if (recu.matches("\\d:\\d")){
 			frame.marquerActionAutreJoueur(recu, getPortClient(), mapSymboleJoueur.get(getSymboleAutreClient()));
@@ -163,29 +190,36 @@ public class Joueur {
 			System.out.println(getPortClient()+": C'est ‡† l'autre");
 		}
 		if (recu.matches(".*win")){
-			System.out.println("Partie termin√©e");
+			System.out.println("Partie terminÈe");
 			finishGame();
-			return true;
+			System.out.println("out of finish");
+			return;
 		}
-		return false;
 	}
 
 	
 	
-	private void finishGame() {
-		(new Thread() {
+	private void finishGame() throws InterruptedException {
+    	boolean replay = false;
+
+		Thread t = new Thread() {
 		    public void run() {
 		    	ReplayFrame r = new ReplayFrame();
 		    	r.setVisible(true);
 		    	r.toFront();
-		    	//r.setLocationRelativeTo();
+		    	r.setLocationRelativeTo(frame);
+		    	r.setChoice(false);
+		    	
 			    	/* Bouton OUI */
 			    	r.getButtonYes().addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							try {envoyer(portClient + "Ready", portServeur);} 
 							catch (IOException e1) {e1.printStackTrace();}	
 							r.setChoice(true);
+							setPlayAgain(true);
 						}
+
+						
 					});
 			    	
 		    		/* Bouton NON*/
@@ -194,22 +228,30 @@ public class Joueur {
 							try {envoyer(portClient + "NotReplay", portServeur);} 
 							catch (IOException e1) {e1.printStackTrace();}	
 							r.setChoice(true);
+							setPlayAgain(false);
+							
 						}
 					});
+		    		
+
 				while (!r.getChoice()){
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
+					try { Thread.sleep(5); } 
+					catch (InterruptedException e1) { e1.printStackTrace(); }
 				}
 				r.dispose();
 		    }
-		}).start();		
+		};
+		t.start();
+		t.join();
+		if (!getPlayAgain()) { 
+			frame.setVisible(false);
+			frame.dispose();
+		}
 	}
 
+	private void setPlayAgain(boolean b) {playAgain = b;}
+	public boolean getPlayAgain() {return playAgain;}
 
-	
 	
 	private int getSymboleAutreClient() {
 	    

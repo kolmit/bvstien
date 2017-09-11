@@ -79,12 +79,11 @@ public class Fenetre extends JFrame {
 	    					tabButton[i].setEnabled(false);
 	    					
 	    					setLastButton(i);
-	    				
-	    				/*
-	    				try {envoyer(getLastButton(), portServeur);} 
-	    				catch (IOException e) {e.printStackTrace();}
-	    				*/
-	    				return;
+	    					setTour(false);
+		    				
+		    				
+		    				
+		    				return;
 	    				}
 	    			}
 	    		}				
@@ -99,7 +98,7 @@ public class Fenetre extends JFrame {
 	 * ****************** Fenetre ********************
 	**/
 	
-
+	
 	
 	
 	public void marquerActionAutreJoueur(String coord, int portClient, String symboleAutreJoueur){
