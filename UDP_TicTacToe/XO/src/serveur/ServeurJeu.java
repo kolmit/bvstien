@@ -6,6 +6,11 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.swing.JTable;
 
 
 public class ServeurJeu
@@ -17,8 +22,12 @@ public class ServeurJeu
 	private DatagramSocket socket_send;
 	private DatagramPacket dpE;
 	private byte[] bufE;
-		
+	
+	/*
+	private ArrayList<String> listeIP;
 	private ArrayList<Integer> listePort;
+	*/
+	private  HashMap<Integer, String> adressePort;
 	private InetSocketAddress adrDest;
 	
 	private final short NBPLAYER = 2;
@@ -45,7 +54,7 @@ public class ServeurJeu
 	private void initGame() {
 		initSauvegarde();
 		CompteurJoueur = 0;
-		listePort.clear();
+		adressePort.clear();
 	}
 
 	public void init() throws SocketException{
@@ -61,8 +70,8 @@ public class ServeurJeu
 
 		
 		this.socket_listen.bind(new InetSocketAddress(5555));
-
-		listePort = new ArrayList<Integer>();
+		
+		adressePort = new HashMap<Integer,String>();
 		return;
 	}
 	
@@ -78,12 +87,12 @@ public class ServeurJeu
 	}
 	
 
-	public void envoyer(String msg, int port) throws IOException{
-		this.adrDest = new InetSocketAddress("127.0.0.1", port);
+	public void envoyer(String msg, String adresse, int port) throws IOException{
+		this.adrDest = new InetSocketAddress(adresse, port);
 		this.bufE = msg.getBytes();
 		this.dpE = new DatagramPacket(bufE, bufE.length, adrDest);
 		this.socket_send.send(this.dpE);
-		System.out.println("Message à "+port+" : "+new String(bufE, dpE.getOffset(), dpE.getLength()));
+		System.out.println("Message à :"+adresse+":"+port+" : "+new String(bufE, dpE.getOffset(), dpE.getLength()));
 
 		return;
 	}
@@ -97,9 +106,13 @@ public class ServeurJeu
 			this.socket_listen.receive(this.dpR);
 
 			String message = new String(bufR, dpR.getOffset(), dpR.getLength());
-			
-			int portClient = Integer.parseInt(message.substring(0,5));	
-			this.listePort.add(portClient);
+			String adresse = dpR.getAddress().toString().substring(1);
+			int portClient = Integer.parseInt(message.substring(0,5));
+
+			System.out.println("ADD : "+adresse+ " PORT : "+portClient);
+			adressePort.put(portClient, adresse);
+			System.out.println("size:"+adressePort.size());
+
 			
 			System.out.println("Message: "+message+" de "+dpR.getAddress()+":"+dpR.getPort());
 			if (message.contains("Ready")){
@@ -113,18 +126,20 @@ public class ServeurJeu
 		
 		// On envoit le nombre de col/lignes aux clients
 		// Et leurs symboles !
-		for (int p : listePort){
+		for(Entry<Integer, String> entry : adressePort.entrySet()){
+			System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());
+			System.out.println("size:"+adressePort.size());
 			int symboleNum = CompteurJoueur;
-			envoyer(nbColLin, p);
+			envoyer(nbColLin, entry.getValue(), entry.getKey());
 			
 			int numberIteration = 0;
 			for (String numSymbole : symboleJoueur){
 				if (numberIteration == NBPLAYER) break;
 				
-				envoyer(numSymbole +":" +listePort.get(numberIteration), p);
+				envoyer(numSymbole +":" +entry.getValue()+ ":"+(entry.getKey()+numberIteration), entry.getValue(), entry.getKey());
 				numberIteration++;
 			}
-			envoyer("fin symbole", p);
+			envoyer("fin symbole", entry.getValue(), entry.getKey());
 		}
 				
 		return;
@@ -136,14 +151,15 @@ public class ServeurJeu
 		int compteurCoup = 0;
 		
 		while (compteurCoup < Integer.parseInt(nbColLin)*Integer.parseInt(nbColLin)){
-			for (int p : listePort){
+			for (Entry<Integer, String> entry : adressePort.entrySet()){
 				
-				joueEtAck(p);
-				for (int portAutre : listePort){
-					if (portAutre != p)
-						repercuteActionAutreJoueur(portAutre);
+				joueEtAck( entry.getValue(), entry.getKey() );
+				for (Entry<Integer, String> autreEntry : adressePort.entrySet())
+				{
+					if ( autreEntry.getValue() != entry.getValue() )
+						repercuteActionAutreJoueur( autreEntry.getValue(), autreEntry.getKey() );
 				}
-				if ( checkWin(p) ){
+				if ( checkWin(entry.getValue(), entry.getKey()) ){
 					System.out.println("Partie terminée!");
 					return;
 				}
@@ -154,14 +170,14 @@ public class ServeurJeu
 	}
 	
 
-	private void repercuteActionAutreJoueur(int portAutre) throws IOException {
+	private void repercuteActionAutreJoueur(String ipAutre, int portAutre) throws IOException {
 		System.out.println("Repercute :"+new String(bufR, dpR.getOffset(), dpR.getLength())+" à "+portAutre);
-		envoyer(new String(bufR, dpR.getOffset(), dpR.getLength()), portAutre);
+		envoyer(new String(bufR, dpR.getOffset(), dpR.getLength()), ipAutre, portAutre);
 	}
 	
 
-	private void joueEtAck(int p) throws IOException {
-		envoyer("joue", p);
+	private void joueEtAck(String ip, int port) throws IOException {
+		envoyer("joue", ip, port);
 		
 		//On reçoit ce que la fenêtre a envoyé
 		this.socket_listen.receive(this.dpR);
@@ -170,17 +186,17 @@ public class ServeurJeu
 		saveGame(recu);
 		
 		System.out.println("recu serv :"+recu);
-		envoyer("ack", p);		
+		envoyer("ack", ip, port);		
 	}
 
 
 
-	private boolean checkWin(int p) throws IOException {
+	private boolean checkWin(String adresse, int port) throws IOException {
 
 		if (checkHorizontal() || checkVertical() || checkDiagonal() || checkDiagonal2()){
 			System.out.println("============Y'a un gagnant!=============");
-			for (int port : listePort){
-				envoyer(p+":win", port);
+			for ( Entry<Integer, String> entry : adressePort.entrySet() ){
+				envoyer(port+":win", entry.getValue(), entry.getKey());
 			}
 			return true;
 		}

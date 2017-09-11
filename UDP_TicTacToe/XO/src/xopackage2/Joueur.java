@@ -139,7 +139,7 @@ public class Joueur {
 			System.out.println("Symbole ?\t"+recu);
 						
 			String symboleRecu = recu.substring(0, recu.indexOf(":"));
-			int portRecu = Integer.parseInt( recu.substring( recu.indexOf(":")+1 , recu.length() ) );
+			int portRecu = Integer.parseInt( recu.substring( recu.lastIndexOf(":")+1/*recu.indexOf(":")+1*/ , recu.length() ) );
 			setSymbole(portRecu, symboleRecu);
 		}
 		
