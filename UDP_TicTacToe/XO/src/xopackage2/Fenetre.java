@@ -1,26 +1,18 @@
 package xopackage2;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Fenetre extends JFrame {
 
 	private JPanel contentPane;
 	private JButton[] tabButton;
-    private JLabel label;
     
     private int nbColonne;
     private int nbLigne;

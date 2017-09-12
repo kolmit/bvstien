@@ -1,47 +1,37 @@
 package xopackage2;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
-import java.net.SocketException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Scanner;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 
 
 public class Joueur {
 
-	/** RÃ©seau */ 
+		/** Réseau */ 
 		private int portServeur = 5555;
 		protected String adresseServeur;
+		
+		private DatagramPacket dpR;
+		private byte[] bufR;
 
 		private DatagramSocket socket_send;
 		private DatagramSocket socket_listen;
-		private static InetSocketAddress adrDest;
-		private static int portClient;
+		private InetSocketAddress adrDest;
+		private int portClient;
 		
 		public static String pathExec = System.getProperty("user.dir");
 
 		
 		static Map<Integer, String> mapSymboleJoueur;
 		public boolean cestMonTour;
-		private boolean tour;
-		private boolean tourValide;
+		private boolean tour;		
 		
-		
-		private DatagramPacket dpR;
-		private byte[] bufR;
+
 	
 	/** Jeu */
 		private int dimension;
@@ -57,15 +47,34 @@ public class Joueur {
 	 */
 	public static void main (String args[]) throws IOException, InterruptedException{
 		Joueur j = new Joueur();
-		j.init(args);
+		j.askServerAdress();
+		j.initNetwork(args);
 
 		while (true){
 			j.initGame();
-			j.execute(getPortClient());
+			j.execute(j.getPortClient());
 		}
 	}
 	
 	
+	private void askServerAdress() throws InterruptedException {
+		RequestServeur rs = new RequestServeur();
+		rs.getbuttonValid().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				portServeur = Integer.parseInt( rs.getTextFieldPort().getText() );
+				adresseServeur = rs.getTextFieldAdresse().getText();
+				rs.setValided(true);
+				rs.setVisible(false);
+				rs.dispose();
+			}
+		});
+		
+		while ( !rs.getValided() ) {
+			Thread.sleep(100);
+		}		
+	}
+
+
 	private void initGame() throws InterruptedException {
 		wp = new WaitingPlayer();
 
@@ -83,7 +92,7 @@ public class Joueur {
 	 * ******************** ENVOYER ********************
 	 */
 	public void envoyer(String msg, int port) throws IOException{
-		this.adrDest = new InetSocketAddress("127.0.0.1", port);
+		this.adrDest = new InetSocketAddress(adresseServeur, port);
 		this.bufR = msg.getBytes();
 		this.dpR = new DatagramPacket(bufR, bufR.length, adrDest);
 		this.socket_send.send(this.dpR);
@@ -93,24 +102,8 @@ public class Joueur {
 	}
 		
 
-	private void init(String args[]) throws IOException, InterruptedException {
-		
-		RequestServeur rs = new RequestServeur();
-		rs.getbuttonValid().addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				portServeur = Integer.parseInt( rs.getTextFieldPort().getText() );
-				adresseServeur = rs.getTextFieldAdresse().getText();
-				rs.setValided(true);
-				rs.setVisible(false);
-				rs.dispose();
-			}
-		});
-		
-		while ( !rs.getValided() ) {
-			Thread.sleep(100);
-		}
-		
-		this.mapSymboleJoueur = new HashMap<Integer,String>();
+	private void initNetwork(String args[]) throws IOException, InterruptedException {
+		Joueur.mapSymboleJoueur = new HashMap<Integer,String>();
 		this.socket_listen = new DatagramSocket(null);
 		this.socket_send = new DatagramSocket();
 		
@@ -215,8 +208,6 @@ public class Joueur {
 	
 	
 	private void finishGame() throws InterruptedException {
-    	boolean replay = false;
-
 		Thread t = new Thread() {
 		    public void run() {
 		    	ReplayFrame r = new ReplayFrame();
@@ -258,6 +249,7 @@ public class Joueur {
 		};
 		t.start();
 		t.join();
+		
 		if (!getPlayAgain()) { 
 			frame.setVisible(false);
 			frame.dispose();
@@ -282,18 +274,15 @@ public class Joueur {
 	
 	
 	
-	public static int getPortClient() {return portClient;}
+	public int getPortClient() {return portClient;}
 	public int getDimension() {return dimension;}
 	public boolean getCestMonTour() {return cestMonTour;}
-	public String getSymbole() { return this.mapSymboleJoueur.get(getPortClient()); }
-	private boolean getValide() { return this.tourValide; }
+	public String getSymbole() { return Joueur.mapSymboleJoueur.get(getPortClient()); }
 	public void setTour(boolean b){this.tour = b;}
 	public boolean getTour(){return this.tour;}
-	public void setSymbole(int portClient, String s){ this.mapSymboleJoueur.put(portClient, s);}
+	public void setSymbole(int portClient, String s){ Joueur.mapSymboleJoueur.put(portClient, s);}
 
 	public void setPortClient(int portClient) {this.portClient = portClient;}
 	public void setDimension(int dimension) {this.dimension = dimension;}
 	public void setCestMonTour(boolean b) {cestMonTour = b;}
-	private void setValide(boolean b) { this.tourValide = b; }
-
 }
