@@ -34,7 +34,6 @@ public class Joueur {
 
 	
 	/** Jeu */
-		private int dimension;
 		private Fenetre frame;
 		private WaitingPlayer wp;
 		private boolean playAgain;
@@ -275,7 +274,6 @@ public class Joueur {
 	
 	
 	public int getPortClient() {return portClient;}
-	public int getDimension() {return dimension;}
 	public boolean getCestMonTour() {return cestMonTour;}
 	public String getSymbole() { return Joueur.mapSymboleJoueur.get(getPortClient()); }
 	public void setTour(boolean b){this.tour = b;}
@@ -283,6 +281,5 @@ public class Joueur {
 	public void setSymbole(int portClient, String s){ Joueur.mapSymboleJoueur.put(portClient, s);}
 
 	public void setPortClient(int portClient) {this.portClient = portClient;}
-	public void setDimension(int dimension) {this.dimension = dimension;}
 	public void setCestMonTour(boolean b) {cestMonTour = b;}
 }
