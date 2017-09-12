@@ -1,4 +1,4 @@
-package xopackage2;
+package player;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class Fenetre extends JFrame {
 
 	private JPanel contentPane;
@@ -84,7 +85,8 @@ public class Fenetre extends JFrame {
 	
 	    this.setVisible(true);	
 	}
-	
+
+
 
 	/** 
 	 * ****************** Fenetre ********************

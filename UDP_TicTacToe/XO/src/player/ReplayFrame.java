@@ -1,4 +1,4 @@
-package xopackage2;
+package player;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;

@@ -1,4 +1,4 @@
-package xopackage2;
+package player;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
