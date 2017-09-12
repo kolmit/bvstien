@@ -23,15 +23,15 @@ import javax.swing.JOptionPane;
 public class Joueur {
 
 	/** Réseau */ 
-		public final int portServeur = 5555;
-		public final String ipServeur = "127.0.0.1";
+		private int portServeur = 5555;
+		protected String adresseServeur;
+
 		private DatagramSocket socket_send;
 		private DatagramSocket socket_listen;
 		private static InetSocketAddress adrDest;
 		private static int portClient;
 		
 		public static String pathExec = System.getProperty("user.dir");
-
 
 		
 		static Map<Integer, String> mapSymboleJoueur;
@@ -93,24 +93,37 @@ public class Joueur {
 	}
 		
 
-	private void init(String args[]) throws IOException {
+	private void init(String args[]) throws IOException, InterruptedException {
+		
+		RequestServeur rs = new RequestServeur();
+		rs.getbuttonValid().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				portServeur = Integer.parseInt( rs.getTextFieldPort().getText() );
+				adresseServeur = rs.getTextFieldAdresse().getText();
+				rs.setValided(true);
+				rs.setVisible(false);
+				rs.dispose();
+			}
+		});
+		
+		while ( !rs.getValided() ) {
+			Thread.sleep(100);
+		}
+		
 		this.mapSymboleJoueur = new HashMap<Integer,String>();
 		this.socket_listen = new DatagramSocket(null);
 		this.socket_send = new DatagramSocket();
-		this.setPortClient( Integer.parseInt(args[0]) );
-
+		
 		
 		if (socket_listen.isBound() || socket_send.isBound()){
-			//socket_listen.close();
-			//socket_send.close();
 			this.socket_listen = new DatagramSocket(null);
 			this.socket_send = new DatagramSocket();
 		}
-		this.socket_listen.bind(new InetSocketAddress(this.portClient));
 		
-		
+		this.socket_listen.bind( new InetSocketAddress(0) );
+		this.setPortClient( this.socket_listen.getLocalPort() );
 		System.out.println("Demarrage du client ..." + pathExec);
-		this.adrDest = new InetSocketAddress(ipServeur, portServeur);
+		this.adrDest = new InetSocketAddress(adresseServeur, portServeur);
 		
 		byte[] bufR = new byte[2048];
 		DatagramPacket dpR = new DatagramPacket(bufR, bufR.length);
@@ -118,6 +131,8 @@ public class Joueur {
 		bufR = new String(portClient+"Ready").getBytes();
 		dpR = new DatagramPacket(bufR, bufR.length, adrDest);
 		this.socket_send.send(dpR);
+		
+
 		
 		return;
 	}

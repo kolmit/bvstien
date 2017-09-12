@@ -33,9 +33,6 @@ public class PrintAdress extends JFrame {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-			
-				
 			}
 		});
 	}
@@ -46,8 +43,9 @@ public class PrintAdress extends JFrame {
 	public PrintAdress() throws InterruptedException {
 		setResizable(false);
 		setBackground(new Color(0, 51, 102));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 360, 108);
+		setTitle("IP : Port");
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(253, 245, 230));
 		contentPane.setBorder(null);
@@ -55,7 +53,7 @@ public class PrintAdress extends JFrame {
 		contentPane.setLayout(null);
 		
 		setLblPrintAdress(new JLabel());//"IP : " + getIP() + "\nPORT : " + getMyPort() );
-		getLblPrintAdress().setFont(new Font("Source Sans Pro", Font.BOLD, 12));
+		getLblPrintAdress().setFont(new Font("Source Sans Pro", Font.BOLD, 15));
 		getLblPrintAdress().setBounds(41, 0, 266, 73);
 		contentPane.add(getLblPrintAdress());
 	}

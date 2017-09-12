@@ -19,23 +19,6 @@ public class ReplayFrame extends JFrame {
 	private JButton buttonYes;
 	private boolean choiceReplay = false;
 
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ReplayFrame frame = new ReplayFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	/**
 	 * Create the frame.
 	 */

@@ -16,25 +16,7 @@ public class WaitingPlayer extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel lblEnAttenteDautres;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					WaitingPlayer frame = new WaitingPlayer();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-			
-				
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the frame.
