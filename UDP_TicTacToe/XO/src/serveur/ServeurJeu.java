@@ -3,18 +3,25 @@ package serveur;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.swing.JLabel;
 import javax.swing.JTable;
+
+import commonframes.PrintAdress;
 
 
 public class ServeurJeu
 {
+	private static final int portServeur = 5555;
 	private DatagramSocket socket_listen;
 	private DatagramPacket dpR;
 	private byte[] bufR;
@@ -57,19 +64,53 @@ public class ServeurJeu
 		adressePort.clear();
 	}
 
-	public void init() throws SocketException{
+	public void init() throws SocketException, InterruptedException{
 		this.bufR = new byte[2048];
 		this.dpR = new DatagramPacket(this.bufR, this.bufR.length);
 		this.socket_listen = new DatagramSocket(null);
 		this.socket_send = new DatagramSocket();
 		
+
+
 		if (this.socket_listen.isBound() || this.socket_send.isBound()){
 			this.socket_listen = new DatagramSocket(null);
 			this.socket_send = new DatagramSocket();
 		}
 
 		
-		this.socket_listen.bind(new InetSocketAddress(5555));
+		this.socket_listen.bind(new InetSocketAddress(portServeur));
+		
+
+
+	    String ip = new String();
+	    PrintAdress printAdressFrame = new PrintAdress();
+
+	    try {
+	        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+	        while (interfaces.hasMoreElements()) {
+	            NetworkInterface iface = interfaces.nextElement();
+	            // filters out 127.0.0.1 and inactive interfaces
+	            if (iface.isLoopback() || !iface.isUp())
+	                continue;
+
+	            Enumeration<InetAddress> addresses = iface.getInetAddresses();
+	            while(addresses.hasMoreElements()) {
+	                InetAddress addr = addresses.nextElement();
+	                ip = addr.getHostAddress();
+	                if (ip.matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b")) {
+	            	    printAdressFrame.setIP(ip);
+	            	    printAdressFrame.setPort(portServeur);
+	                }
+	            }
+	        }
+	    } catch (SocketException e) {
+	      throw new RuntimeException(e);
+	    }
+	    
+	    System.out.println("IP Finale : "+printAdressFrame.getIP() );
+		printAdressFrame.getLblPrintAdress().setText("Adresse Serveur : " + printAdressFrame.getIP() + ":" + printAdressFrame.getMyPort() ) ;
+
+	    printAdressFrame.setVisible(true);
 		
 		adressePort = new HashMap<Integer,String>();
 		return;
