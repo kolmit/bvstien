@@ -133,12 +133,13 @@ public class ServeurJeu
 			envoyer(nbColLin, entry.getValue(), entry.getKey());
 			
 			int numberIteration = 0;
-			for (String numSymbole : symboleJoueur){
+			for(Entry<Integer, String> autreEntry : adressePort.entrySet()){
 				if (numberIteration == NBPLAYER) break;
 				
-				envoyer(numSymbole +":" +entry.getValue()+ ":"+(entry.getKey()+numberIteration), entry.getValue(), entry.getKey());
+				envoyer(symboleJoueur[numberIteration] +":" +entry.getValue()+ ":"+( autreEntry.getKey() ), entry.getValue(), entry.getKey());
 				numberIteration++;
 			}
+				
 			envoyer("fin symbole", entry.getValue(), entry.getKey());
 		}
 				

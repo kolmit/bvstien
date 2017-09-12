@@ -183,7 +183,7 @@ public class Joueur {
 			catch (IOException e) {e.printStackTrace();}
 		}
 		if (recu.matches("\\d:\\d")){
-			frame.marquerActionAutreJoueur(recu, getPortClient(), mapSymboleJoueur.get(getSymboleAutreClient()));
+			frame.marquerActionAutreJoueur(recu, getPortClient(), mapSymboleJoueur.get( getSymboleAutreClient() ));
 			jattendsMonTour();
 		}
 		if (recu.matches("ack")){
@@ -257,6 +257,7 @@ public class Joueur {
 	    
 	    for (Map.Entry<Integer, String> entry : mapSymboleJoueur.entrySet())
 	    {	        	
+	    	System.out.println("entry :"+entry.getKey()+" - "+entry.getValue());
 	    	if (entry.getKey() != getPortClient()){
 	    		return (int) entry.getKey();
 	    	}
