@@ -3,26 +3,26 @@ package player;
 import java.awt.Font;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-public class RequestServeur extends JFrame {
+@SuppressWarnings("serial")
+public class RequestServeur extends JDialog {
 
 	private JPanel contentPane;
 	private JTextField textFieldAdresse;
 	private JTextField textFieldPort;
 	private JButton buttonValid;
-	private boolean valided = false;
 
 
 	/**
 	 * Create the frame.
 	 */
 	public RequestServeur() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 400, 171);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -33,10 +33,13 @@ public class RequestServeur extends JFrame {
 		textFieldAdresse.setBounds(11, 33, 252, 48);
 		contentPane.add(textFieldAdresse);
 		textFieldAdresse.setColumns(10);
+		textFieldAdresse.setText("192.168.1.10");
 		
 		textFieldPort = new JTextField();
 		textFieldPort.setColumns(10);
 		textFieldPort.setBounds(283, 33, 86, 48);
+		textFieldPort.setText("5555");
+
 		contentPane.add(textFieldPort);
 		
 		JLabel lblAdresseIpServeur = new JLabel("Adresse IP Serveur");
@@ -70,7 +73,4 @@ public class RequestServeur extends JFrame {
 	public JTextField getTextFieldPort() {return textFieldPort;}
 	public void setTextFieldPort(JTextField textFieldPort) {this.textFieldPort = textFieldPort;}
 
-	public boolean getValided() {return valided;}
-	public void setValided(boolean b) {valided = b;}
-	
 }

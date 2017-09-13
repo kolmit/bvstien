@@ -62,15 +62,13 @@ public class Joueur {
 			public void actionPerformed(ActionEvent e) {
 				portServeur = Integer.parseInt( rs.getTextFieldPort().getText() );
 				adresseServeur = rs.getTextFieldAdresse().getText();
-				rs.setValided(true);
 				rs.setVisible(false);
-				rs.dispose();
 			}
 		});
 		
-		while ( !rs.getValided() ) {
+		while ( rs.isVisible() ) {
 			Thread.sleep(100);
-		}		
+		}
 	}
 
 

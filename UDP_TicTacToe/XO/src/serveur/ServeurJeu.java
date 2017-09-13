@@ -25,11 +25,7 @@ public class ServeurJeu
 	private DatagramPacket dpE;
 	private byte[] bufE;
 	
-	/*
-	private ArrayList<String> listeIP;
-	private ArrayList<Integer> listePort;
-	*/
-	private  HashMap<Integer, String> mapAdressePortClients;
+	private  HashMap<Integer, String> mapAdressePortClients;	
 	private InetSocketAddress adrDest;
 	
 	private final short NBPLAYER = 2;
