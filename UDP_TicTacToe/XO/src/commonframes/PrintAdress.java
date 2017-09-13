@@ -1,19 +1,12 @@
 package commonframes;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.Color;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.BevelBorder;
-import javax.swing.JLabel;
+import java.awt.EventQueue;
 import java.awt.Font;
 
-
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class PrintAdress extends JFrame {
 	private JPanel contentPane;
