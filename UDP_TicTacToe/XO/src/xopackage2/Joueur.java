@@ -83,7 +83,7 @@ public class Joueur {
 	 * ******************** ENVOYER ********************
 	 */
 	public void envoyer(String msg, int port) throws IOException{
-		this.adrDest = new InetSocketAddress("127.0.0.1", port);
+		this.adrDest = new InetSocketAddress(adresseServeur, port);
 		this.bufR = msg.getBytes();
 		this.dpR = new DatagramPacket(bufR, bufR.length, adrDest);
 		this.socket_send.send(this.dpR);
