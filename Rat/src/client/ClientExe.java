@@ -1,6 +1,7 @@
 package client;
 
 import java.awt.AWTException;
+import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -17,6 +18,7 @@ import javax.imageio.ImageWriter;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.ImageOutputStream;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 import javafx.scene.image.Image;
 
@@ -32,6 +34,8 @@ public class ClientExe {
 	private final String screenshotClient = "tmpScreen." + screenshotFormat;
 	private final String screenshotDirectory = System.getProperty("user.dir") + "\\screenDir\\";
 	private int id = 0;
+	private int frameClientWidth; 
+	private int frameClientHeight;
 
 	
 	
@@ -42,26 +46,27 @@ public class ClientExe {
 	
 	public void testIt() throws InterruptedException, IOException {		
 		getSystemProperties();
-		FullScreenCaptureExample();
-		
 		FrameClientScreen fcs = new FrameClientScreen();
-		fcs.setBounds(new Rectangle(600, 400, (int)screenResolutionWidth/2, (int)screenResolutionHeight/2));
+		fcs.setBounds(2000, 400, frameClientWidth, frameClientHeight);
 		fcs.setVisible(true);
 		
 		while (true) {
 			getMouse();
-			Thread.sleep(50);
-			fcs.getLblImage().setIcon(FullScreenCaptureExample());
-			//System.out.println("Mouse : " + getMousePositionX() + ":" + getMousePositionY());
+			Thread.sleep(250);
+			JLabel screen = new JLabel( FullScreenCaptureExample( fcs.getLayeredPane().getWidth() , fcs.getLayeredPane().getHeight() ) );
+			//fcs.getLayeredPane().setLayer(screen, 0, 0);
+			fcs.add(screen, 1);
+			//fcs.getLayeredPane().setIcon(  );
 		}
-		
-
 	}
 	
 	public void getSystemProperties() {
 		setScreenResolutionHeight( Toolkit.getDefaultToolkit().getScreenSize().getHeight() );
 		setScreenResolutionWidth( Toolkit.getDefaultToolkit().getScreenSize().getWidth() );
-		System.out.println(screenResolutionWidth + " x " +screenResolutionHeight);
+		frameClientHeight = (int) (getScreenResolutionHeight()/2);
+		frameClientWidth = (int) (getScreenResolutionWidth()/2); 
+
+		//System.out.println(frameClientWidth + " x " +frameClientHeight);
 	}
 	
 	
@@ -75,10 +80,12 @@ public class ClientExe {
 	}
 
 	
-	public ImageIcon FullScreenCaptureExample() throws IOException {
+	public ImageIcon FullScreenCaptureExample(int width, int height) throws IOException {
 	       try {
-	            Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());          
-	            return (new ImageIcon(new Robot().createScreenCapture(screenRect)));
+	            Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());        
+	            ImageIcon nativeScreen = new ImageIcon(new Robot().createScreenCapture(screenRect));
+	            java.awt.Image imgResized = nativeScreen.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
+	            return new ImageIcon(imgResized);
 	        }
 	        catch (AWTException ex) {System.err.println(ex);}
 		return null;

@@ -1,17 +1,17 @@
 package client;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
 
 public class FrameClientScreen extends JFrame {
 
 	private JPanel contentPane;
-	private JLabel lblImage;
+	private JLayeredPane layeredPane;
 
 
 
@@ -37,20 +37,29 @@ public class FrameClientScreen extends JFrame {
 		//setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		contentPane.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		lblImage = new JLabel("");
-		contentPane.add(lblImage, BorderLayout.NORTH);
+		layeredPane = new JLayeredPane();
+		contentPane.add(layeredPane);
+		layeredPane.setLayout(new GridLayout(1, 0, 0, 0));
+	}
+
+	public JLayeredPane getLayeredPane() {
+		return layeredPane;
+	}
+
+	public void setLayeredPane(JLayeredPane layeredPane) {
+		this.layeredPane = layeredPane;
 	}
 	
 	
-	public JLabel getLblImage() {
+	/*public JLabel getLblImage() {
 		return lblImage;
 	}
 
 	public void setLblImage(JLabel lblImage) {
 		this.lblImage = lblImage;
-	}
+	}*/
 
 }
