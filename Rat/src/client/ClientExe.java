@@ -1,6 +1,7 @@
 package client;
 
 import java.awt.AWTException;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.Rectangle;
@@ -19,6 +20,7 @@ import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.ImageOutputStream;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import javafx.scene.image.Image;
 
@@ -41,21 +43,30 @@ public class ClientExe {
 	
 	public static void main (String args[]) throws InterruptedException, IOException {
 		ClientExe c = new ClientExe();
+
+	    //FrameClientScreen lp = new FrameClientScreen();
+		/*SimpleLayers lp = new SimpleLayers();
+		JLabel screen = new JLabel( c.FullScreenCaptureExample( 500,500 ));//fcs.getLayeredPane().getWidth() , fcs.getLayeredPane().getHeight()
+		lp.setBackgroundScreen(new JLabel( c.FullScreenCaptureExample(1500,800) ) );//fcs.getLayeredPane().getWidth() , fcs.getLayeredPane().getHeight()
+		lp.setBounds(2000, 400, 900, 540);
+	    */
+	    
 		c.testIt();
 	}
 	
 	public void testIt() throws InterruptedException, IOException {		
 		getSystemProperties();
 		FrameClientScreen fcs = new FrameClientScreen();
-		fcs.setBounds(2000, 400, frameClientWidth, frameClientHeight);
-		fcs.setVisible(true);
+		//fcs.setBounds(2000, 400, frameClientWidth, frameClientHeight);
+		//fcs.setVisible(true);
 		
 		while (true) {
 			getMouse();
 			Thread.sleep(250);
-			JLabel screen = new JLabel( FullScreenCaptureExample( fcs.getLayeredPane().getWidth() , fcs.getLayeredPane().getHeight() ) );
-			//fcs.getLayeredPane().setLayer(screen, 0, 0);
-			fcs.add(screen, 1);
+			JLabel screen = new JLabel( FullScreenCaptureExample( 500,500/*fcs.getLayeredPane().getWidth() , fcs.getLayeredPane().getHeight()*/ ) );
+			
+			fcs.getSubLayer().add(screen, BorderLayout.SOUTH);
+			fcs.getMainLayer().add(screen, 2);
 			//fcs.getLayeredPane().setIcon(  );
 		}
 	}
