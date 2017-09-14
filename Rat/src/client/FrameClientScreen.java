@@ -1,118 +1,145 @@
 package client;
 
-import java.awt.AWTException;
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.io.IOException;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import java.awt.Button;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.JButton;
+import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.BoxLayout;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.FormSpecs;
+import javax.swing.Box;
 
+@SuppressWarnings("serial")
 public class FrameClientScreen extends JFrame {
 
-	private JPanel contentPane;
-	private JLayeredPane layeredPane;
-	private JLabel backgroundScreen;
-	private JLayeredPane mainLayer;
-	private JPanel subLayer;
+	private JLayeredPane contentPane;
+	private JLabel lblImage;
+
+	private JButton btnFullscreen;
+	private JButton btnEcran;
+	private JButton btnWebcam;
 
 
-	public JLayeredPane getMainLayer() {
-		return mainLayer;
+
+
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					FrameClientScreen frame = new FrameClientScreen();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
-
-
-	public void setMainLayer(JLayeredPane mainLayer) {
-		this.mainLayer = mainLayer;
-	}
-
-
-	public JPanel getSubLayer() {
-		return subLayer;
-	}
-
-
-	public void setSubLayer(JPanel subLayer) {
-		this.subLayer = subLayer;
-	}
-
 
 	/**
 	 * Create the frame.
 	 */
-    public FrameClientScreen() throws IOException {
-        JFrame frame = new JFrame("FrameDemoaze");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public FrameClientScreen() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        mainLayer = new JLayeredPane();
-        frame.add(mainLayer, BorderLayout.CENTER);
-
-        JLabel label = new JLabel("LABEL", JLabel.CENTER);
-        label.setBounds(100, 100, 200, 100);
-        label.setOpaque(true);
-        label.setBackground(Color.cyan);
-        mainLayer.add(label, 1);
-
-        subLayer = new JPanel(new BorderLayout());
+		contentPane = new JLayeredPane();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 		
-        backgroundScreen = new JLabel(FullScreenCaptureExample(960, 540) );//lp.getLayeredPane().getWidth() , lp.getLayeredPane().getHeight() ) );
-		backgroundScreen.setBounds(5, 5, 800, 600);
-		backgroundScreen.setOpaque(true);
-		backgroundScreen.setBackground(Color.green);
-        subLayer.add(backgroundScreen, BorderLayout.SOUTH);
-        mainLayer.add(backgroundScreen, 2);
-
-        frame.pack();
-        frame.setSize(980, 540);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        
-    }
-
-	
-    public JLabel getBackgroundScreen() {
-		return backgroundScreen;
-	}
-
-
-	public void setBackgroundScreen(JLabel backgroundScreen) {
-		this.backgroundScreen = backgroundScreen;
+		Box verticalBox = Box.createVerticalBox();
+		contentPane.add(verticalBox);
+		
+		Box horizontalBox = Box.createHorizontalBox();
+		verticalBox.add(horizontalBox);
+		
+		btnEcran = new JButton("Ecran");
+		horizontalBox.add(btnEcran);
+		
+		btnFullscreen = new JButton("FullScreen");
+		horizontalBox.add(btnFullscreen);
+		
+		btnWebcam = new JButton("New button");
+		horizontalBox.add(btnWebcam);
+		
+		Box horizontalBox_1 = Box.createHorizontalBox();
+		verticalBox.add(horizontalBox_1);
+		
+		lblImage = new JLabel("New label");
+		horizontalBox_1.add(lblImage);
 	}
 	
-	public JLayeredPane getLayeredPane() {
-		return layeredPane;
-	}
-
-	public void setLayeredPane(JLayeredPane layeredPane) {
-		this.layeredPane = layeredPane;
-	}
 	
-	public ImageIcon FullScreenCaptureExample(int width, int height) throws IOException {
-	       try {
-	            Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());        
-	            ImageIcon nativeScreen = new ImageIcon(new Robot().createScreenCapture(screenRect));
-	            java.awt.Image imgResized = nativeScreen.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
-	            return new ImageIcon(imgResized);
-	        }
-	        catch (AWTException ex) {System.err.println(ex);}
-		return null;
-	}
-	
-	/*public JLabel getLblImage() {
+	public JLabel getLblImage() {
 		return lblImage;
 	}
 
 	public void setLblImage(JLabel lblImage) {
 		this.lblImage = lblImage;
-	}*/
+	}
+
+	public JButton getBtnFullscreen() {
+		return btnFullscreen;
+	}
+
+	public void setBtnFullscreen(JButton btnFullscreen) {
+		this.btnFullscreen = btnFullscreen;
+	}
+
+	public JButton getBtnEcran() {
+		return btnEcran;
+	}
+
+	public void setBtnEcran(JButton btnEcran) {
+		this.btnEcran = btnEcran;
+	}
+
+	public JButton getBtnWebcam() {
+		return btnWebcam;
+	}
+
+	public void setBtnWebcam(JButton btnWebcam) {
+		this.btnWebcam = btnWebcam;
+	}
 
 }
+
+
+
+	
+    /*
+     * OUT OF MEMORY
+     * 
+     * private void getScreen() throws IOException, InterruptedException {
+    	new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					try {
+						Thread.sleep(200);
+						backgroundScreen = new JLabel(FullScreenCaptureExample(960, 540) );
+					} 
+					catch (IOException | InterruptedException e) { e.printStackTrace(); }
+					backgroundScreen.setBounds(5, 5, 800, 600);
+					backgroundScreen.setOpaque(true);
+					backgroundScreen.setBackground(Color.green);
+			        subLayer.add(backgroundScreen, BorderLayout.SOUTH);
+			        mainLayer.add(backgroundScreen, 2);		
+		    	}				
+			}
+		}).start();
+    	
+	}*/
+

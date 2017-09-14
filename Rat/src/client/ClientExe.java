@@ -1,33 +1,22 @@
 package client;
 
 import java.awt.AWTException;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.Locale;
 
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
-import javax.imageio.stream.ImageOutputStream;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import javafx.scene.image.Image;
 
 public class ClientExe {
 	private int screenResolution;	
-	private double screenResolutionHeight;
-	private double screenResolutionWidth;
+	private int screenResolutionHeight;
+	private int screenResolutionWidth;
 	
 	private double mousePositionX;
 	private double mousePositionY;
@@ -38,46 +27,49 @@ public class ClientExe {
 	private int id = 0;
 	private int frameClientWidth; 
 	private int frameClientHeight;
+	
+	private boolean fullscreenSelected = false;
 
 	
 	
 	public static void main (String args[]) throws InterruptedException, IOException {
 		ClientExe c = new ClientExe();
-
-	    //FrameClientScreen lp = new FrameClientScreen();
-		/*SimpleLayers lp = new SimpleLayers();
-		JLabel screen = new JLabel( c.FullScreenCaptureExample( 500,500 ));//fcs.getLayeredPane().getWidth() , fcs.getLayeredPane().getHeight()
-		lp.setBackgroundScreen(new JLabel( c.FullScreenCaptureExample(1500,800) ) );//fcs.getLayeredPane().getWidth() , fcs.getLayeredPane().getHeight()
-		lp.setBounds(2000, 400, 900, 540);
-	    */
-	    
 		c.testIt();
 	}
 	
 	public void testIt() throws InterruptedException, IOException {		
 		getSystemProperties();
 		FrameClientScreen fcs = new FrameClientScreen();
-		//fcs.setBounds(2000, 400, frameClientWidth, frameClientHeight);
-		//fcs.setVisible(true);
+		System.out.println(frameClientWidth + " x " +frameClientHeight);
+		fcs.getBtnFullscreen().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fullscreenSelected = true;			
+			}
+		});
+		fcs.setBounds(2000, 400, frameClientWidth, frameClientHeight);
+		fcs.setVisible(true);
 		
 		while (true) {
 			getMouse();
 			Thread.sleep(250);
-			JLabel screen = new JLabel( FullScreenCaptureExample( 500,500/*fcs.getLayeredPane().getWidth() , fcs.getLayeredPane().getHeight()*/ ) );
-			
-			fcs.getSubLayer().add(screen, BorderLayout.SOUTH);
-			fcs.getMainLayer().add(screen, 2);
-			//fcs.getLayeredPane().setIcon(  );
+			if (fullscreenSelected) {
+				fcs.getLblImage().setIcon(FullScreenCaptureBig(screenResolutionHeight, screenResolutionWidth));
+			}
+			else {
+				fcs.getLblImage().setIcon(FullScreenCaptureResized( frameClientWidth , frameClientHeight ));
+			}
 		}
 	}
 	
 	public void getSystemProperties() {
-		setScreenResolutionHeight( Toolkit.getDefaultToolkit().getScreenSize().getHeight() );
-		setScreenResolutionWidth( Toolkit.getDefaultToolkit().getScreenSize().getWidth() );
+		setScreenResolutionHeight( (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() );
+		setScreenResolutionWidth( (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() );
 		frameClientHeight = (int) (getScreenResolutionHeight()/2);
 		frameClientWidth = (int) (getScreenResolutionWidth()/2); 
 
-		//System.out.println(frameClientWidth + " x " +frameClientHeight);
+		System.out.println(frameClientWidth + " x " +frameClientHeight);
 	}
 	
 	
@@ -91,10 +83,21 @@ public class ClientExe {
 	}
 
 	
-	public ImageIcon FullScreenCaptureExample(int width, int height) throws IOException {
+	public ImageIcon FullScreenCaptureResized(int width, int height) throws IOException {
 	       try {
-	            Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());        
-	            ImageIcon nativeScreen = new ImageIcon(new Robot().createScreenCapture(screenRect));
+	            Rectangle screenRec = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());        
+	            ImageIcon nativeScreen = new ImageIcon(new Robot().createScreenCapture(screenRec));
+	            java.awt.Image imgResized = nativeScreen.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
+	            return new ImageIcon(imgResized);
+	        }
+	        catch (AWTException ex) {System.err.println(ex);}
+		return null;
+	}
+	
+	public ImageIcon FullScreenCaptureBig(int width, int height) throws IOException {
+	       try {
+	            Rectangle screenRec = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());        
+	            ImageIcon nativeScreen = new ImageIcon(new Robot().createScreenCapture(screenRec));
 	            java.awt.Image imgResized = nativeScreen.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
 	            return new ImageIcon(imgResized);
 	        }
@@ -114,7 +117,7 @@ public class ClientExe {
 		return screenResolutionHeight;
 	}
 
-	public void setScreenResolutionHeight(double screenResolutionHeight) {
+	public void setScreenResolutionHeight(int screenResolutionHeight) {
 		this.screenResolutionHeight = screenResolutionHeight;
 	}
 
@@ -122,7 +125,7 @@ public class ClientExe {
 		return screenResolutionWidth;
 	}
 
-	public void setScreenResolutionWidth(double screenResolutionWidth) {
+	public void setScreenResolutionWidth(int screenResolutionWidth) {
 		this.screenResolutionWidth = screenResolutionWidth;
 	}
 
