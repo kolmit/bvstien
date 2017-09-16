@@ -11,6 +11,8 @@ import java.awt.Button;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.MenuBar;
+
 import javax.swing.JButton;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -22,16 +24,21 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.Box;
 import java.awt.BorderLayout;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
 @SuppressWarnings("serial")
 public class FrameClientScreen extends JFrame {
 
 	private JLayeredPane contentPane;
 	private JLabel lblImage;
-
-	private JButton btnFullscreen;
-	private JButton btnEcran;
-	private JButton btnWebcam;
+	private JMenuBar menuBar;
+	private JLabel labelMouse;
 
 
 
@@ -54,11 +61,12 @@ public class FrameClientScreen extends JFrame {
 	 */
 	public FrameClientScreen() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 
 		contentPane = new JLayeredPane();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 		
 		Box verticalBox = Box.createVerticalBox();
 		contentPane.add(verticalBox);
@@ -66,20 +74,36 @@ public class FrameClientScreen extends JFrame {
 		Box horizontalBox = Box.createHorizontalBox();
 		verticalBox.add(horizontalBox);
 		
-		btnEcran = new JButton("Ecran");
-		horizontalBox.add(btnEcran);
+		menuBar = new JMenuBar();
+		horizontalBox.add(menuBar);
 		
-		btnFullscreen = new JButton("FullScreen");
-		horizontalBox.add(btnFullscreen);
+		JMenu mnNewMenu = new JMenu("Ecran");
+		menuBar.add(mnNewMenu);
 		
-		btnWebcam = new JButton("New button");
-		horizontalBox.add(btnWebcam);
+		JMenuItem mntmEcran = new JMenuItem("Ecran 1");
+		mntmEcran.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Yelala");
+			}
+		});
+		mnNewMenu.add(mntmEcran);
+		
+		JMenu mnWebcam = new JMenu("Webcam");
+		menuBar.add(mnWebcam);
+		
+		JMenuItem mntmWebcam = new JMenuItem("Webcam");
+		mnWebcam.add(mntmWebcam);
 		
 		Box horizontalBox_1 = Box.createHorizontalBox();
 		verticalBox.add(horizontalBox_1);
 		
 		lblImage = new JLabel();
 		horizontalBox_1.add(lblImage);
+		
+		labelMouse = new JLabel(".");
+		horizontalBox_1.add(labelMouse);
+		labelMouse.setForeground(Color.RED);
+		labelMouse.setFont(new Font("Tahoma", Font.BOLD, 15));
 	}
 	
 	
@@ -91,28 +115,16 @@ public class FrameClientScreen extends JFrame {
 		this.lblImage = lblImage;
 	}
 
-	public JButton getBtnFullscreen() {
-		return btnFullscreen;
+	public void setMenuBar(JMenuBar menuBar) {
+		this.menuBar = menuBar;
 	}
 
-	public void setBtnFullscreen(JButton btnFullscreen) {
-		this.btnFullscreen = btnFullscreen;
+	public JLabel getLabelMouse() {
+		return labelMouse;
 	}
 
-	public JButton getBtnEcran() {
-		return btnEcran;
-	}
-
-	public void setBtnEcran(JButton btnEcran) {
-		this.btnEcran = btnEcran;
-	}
-
-	public JButton getBtnWebcam() {
-		return btnWebcam;
-	}
-
-	public void setBtnWebcam(JButton btnWebcam) {
-		this.btnWebcam = btnWebcam;
+	public void setLabelMouse(JLabel labelMouse) {
+		this.labelMouse = labelMouse;
 	}
 
 }

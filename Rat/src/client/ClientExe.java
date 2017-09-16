@@ -5,10 +5,15 @@ import java.awt.MouseInfo;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
+import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class ClientExe {
@@ -16,47 +21,53 @@ public class ClientExe {
 	private int screenResolutionHeight;
 	private int screenResolutionWidth;
 	
-	private double mousePositionX;
-	private double mousePositionY;
-	
-	private final String screenshotFormat = "jpg";
-	private final String screenshotClient = "tmpScreen." + screenshotFormat;
-	private final String screenshotDirectory = System.getProperty("user.dir") + "\\screenDir\\";
+	private final String ressourcesDirectory = System.getProperty("user.dir") + "\\ressources\\";
 
 	private int frameClientWidth; 
 	private int frameClientHeight;
 	
 	private boolean fullscreenSelected = false;
 
+	/* Réseau */
+	private static final int portServeur = 5555;
+	private DatagramSocket socket_listen;
+	private DatagramPacket dpR;
+	private byte[] bufR;
+	
+	private DatagramSocket socket_send;
+	private DatagramPacket dpE;
+	private byte[] bufE;
+	
+	private InetSocketAddress adrDest;
 	
 	
-	public static void main (String args[]) throws InterruptedException, IOException {
+	public static void main (String args[]) throws InterruptedException, IOException, AWTException {
 		ClientExe c = new ClientExe();
 		c.testIt();
 	}
 	
-	public void testIt() throws InterruptedException, IOException {		
+	public void envoyer(String msg, String adresse, int port) throws IOException{
+		this.adrDest = new InetSocketAddress(adresse, port);
+		this.bufE = msg.getBytes();
+		this.dpE = new DatagramPacket(bufE, bufE.length, adrDest);
+		this.socket_send.send(this.dpE);
+		System.out.println("Message à :"+adresse+":"+port+" : "+new String(bufE, dpE.getOffset(), dpE.getLength()));
+
+		return;
+	}
+	
+	
+	public void testIt() throws InterruptedException, IOException, AWTException {		
 		getSystemProperties();
 		FrameClientScreen fcs = new FrameClientScreen();
-		fcs.getBtnFullscreen().addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fullscreenSelected = true;			
-			}
-		});
-		//fcs.setBounds(2000, 200, frameClientWidth, frameClientHeight);
+		
+		fcs.setBounds(2000, 200, frameClientWidth+10, frameClientHeight+90);
 		fcs.setVisible(true);
 		
 		while (true) {
-			getMouse();
 			Thread.sleep(250);
-			if (fullscreenSelected) {
-				fcs.getLblImage().setIcon(FullScreenCaptureBig(screenResolutionHeight, screenResolutionWidth));
-			}
-			else {
-				fcs.getLblImage().setIcon(FullScreenCaptureResized( frameClientWidth , frameClientHeight ));
-			}
+			fcs.getLblImage().setIcon(FullScreenCaptureResized( frameClientWidth , frameClientHeight ));
+			fcs.getLabelMouse().setLocation((int)MouseInfo.getPointerInfo().getLocation().getX(), (int)MouseInfo.getPointerInfo().getLocation().getY());
 		}
 	}
 	
@@ -70,38 +81,25 @@ public class ClientExe {
 		System.out.println(frameClientWidth + " xxx " +frameClientHeight);
 	}
 	
-	
-	public void getMouse() {
-			new Thread(new Runnable() {
-				public void run() {
-						setMousePositionX(MouseInfo.getPointerInfo().getLocation().getX());
-						setMousePositionY(MouseInfo.getPointerInfo().getLocation().getY());
-				}
-			}).start();	
-	}
 
 	
-	public ImageIcon FullScreenCaptureResized(int width, int height) throws IOException {
+	public ImageIcon FullScreenCaptureResized(int width, int height) throws IOException, AWTException {
 	       try {
-	            Rectangle screenRec = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());        
-	            ImageIcon nativeScreen = new ImageIcon(new Robot().createScreenCapture(screenRec));
+	            Rectangle screenRec = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());  
+	            BufferedImage bi = new Robot().createScreenCapture(screenRec);
+	            BufferedImage cursor = ImageIO.read(new File(ressourcesDirectory + "cursor.gif"));
+	            bi.getGraphics().drawImage(cursor, getMousePositionX(), getMousePositionY(), null);
+	            
+	            ImageIcon nativeScreen = new ImageIcon(bi);
 	            java.awt.Image imgResized = nativeScreen.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
+
 	            return new ImageIcon(imgResized);
 	        }
 	        catch (AWTException ex) {System.err.println(ex);}
 		return null;
 	}
 	
-	public ImageIcon FullScreenCaptureBig(int width, int height) throws IOException {
-	       try {
-	            Rectangle screenRec = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());        
-	            ImageIcon nativeScreen = new ImageIcon(new Robot().createScreenCapture(screenRec));
-	            java.awt.Image imgResized = nativeScreen.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
-	            return new ImageIcon(imgResized);
-	        }
-	        catch (AWTException ex) {System.err.println(ex);}
-		return null;
-	}
+
 	
 	
 	public int getScreenResolution() {
@@ -127,21 +125,15 @@ public class ClientExe {
 		this.screenResolutionWidth = screenResolutionWidth;
 	}
 
-	public double getMousePositionX() {
-		return mousePositionX;
+	public int getMousePositionX() {
+		return (int) MouseInfo.getPointerInfo().getLocation().getX();
 	}
 
-	public void setMousePositionX(double mousePositionX) {
-		this.mousePositionX = mousePositionX;
+
+	public int getMousePositionY() {
+		return (int) MouseInfo.getPointerInfo().getLocation().getY();
 	}
 
-	public double getMousePositionY() {
-		return mousePositionY;
-	}
-
-	public void setMousePositionY(double mousePositionY) {
-		this.mousePositionY = mousePositionY;
-	}
 
 	
 }

@@ -75,6 +75,7 @@ public class ServerUDP
 
 	private String[] parseCmd(String mes) throws IOException{
 		String[] msg = mes.split(" ");
+		
 		for (int i = 0 ; i<msg.length ; i++){
 			msg[i].trim();
 		}
@@ -107,10 +108,11 @@ public class ServerUDP
 		/*
 		 * ================= AUTRE PROGRAMME =================
 		 */
-		
 		if (receiveUDP.matches("rat")) {
-			return "java -jar C:\\Users\\utilisateur\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Launcher Perso\\Rat.jar";
+			return "java -jar C:\\Users\\UTILIS~1\\AppData\\Roaming\\MICROS~1\\Windows\\STARTM~1\\Programs\\LauncherJavaPerso\\Rat.jar";
 		}
+		
+		
 		
 		/*
 		 * ================= SHUTDOWN =================
