@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import static java.awt.event.KeyEvent.*;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.DatagramPacket;
@@ -18,6 +19,11 @@ import java.net.SocketException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.Line;
+
 public class ServerUDP
 {
 	private static final String s_EcranOff = "nircmd.exe monitor off";
@@ -25,11 +31,8 @@ public class ServerUDP
 	private DatagramSocket m_sock;
 	private State state;
 	private Robot r;
-	private String lastReceive;
 	
-	/* Getter - Setter */
-	private void setLastReceive(String lastReceive) { this.lastReceive = lastReceive; }
-	private String getLastReceive() { return this.lastReceive; }
+
 	
 	/* Constructeur */
 	public ServerUDP() throws SocketException, AWTException{
@@ -41,9 +44,11 @@ public class ServerUDP
 	
 	
 	public static void main(String[] args) throws Exception
-	{			
-		ServerUDP s = new ServerUDP();
-		s.startServ(s);
+	{		
+		Audio a = new Audio();
+		Audio.setMasterOutputVolume(0.5f);;
+		//ServerUDP s = new ServerUDP();
+		//s.startServ(s);
 	}
 	
 	private void startServ(ServerUDP s) throws IOException, InterruptedException, AWTException{
@@ -66,7 +71,6 @@ public class ServerUDP
 		byte[] bufR = new byte[2048];
 		DatagramPacket dpR = new DatagramPacket(bufR, bufR.length);
 		socket.receive(dpR);
-		setLastReceive(new String(bufR, dpR.getOffset(), dpR.getLength()));
 		return new String(bufR, dpR.getOffset(), dpR.getLength());
 	}
 
@@ -92,19 +96,23 @@ public class ServerUDP
 		ProcessBuilder pb = new ProcessBuilder(message);
 		pb.redirectErrorStream(true);
 		Process process = pb.start();
-		BufferedReader inStreamReader = new BufferedReader(new InputStreamReader(process.getInputStream()) ); 
+		new BufferedReader(new InputStreamReader(process.getInputStream()) ); 
 		
-		/*while(inStreamReader.readLine() != null){
-			System.out.println("Readline : "+inStreamReader.readLine());
-		}*/
 		return;
 	}
 	
 	
 	private String checkAlias(String receiveUDP) throws IOException, InterruptedException {
         Pattern pInt = Pattern.compile("\\d+");
-        Pattern pYoutube = Pattern.compile("(https://m.youtube.com/)*");
 		System.out.println("recu :"+receiveUDP);
+		
+		/*
+		 * ================= AUTRE PROGRAMME =================
+		 */
+		
+		if (receiveUDP.matches("rat")) {
+			return "java -jar C:\\Users\\utilisateur\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Launcher Perso\\Rat.jar";
+		}
 		
 		/*
 		 * ================= SHUTDOWN =================
@@ -151,14 +159,14 @@ public class ServerUDP
 		/*
 		 * ================= ECRAN =================
 		 */
-		else if (receiveUDP.matches("(e|Ã©)cran off") || 
-				receiveUDP.matches("(e|Ã©)teindre (e|Ã©)cran")){
+		else if (receiveUDP.matches("(e|é)cran off") || 
+				receiveUDP.matches("(e|é)teindre (e|é)cran")){
 			
 			state.setEcranOff(true);
 			return s_EcranOff;
 		}
-		else if (receiveUDP.matches("(Ã©|e)cran on") ||
-				receiveUDP.matches("allumer (e|Ã©)cran")){
+		else if (receiveUDP.matches("(é|e)cran on") ||
+				receiveUDP.matches("allumer (e|é)cran")){
 			
 			state.setEcranOff(false);
 			r.keyPress(KeyEvent.VK_WINDOWS);

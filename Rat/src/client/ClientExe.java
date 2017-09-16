@@ -1,8 +1,6 @@
 package client;
 
 import java.awt.AWTException;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -24,7 +22,7 @@ public class ClientExe {
 	private final String screenshotFormat = "jpg";
 	private final String screenshotClient = "tmpScreen." + screenshotFormat;
 	private final String screenshotDirectory = System.getProperty("user.dir") + "\\screenDir\\";
-	private int id = 0;
+
 	private int frameClientWidth; 
 	private int frameClientHeight;
 	
@@ -40,7 +38,6 @@ public class ClientExe {
 	public void testIt() throws InterruptedException, IOException {		
 		getSystemProperties();
 		FrameClientScreen fcs = new FrameClientScreen();
-		System.out.println(frameClientWidth + " x " +frameClientHeight);
 		fcs.getBtnFullscreen().addActionListener(new ActionListener() {
 			
 			@Override
@@ -48,7 +45,7 @@ public class ClientExe {
 				fullscreenSelected = true;			
 			}
 		});
-		fcs.setBounds(2000, 400, frameClientWidth, frameClientHeight);
+		//fcs.setBounds(2000, 200, frameClientWidth, frameClientHeight);
 		fcs.setVisible(true);
 		
 		while (true) {
@@ -66,10 +63,11 @@ public class ClientExe {
 	public void getSystemProperties() {
 		setScreenResolutionHeight( (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() );
 		setScreenResolutionWidth( (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() );
-		frameClientHeight = (int) (getScreenResolutionHeight()/2);
-		frameClientWidth = (int) (getScreenResolutionWidth()/2); 
+		frameClientHeight = (int) ( 2*getScreenResolutionHeight()/3 );
+		frameClientWidth = (int) ( 2*getScreenResolutionWidth()/3 ); 
 
-		System.out.println(frameClientWidth + " x " +frameClientHeight);
+		System.out.println(getScreenResolutionWidth() + " xxx " +getScreenResolutionHeight());
+		System.out.println(frameClientWidth + " xxx " +frameClientHeight);
 	}
 	
 	

@@ -21,6 +21,7 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.Box;
+import java.awt.BorderLayout;
 
 @SuppressWarnings("serial")
 public class FrameClientScreen extends JFrame {
@@ -57,7 +58,7 @@ public class FrameClientScreen extends JFrame {
 		contentPane = new JLayeredPane();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
+		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		Box verticalBox = Box.createVerticalBox();
 		contentPane.add(verticalBox);
@@ -77,7 +78,7 @@ public class FrameClientScreen extends JFrame {
 		Box horizontalBox_1 = Box.createHorizontalBox();
 		verticalBox.add(horizontalBox_1);
 		
-		lblImage = new JLabel("New label");
+		lblImage = new JLabel();
 		horizontalBox_1.add(lblImage);
 	}
 	
