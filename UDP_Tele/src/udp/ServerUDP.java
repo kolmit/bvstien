@@ -45,10 +45,8 @@ public class ServerUDP
 	
 	public static void main(String[] args) throws Exception
 	{		
-		Audio a = new Audio();
-		Audio.setMasterOutputVolume(0.5f);;
-		//ServerUDP s = new ServerUDP();
-		//s.startServ(s);
+		ServerUDP s = new ServerUDP();
+		s.startServ(s);
 	}
 	
 	private void startServ(ServerUDP s) throws IOException, InterruptedException, AWTException{
