@@ -41,7 +41,6 @@ public class HackerExe {
 		HackerExe h = new HackerExe();
 		h.initListen();
 		h.execute();
-		printClientInterface();
 	}
 	
 	
@@ -76,6 +75,7 @@ public class HackerExe {
 					System.out.println("msg = "+msg);
 					
 					if (msg.matches(".*Resolution.*")) {
+						System.out.println("Resolution matched");
 						String[] resolution = msg.split(":");
 		
 						clientResolutionX = Integer.parseInt(msg.substring(msg.indexOf("=")+1, msg.indexOf(":")));
@@ -85,13 +85,15 @@ public class HackerExe {
 					}
 					
 					if (msg.matches(".*Mouse.*")) {
+						System.out.println("Mouse matched");
 						String[] resolution = msg.split(":");
 						
 						clientMousePostionX = Integer.parseInt(msg.substring(msg.indexOf("=")+1, msg.indexOf(":")));
 						clientMousePostionY = Integer.parseInt(msg.substring(msg.indexOf(":")+1, msg.length()));
 					}
 					else {
-						printClientInterface();
+						//System.out.println("Nothing matched");
+						//printClientInterface();
 					}
 				}
 			//}

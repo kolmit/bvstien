@@ -46,19 +46,19 @@ public class ServerUDP
 	public static void main(String[] args) throws Exception
 	{		
 		ServerUDP s = new ServerUDP();
-		s.startServ(s);
+		s.startServ();
 	}
 	
-	private void startServ(ServerUDP s) throws IOException, InterruptedException, AWTException{
+	private void startServ() throws IOException, InterruptedException, AWTException{
 		if (!m_sock.isBound()){
 			m_sock.bind(new InetSocketAddress(54321));
 		}
 		while (true){
 			Thread.sleep(100);
-			s.executeCommand(
-				s.parseCmd(
-					s.checkAlias(
-						s.receiveUDP(m_sock))));	
+			executeCommand(
+						parseCmd(
+								checkAlias(
+										receiveUDP(m_sock) )));	
 		}
 	}
 	
@@ -296,14 +296,20 @@ public class ServerUDP
 		}
 		
 		
-		else if (receiveUDP.matches(".*<<.*")){
-			r.keyPress(VK_LEFT);
-			r.keyRelease(VK_LEFT);
+		else if (receiveUDP.matches(".*<<*.")){
+			int nbDeChevron = receiveUDP.substring(receiveUDP.indexOf('<'),receiveUDP.lastIndexOf('<')).length() + 1;
+			for (int i = 0 ; i < nbDeChevron ; i++) {
+				r.keyPress(VK_LEFT);
+				r.keyRelease(VK_LEFT);
+			}
 		}
 		
 		else if (receiveUDP.matches(".*>>.*")){
-			r.keyPress(VK_RIGHT);
-			r.keyRelease(VK_RIGHT);
+			int nbDeChevron = receiveUDP.substring(receiveUDP.indexOf('>'),receiveUDP.lastIndexOf('>')).length() + 1;
+			for (int i = 0 ; i < nbDeChevron ; i++) {
+				r.keyPress(VK_RIGHT);
+				r.keyRelease(VK_RIGHT);
+			}
 		}
 		
 		
@@ -451,12 +457,12 @@ public class ServerUDP
 	private void selectYoutubeFullscreen() throws IOException, InterruptedException {
 		String taille = receiveUDP(m_sock);
 		AltSpaceN();
-		if (taille.matches(".*youtube.* fs g.*") ||
-			taille.matches(".* fs g.*")){
+		if (taille.matches(".*youtube.*fs g.*") ||
+			taille.matches(".*fs g.*")){
 			fullScreenYoutubeCinema();
 		}
-		else if (taille.matches(".*youtube.* fs p.*") ||
-				taille.matches(".* fs g.*")){
+		else if (taille.matches(".*youtube.*fs p.*") ||
+				taille.matches(".*fs p.*")){
 			fullScreenYoutubeStandard();
 		}
 		state.setFullScreen(true);
@@ -478,7 +484,7 @@ public class ServerUDP
 	
 
 	private void reduceAll() {
-		r.mouseMove(20000, 20000);
+		r.mouseMove(1920, 1080);
 		r.mousePress(InputEvent.BUTTON1_MASK);
 		r.mouseRelease(InputEvent.BUTTON1_MASK);
 		state.setFullScreen(false);
@@ -487,14 +493,14 @@ public class ServerUDP
 
 	private void fullScreenYoutubeStandard() throws IOException, InterruptedException {
 		r.mouseMove(-20000, -20000);
-		r.mouseMove(1140, 650);
+		r.mouseMove(1140, 655);
 		r.mousePress(InputEvent.BUTTON1_MASK);
 		r.mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 	
 	private void fullScreenYoutubeCinema() throws IOException, InterruptedException {
 		r.mouseMove(-20000, -20000);
-		r.mouseMove(1565, 875);
+		r.mouseMove(1868, 885);
 		r.mousePress(InputEvent.BUTTON1_MASK);
 		r.mouseRelease(InputEvent.BUTTON1_MASK);
 	}
