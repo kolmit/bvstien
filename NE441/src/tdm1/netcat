@@ -1,0 +1,5 @@
+Serveur :
+	nc -lup 12345
+	
+Client :
+	nc -u localhost 12345
