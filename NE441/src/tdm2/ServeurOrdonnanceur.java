@@ -21,7 +21,7 @@ public class ServeurOrdonnanceur extends ServeurUDP{
 	
 	private void execute() throws IOException, InterruptedException {
 		listeClient = new ArrayList<>();
-		initSocket(12345);
+		initSocketListen(12345);
 		
 		String msgClient = recevoir();
 		if (msgClient.matches("127.0.0.1:.*")) {
@@ -59,7 +59,6 @@ public class ServeurOrdonnanceur extends ServeurUDP{
 				try {
 					msgClient = recevoir();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				if (msgClient.matches("127.0.0.1:.*")) {

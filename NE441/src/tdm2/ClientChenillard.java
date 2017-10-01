@@ -23,7 +23,7 @@ public class ClientChenillard extends ServeurUDP {
 
 
 	private void execute() throws IOException, InterruptedException {
-		initSocket(0); 		// 0 = Port aléatoire car c'est un client
+		initSocketListen(0); 		// 0 = Port aléatoire car c'est un client
 		helloServeur();
 		
 		while (true) {

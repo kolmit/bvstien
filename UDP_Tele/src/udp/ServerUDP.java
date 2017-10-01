@@ -209,7 +209,7 @@ public class ServerUDP
 		 * ================= UTILS =================
 		 */
 		else if (receiveUDP.matches("alt tab")){
-			 
+			 System.out.println("ALT TAB!");
 			r.keyPress(KeyEvent.VK_ALT);
 			String next = null;
 			do {

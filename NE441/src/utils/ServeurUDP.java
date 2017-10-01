@@ -13,17 +13,22 @@ import java.net.SocketException;
 	public abstract class ServeurUDP
 	{
 		protected DatagramSocket sockListen;
+		protected DatagramSocket sockSend;
 
-		protected void initSocket(int portServeur) throws SocketException {
-			sockListen = new DatagramSocket(null);
-			sockListen.bind(new InetSocketAddress(portServeur));
+		protected void initSocketListen(int portEcoute) throws SocketException {
+			this.sockListen = new DatagramSocket(null);
+			this.sockListen.bind(new InetSocketAddress(portEcoute));
 		}
+		
+		/*protected void initSocketSend() throws SocketException {
+			this.sockSend = new DatagramSocket();
+		}*/
 		
 		
 		protected String recevoir() throws IOException{
 			byte[] bufR = new byte[2048];
 			DatagramPacket dpR = new DatagramPacket(bufR, bufR.length);
-			sockListen.receive(dpR);
+			this.sockListen.receive(dpR);
 			return new String(bufR, dpR.getOffset(), dpR.getLength());
 		}
 			
@@ -32,7 +37,7 @@ import java.net.SocketException;
 			try {
 				byte[] bufE = new String(message).getBytes();
 				DatagramPacket dpE = new DatagramPacket(bufE, bufE.length, new InetSocketAddress(adresse, port));
-				sockListen.send(dpE);
+				this.sockListen.send(dpE);
 			} 
 			catch (Exception e) {
 				e.printStackTrace();
