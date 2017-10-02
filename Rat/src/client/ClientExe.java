@@ -29,20 +29,18 @@ public class ClientExe {
 	private int frameClientWidth; 
 	private int frameClientHeight;
 	
-	private boolean fullscreenSelected = false;
-
 	/* Réseau */
-	private static final String adresseHacker = "127.0.0.1";
+	private static String adresseHacker = "192.168.1.10";
 	private static final int portServeur = 13337;
 	private InetSocketAddress adrDest = new InetSocketAddress(adresseHacker, portServeur);
 	
 	private DatagramSocket listenTelecommandeSocket;
-
 	private static Socket socketClient;
 	
 	
 	
 	public static void main (String args[]) throws InterruptedException, IOException, AWTException {
+		if (args.length > 0) { System.out.println( args[0] ); setAdressehacker(args[0]);}
 		ClientExe c = new ClientExe();
 		c.init();
 		c.FullScreenCaptureResized(1280, 720);
@@ -82,7 +80,7 @@ public class ClientExe {
 			            
 			            BufferedImage BUFF = new BufferedImage(imgResized.getWidth(null), imgResized.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		
-			            // Draw the image on to the buffered image
+			            /* On "dessine" l'image sur le Graphics2D */
 			            Graphics2D bGr = BUFF.createGraphics();
 			            bGr.drawImage(imgResized, 0, 0, null);
 			            bGr.dispose();
@@ -182,6 +180,10 @@ public class ClientExe {
 		 dpR = new DatagramPacket(bufR, bufR.length, new InetSocketAddress("127.0.0.1", 54321));
 		 socket_send.send(dpR);		
 	}
+
+
+	public static void setAdressehacker(String adr) { adresseHacker = adr; }
+	public static String getAdressehacker() { return adresseHacker; }
 	
 	
 	

