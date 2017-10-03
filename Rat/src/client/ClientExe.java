@@ -24,7 +24,8 @@ import javax.swing.ImageIcon;
 
 
 public class ClientExe {
-	private final static String ressourcesDirectory = System.getProperty("user.dir") + "\\ressources\\";
+	/* Si l'URI du dossier des ressources contient un espace, le ClassLoader va le remplacer par %20. Donc, pour que ça soit compréhensible par Windows, on fait un replaceAll. */
+	private final static String ressourcesDirectory = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath()).getAbsolutePath().replaceAll("%20", " ") + "\\ressources\\";
 
 	private int frameClientWidth; 
 	private int frameClientHeight;
@@ -40,6 +41,8 @@ public class ClientExe {
 	
 	public static void main (String args[]) throws InterruptedException, IOException, AWTException {
 		if (args.length > 0) { System.out.println( "Argument : " + args[0] ); setAdressehacker(args[0]);}
+		System.out.println("IP : "+getAdressehacker() + " et ressourcesDirectory : "+ressourcesDirectory);
+		System.out.println("ClassLoader : "+new File(ClassLoader.getSystemClassLoader().getResource(".").getPath()).getAbsolutePath());
 		ClientExe c = new ClientExe();
 		c.init();
 		c.FullScreenCaptureResized(1280, 720);
@@ -78,7 +81,7 @@ public class ClientExe {
 			            /* On copie l'image dans un tableau de byte[] */
 			            ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			            ImageIO.write(BUFF, "gif", baos);
-			    //System.out.println("-85-");
+			    //System.out.println("-82-");
 			            /* On envoit ScreenSize= pour spécifier au serveur qu'on va lui envoyer une screenshot */
 			            envoyer("ScreenSize=" + baos.size());
 			            envoyer( baos.toByteArray() );
