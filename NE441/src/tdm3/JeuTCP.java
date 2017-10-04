@@ -17,20 +17,52 @@ public class JeuTCP {
 	private Socket socket;
 	
 	private void execute() throws IOException {
+		/* Init socket */
 		socket = new Socket();
-		InetSocketAddress adrDest = new InetSocketAddress("127.0.0.1", 7500);
+		InetSocketAddress adrDest = new InetSocketAddress("192.168.130.90", 7500);
 		socket.connect(adrDest);	
 				
+		
 		String msg = new String();
 		while (true) { 
-			msg = readInputStream(1, socket.getInputStream()).toString(); 
+			//msg = readInputStream(1, socket.getInputStream()).toString(); 
 
+			msg = lireServeur();
 			int resNumerique = calculFromString(msg);
 			envoyerAuServeur(resNumerique);
 		}
 	}
 	
 	
+	private String lireServeur() throws IOException {
+		StringBuffer buffer = new StringBuffer();
+		
+		int returnRead, nbByteLu = 0;
+		byte[] bufReception = new byte[2048];
+		
+		while ((returnRead = socket.getInputStream().read(bufReception)) > -1) {
+			nbByteLu += returnRead;
+			buffer.append(new String(bufReception, 0, returnRead));
+			
+			/*if (buffer.charAt(buffer.length()-1) == '?') {
+				String stringLu = buffer.toString();
+				System.out.println("StringLu = "+stringLu);
+				int resultatNumerique = calculFromString(stringLu);
+				envoyerAuServeur(resultatNumerique);
+			}*/
+			
+			String[] otherCalcul = buffer.toString().split("[?]");
+			
+			for (String s : otherCalcul) {
+				System.out.println("OtherCalcul : "+s);
+				int resultatNumerique = calculFromString(s);
+				envoyerAuServeur(resultatNumerique);
+			}
+		}
+		return null;
+	}
+
+
 	private StringBuffer readInputStream(int nbByte, InputStream is) throws IOException
 	{
 		StringBuffer buf = new StringBuffer();
@@ -51,13 +83,7 @@ public class JeuTCP {
 		} while (buf.toString().charAt(buf.length()-1) != '?');
 		
 		
-		String[] otherCalcul = buf.toString().split("[?]");
 		
-		for (String s : otherCalcul) {
-			System.out.println("\tOtherCalcul : "+s);
-			int resultatNumerique = calculFromString(s);
-			envoyerAuServeur(resultatNumerique);
-		}
 		
 		System.out.println("bufToString :"+buf.toString());
 		return buf;
@@ -67,7 +93,7 @@ public class JeuTCP {
 	private void envoyerAuServeur(int resultatNumerique) throws IOException {
 		OutputStream os = socket.getOutputStream();
 		byte[] responseServeur = new String(resultatNumerique+";").getBytes();
-		System.out.println("Envoyé : "+resultatNumerique+";");
+		System.out.println("\tEnvoye: "+resultatNumerique+";");
 		os.write(responseServeur);
 	}
 	
