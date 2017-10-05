@@ -16,7 +16,7 @@ public class MouseAction implements Serializable {
 	
 	
 	public int getCoordX() {return CoordX;}
-	public void setCoordX(int coordX) {CoordX = coordX;}
+	public void setCoordX(int coordX) {CoordX = coordX;} 
 	public int getCoordY() {return CoordY;}
 	public void setCoordY(int coordY) {CoordY = coordY;}
 }
