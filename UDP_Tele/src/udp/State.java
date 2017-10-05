@@ -6,6 +6,7 @@ public class State {
 	private boolean isOff;
 	private boolean isFullScreen;
 	private boolean isExpanded;
+	private boolean ratLaunched;
 	
 	public State() {
 		isYoutube = false;
@@ -31,6 +32,9 @@ public class State {
 	public boolean getExpanded() {
 		return isExpanded;
 	}
+	public boolean getRatLaunched() {
+		return ratLaunched;
+	}
 	
 
 	public void setText(boolean isText) {
@@ -48,6 +52,12 @@ public class State {
 	public void setExpanded(boolean isExpanded) {
 		this.isExpanded = isExpanded;
 	}
+
+
+	public void setRatLaunched(boolean b) {
+		this.ratLaunched = b;
+	}
+	
 
 
 
