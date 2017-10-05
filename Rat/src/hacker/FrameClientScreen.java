@@ -1,4 +1,4 @@
-package client;
+package hacker;
 
 import java.awt.EventQueue;
 import java.awt.GridLayout;
@@ -7,30 +7,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.border.EmptyBorder;
-import java.awt.Button;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.MenuBar;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-import javax.swing.JButton;
-import java.awt.FlowLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.BoxLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.Box;
-import java.awt.BorderLayout;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 
 @SuppressWarnings("serial")
 public class FrameClientScreen extends JFrame {
@@ -70,13 +50,10 @@ public class FrameClientScreen extends JFrame {
 		Box verticalBox = Box.createVerticalBox();
 		contentPane.add(verticalBox);
 		
+		
 		lblImage = new JLabel();
 		verticalBox.add(lblImage);
 		
-		labelMouse = new JLabel(".");
-		verticalBox.add(labelMouse);
-		labelMouse.setForeground(Color.RED);
-		labelMouse.setFont(new Font("Tahoma", Font.BOLD, 15));
 	}
 	
 	

