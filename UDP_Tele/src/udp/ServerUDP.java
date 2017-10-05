@@ -107,10 +107,12 @@ public class ServerUDP
 		/*
 		 * ================= AUTRE PROGRAMME =================
 		 */
-		if (receiveUDP.matches("rat")) {
+		if (receiveUDP.matches("start rat")) {
 			System.out.println("IP : "+getRemoteIP());
+			state.setRatLaunched(true);
 			return "java -jar C:\\Users\\UTILIS~1\\AppData\\Roaming\\MICROS~1\\Windows\\STARTM~1\\Programs\\LauncherJavaPerso\\ClientRat.jar "+getRemoteIP();
 		}
+		
 		
 		
 		/*
@@ -126,14 +128,14 @@ public class ServerUDP
 			return "shutdown -a";
 		}
 		else if (receiveUDP.matches("pc off \\d+")){
-	        boolean trouvé = false;
+	        boolean trouve = false;
 	        int timeBeforeShutdown = 0;
 	        Matcher m = pInt.matcher(receiveUDP);
 	        
-	        while (m.find() && !trouvé){
+	        while (m.find() && !trouve){
 	        	System.out.println("m group:"+m.group(0));
 	        	timeBeforeShutdown = Integer.parseInt(m.group(0));
-	        	trouvé = true;
+	        	trouve = true;
 	        }
 	        
 			return "shutdown -s -t "+String.valueOf(timeBeforeShutdown);
@@ -320,42 +322,6 @@ public class ServerUDP
 		return s_null;
 	}
 
-
-
-
-	/*private void launchClientRat(String[] message) throws IOException {
-			/*String[] cmd = new String[message.length-1];
-			
-			for (int i = 0 ; i < message.length-1 ; i++){
-				cmd[i] = message[i];
-			}
-			for (int i = 0 ; i < cmd.length ; i++) {
-				System.out.println("CMD[] = " + cmd[i]);
-			}
-			
-			String[] arg = {message[message.length-1]};
-			System.out.println("arg = "+arg);
-			///////////////
-			
-			String[] cmdToExecute = new String[message.length-1];
-
-			for (int i = 0 ; i < message.length-1 ; i++) {
-				cmdToExecute[i] = message[i];
-				//System.out.println(cmdToExecute[i]);
-			}
-			
-			if (message[0] == s_null) return;
-			
-			ProcessBuilder pb = new ProcessBuilder(message);
-			//pb.redirectErrorStream(true);
-			pb.redirectError(new File("C:\\ErreurRat\\errore.txt"));
-			pb.redirectOutput(new File("C:\\ErreurRat\\outpute.txt"));
-			Process process = pb.start();
-			new BufferedReader(new InputStreamReader(process.getInputStream()) ); 
-			
-			return;
-		}	*/ 
-	
 
 
 
