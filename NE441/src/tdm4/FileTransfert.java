@@ -25,7 +25,7 @@ public class FileTransfert {
 		Socket socketConnexion = socketListen.accept();
 		
 		
-		/* On récupère l'inputstream, etc...*/
+		/* On recupere l'inputstream, etc...*/
 		System.out.println("Client : "+socketConnexion.getInetAddress().getHostAddress()+":"+socketConnexion.getPort());
 		byte[] readBuffer = new byte[2048];
 		InputStream is = socketConnexion.getInputStream();
@@ -39,14 +39,14 @@ public class FileTransfert {
 		
 		String fileName = new String(readBuffer, 0, nbLu);
 		
-		System.out.println("Fichier demandé : " + fileName.toString());
+		System.out.println("Fichier demande : " + fileName.toString());
 		OutputStream os = socketConnexion.getOutputStream();
 		
-		/* On récupère la taille du fichier à envoyer et on utilise un séparateur (§) pour indiquer au
-		 * client que la taille s'arrête et que le transfert du fichier commence après */
+		/* On rï¿½cupï¿½re la taille du fichier ï¿½ envoyer et on utilise un sï¿½parateur (ï¿½) pour indiquer au
+		 * client que la taille s'arrï¿½te et que le transfert du fichier commence aprï¿½s */
 		File fichierAEnvoyer = new File(fileName);
-		byte[] tailleFichier = new String (fichierAEnvoyer.length() + "§").getBytes("UTF-8");
-		System.out.println("Taille envoyée : "+fichierAEnvoyer.length());
+		byte[] tailleFichier = new String (fichierAEnvoyer.length() + "Â§").getBytes("UTF-8");
+		System.out.println("Taille envoyee : "+fichierAEnvoyer.length());
 		os.write(tailleFichier);
 		
 		
@@ -54,6 +54,6 @@ public class FileTransfert {
 		os.write(Files.readAllBytes(fichierAEnvoyer.toPath()));
 		
 		
-		System.out.println("Terminé.");
+		System.out.println("Termine.");
 	}
 }
