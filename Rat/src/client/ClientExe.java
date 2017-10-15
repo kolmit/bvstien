@@ -221,7 +221,7 @@ public class ClientExe {
 						try {
 							socketClient.close();
 							socketRat.close();
-						} 
+						}  
 						catch (IOException e) { e.printStackTrace(); }
 						finally { System.exit(0); }
 					}
