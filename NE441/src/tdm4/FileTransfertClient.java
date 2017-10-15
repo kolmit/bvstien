@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class FileTransfertClient {
-	final String pathFileRequested = "C:\\Users\\utilisateur\\Desktop\\Key.txt";
+	final String pathFileRequested = "/home/userir/Documents/file.txt";//"C:\\Users\\utilisateur\\Desktop\\Key.txt";
 
 	
 	public static void main (String[] args) throws UnknownHostException, IOException, InterruptedException {
@@ -32,7 +32,7 @@ public class FileTransfertClient {
 		int tailleLuRead = 0;
 		String msg = new String();
 		
-		while (!msg.contains("§")) {
+		while (!msg.contains("Â§")) {
 			tailleLuRead = is.read(bufferReception);
 			int nbLuTotal = tailleLuRead;
 			msg = new String(bufferReception, 0, nbLuTotal, "UTF-8");
@@ -43,9 +43,9 @@ public class FileTransfertClient {
 		
 		
 		
-		/* Il faut OBLIGATOIREMENT changer la taille du buffeur de réception 
-		 * Si on le laisse à 4096, on ne recevra tout le fichier mais le début 
-		 * sera écrasé par les 4096 derniers octets.
+		/* Il faut OBLIGATOIREMENT changer la taille du buffeur de reception 
+		 * Si on le laisse a 4096, on ne recevra tout le fichier mais le debut 
+		 * sera ecrase par les 4096 derniers octets.
 		 */
 		bufferReception = new byte[tailleFile];
 		int nbLuTotal = 0;
@@ -53,13 +53,13 @@ public class FileTransfertClient {
 		//Thread.sleep(2000);
 		
 		
-		/* On lit l'inputstream jusqu'à atteindre la taille envoyée */
+		/* On lit l'inputstream jusqu'a atteindre la taille envoyee */
 		while (nbLuTotal < tailleFile ) {
 			tailleLuRead = is.read(bufferReception);
 			nbLuTotal += tailleLuRead;
 		}
 		System.out.println("Recu : "+nbLuTotal+" octets.");
-		FileOutputStream fos = new FileOutputStream("C:\\Users\\utilisateur\\Desktop\\Key2.txt");
+		FileOutputStream fos = new FileOutputStream("/home/userir/Documents/fileReceived.txt");
 		fos.write(bufferReception);
 		
 		os.close();
