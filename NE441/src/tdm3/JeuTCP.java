@@ -9,75 +9,75 @@ import java.net.Socket;
 
 public class JeuTCP {
 	
-	public static void main (String[] args ) throws IOException {
-		new JeuTCP().execute();
-		
-	}
-
 	private Socket socket;
 	
+	public static void main (String[] args ) throws IOException {
+		new JeuTCP().execute();
+	}
+
+
+	
 	private void execute() throws IOException {
+		/* Init socket */
 		socket = new Socket();
 		InetSocketAddress adrDest = new InetSocketAddress("127.0.0.1", 7500);
 		socket.connect(adrDest);	
 				
+		
 		String msg = new String();
 		while (true) { 
-			msg = readInputStream(1, socket.getInputStream()).toString(); 
+			//msg = readInputStream(1, socket.getInputStream()).toString(); 
+			lireServeur();
 
-			int resNumerique = calculFromString(msg);
-			envoyerAuServeur(resNumerique);
 		}
 	}
 	
 	
-	private StringBuffer readInputStream(int nbByte, InputStream is) throws IOException
-	{
-		StringBuffer buf = new StringBuffer();
+	private void lireServeur() throws IOException {
+		StringBuffer buffer = new StringBuffer();
 		
-		// Nombre de caracteres reellement lus au total
-		int nb, nbByteRead=0;
-		byte[] bufR = new byte[2048];
-
+		int returnRead, nbByteLu = 0;
+		byte[] bufReception = new byte[2048];
 		
-		do {
-			nb = is.read(bufR);
+		while ((returnRead = socket.getInputStream().read(bufReception)) > -1) {
+			nbByteLu += returnRead;
+			buffer.append(new String(bufReception, 0, returnRead));
 			
-			//if (nb==-1) throw new IOException("Fin du stream atteinte avant d'avoir lu "+nbByte+" octets");
-			if (nb != -1) {
-				nbByteRead = nbByteRead+nb;
-				buf.append(new String(bufR,0,nb));
+			System.out.println("Recu : "+buffer.toString() );
+
+			
+			String[] otherCalcul = buffer.toString().split("[?]");
+			String multiReponse = new String();
+			
+			for (String s : otherCalcul) {
+				if (s.charAt(s.length()-1) != '=') {
+					break;
+				}
+				System.out.println("Calcul en cours : "+s);
+				multiReponse = calculFromString(s);
+				//envoyerAuServeur(multiReponse);
 			}
-		} while (buf.toString().charAt(buf.length()-1) != '?');
-		
-		
-		String[] otherCalcul = buf.toString().split("[?]");
-		
-		for (String s : otherCalcul) {
-			System.out.println("\tOtherCalcul : "+s);
-			int resultatNumerique = calculFromString(s);
-			envoyerAuServeur(resultatNumerique);
+			envoyerAuServeur(multiReponse);
+
 		}
-		
-		System.out.println("bufToString :"+buf.toString());
-		return buf;
 	}
+
+
 	
 
-	private void envoyerAuServeur(int resultatNumerique) throws IOException {
+	private void envoyerAuServeur(String resultatNumerique) throws IOException {
 		OutputStream os = socket.getOutputStream();
-		byte[] responseServeur = new String(resultatNumerique+";").getBytes();
-		System.out.println("Envoyé : "+resultatNumerique+";");
-		os.write(responseServeur);
+		//byte[] responseServeur = new String(resultatNumerique+";").getBytes();
+		System.out.println("\tEnvoye: "+resultatNumerique);
+		os.write(resultatNumerique.getBytes());
 	}
 	
 
-	private int calculFromString(String msg) {
+	private String calculFromString(String msg) {
 		String firstOp = msg.substring(0, msg.indexOf('+'));
 		String secondOp = msg.substring(msg.indexOf('+') + 1, msg.indexOf('='));
 		
-		int resultatNumerique = Integer.parseInt(firstOp) + Integer.parseInt(secondOp);	
-		return resultatNumerique;
+		return  new String(Integer.parseInt(firstOp) + Integer.parseInt(secondOp) + ";");
 	}
 	
 	
