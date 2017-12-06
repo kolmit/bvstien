@@ -47,7 +47,7 @@ public class ThreadTask extends Thread {
 			/* On rï¿½cupï¿½re la taille du fichier ï¿½ envoyer et on utilise un sï¿½parateur (ï¿½) pour indiquer au
 			 * client que la taille s'arrï¿½te et que le transfert du fichier commence aprï¿½s */
 			File fichierAEnvoyer = new File(fileName);
-			byte[] tailleFichier = new String (fichierAEnvoyer.length() + "§").getBytes("UTF-8");
+			byte[] tailleFichier = new String (fichierAEnvoyer.length() + "ï¿½").getBytes("UTF-8");
 			System.out.println("Taille envoyee : "+fichierAEnvoyer.length());
 			os.write(tailleFichier);
 			

@@ -25,12 +25,8 @@ public class JeuUDP extends ServeurUDP{
 		envoyer("JOUER", "127.0.0.1", 7001);
 
 		while (i < 5000) {
-			try {
-				Thread.sleep(5);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			try {Thread.sleep(5);} 
+			catch (InterruptedException e) {e.printStackTrace();}
 			String calculRecu = recevoir();
 			System.out.println(calculRecu);
 			//if (calculRecu.matches(".*Excellent.*")) { envoyer("JOUER", "127.0.0.1", 7001); calculRecu = recevoir(); 	System.out.println("2:::::::::::"+calculRecu);}
