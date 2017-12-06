@@ -1,5 +1,8 @@
 package tdm3;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -8,16 +11,15 @@ import java.net.Socket;
 
 /**
  * Client basique TCP
- * 
+ * pour UPLOAD un fichier vers un Serveur
  */
 public class ClientTCP
 {
 
-	public static void main(String[] args) throws Exception
-	{
-		ClientTCP clientTCP = new ClientTCP();
-		clientTCP.execute();				
+	public static void main(String[] args) throws Exception {
+		new ClientTCP().execute();	
 	}
+	
 								
 	/**
 	 * Le client cree une socket, envoie un message au serveur
@@ -26,63 +28,24 @@ public class ClientTCP
 	 */
 	private void execute() throws IOException
 	{
-		//
 		System.out.println("Demarrage du client ...");
 		
 		//Creation de la socket
 		Socket socket = new Socket();
+		InetSocketAddress adrDest = new InetSocketAddress("127.0.0.1", 8400);
+		socket.connect(adrDest);
 		
-		// Connexion au serveur 
-		InetSocketAddress adrDest = new InetSocketAddress("127.0.0.1", 5099);
-		socket.connect(adrDest);		
-		
-		// Envoi de la requete
-		String messageToSend = "1234567890123456789";
-		byte[] bufE = messageToSend.getBytes();
 		OutputStream os = socket.getOutputStream();
-		os.write(bufE);
-		System.out.println("Message envoye : "+messageToSend);
+		FileInputStream fis = new FileInputStream(new File("C:\\Users\\utilisateur\\Desktop\\CV Ingénieur.pdf"));
 		
-		// Attente de la reponse 
-		byte[] bufR = new byte[2048];
-		InputStream is = socket.getInputStream();
-		int lenBufR = is.read(bufR);
-		String reponse = new String(bufR, 0 , lenBufR );
-		System.out.println("Reponse recue = "+reponse);
-		
-		// Fermeture de la socket
-		socket.close();
-		System.out.println("Arret du client .");
-	}
-	
-	/**
-	 * Methode utilitaire permettant de lire au minimum nbByte octets dans le fux is
-	 * 
-	 * A noter : si la methode read retourne plus de caracteres que nbByte, 
-	 * alors les caracteres lus en plus sont ajoutes dans la reponse 
-	 */
-	private StringBuffer readInputStream(int nbByte, InputStream is) throws IOException
-	{
-		StringBuffer buf = new StringBuffer();
-
-		// Nombre de caracteres reellement lus au total
-		int nbByteRead=0;
-		
-		int nb;
-		byte[] bufR = new byte[1024];
-		
-		while(nbByteRead<nbByte)
-		{
-			nb = is.read(bufR);
-			if (nb==-1)
-			{
-				throw new IOException("Fin du stream atteinte avant d'avoir lu "+nbByte+" octets");
-			}
-			nbByteRead = nbByteRead+nb;
-			buf.append(new String(bufR,0,nb));
+				
+		byte [] bufferTamponFichier = new byte[1999];
+		int nbLuFichier = 0;
+		while (nbLuFichier >= 0) {
+			fis.read(bufferTamponFichier);
+			os.write(bufferTamponFichier);
 		}
-		return buf;
 		
+		System.out.println("Temriné!");
 	}
-
 }
