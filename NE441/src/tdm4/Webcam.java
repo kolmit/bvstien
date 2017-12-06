@@ -21,37 +21,61 @@ public class Webcam {
 		URLConnection conn = url.openConnection();
 		
 		InputStream is = conn.getInputStream();
-		
-		byte[] bufferReception = new byte[4096];
-		int tailleLuRead = 0;
-		String msg = new String();
-		
-		int counterImage = 0;
-		
-		/*
-		 * La regex : 	groupe 0 : ([\\s\\S]*--ipcamera\r\nContent-Type: image/jpeg\r\nContent-Length: ([0-9]*)\r\n\r\n)[\\s\\S]*
-		 * 				groupe 1 : ([\\s\\S]*--ipcamera\r\nContent-Type: image/jpeg\r\nContent-Length: ([0-9]*)\r\n\r\n)
-		 * 				groupe 2 : ([0-9]*)
-		 */
-        java.util.regex.Pattern pat = java.util.regex.Pattern.compile("([\\s\\S]*--ipcamera\r\nContent-Type: image/jpeg\r\nContent-Length: ([0-9]*)\r\n\r\n)[\\s\\S]*"); // On recherche le chunk "ipcamera" ainsi que ses attributs
-        String question = "";
-        Matcher mat = pat.matcher(question); // On initialise le matcher.
-        
-         
-        while (!mat.matches()) {
-            byte[] bufR = new byte[4096];
-            int lenBufR = is.read(bufR, 0 , 4096);
-            
-            if (lenBufR <= 0) return;
-            
-            String reponse = new String(bufR, 0, lenBufR); // récupération du fragment de données reçu
-            question += reponse; // ajout à notre chaîne de caractères d'accumulation
-            mat = pat.matcher(question); // On revérifie la chaîne
+
+
+        for (int counterImage = 0; counterImage < 99999; counterImage++) {
+
+			/*
+			 * La regex : 	groupe 0 : ([\\s\\S]*--ipcamera\r\nContent-Type: image/jpeg\r\nContent-Length: ([0-9]*)\r\n\r\n)[\\s\\S]*
+			 * 				groupe 1 : ([\\s\\S]*--ipcamera\r\nContent-Type: image/jpeg\r\nContent-Length: ([0-9]*)\r\n\r\n)
+			 * 				groupe 2 : ([0-9]*)
+			 */
+	        java.util.regex.Pattern pat = java.util.regex.Pattern.compile("([\\s\\S]*--ipcamera\r\nContent-Type: image/jpeg\r\nContent-Length: ([0-9]*)\r\n\r\n)[\\s\\S]*"); // On recherche le chunk "ipcamera" ainsi que ses attributs
+	        String concatene = "";
+	        Matcher mat = pat.matcher(concatene); // On initialise le matcher.
+	        
+	        is.mark(999999); // On marque le tout début du stream (avant la lecture)
+	        
+	        
+	        // On concatène le stream qu'on lit dans "concatene" jusqu'à ce qu'on match
+	        while (!mat.matches()) { 
+	            byte[] bufR = new byte[4096];
+	            int lenBufR = is.read(bufR, 0 , 4096); // On lit au maximum 4096 bytes
+	            
+	            if (lenBufR <= 0) return; 
+	            
+	            String reponse = new String(bufR, 0, lenBufR); // récupération du fragment de données reçu
+	            concatene += reponse; // ajout à notre chaîne de caractères d'accumulation
+	            mat = pat.matcher(concatene); // On revérifie la chaîne
+	        }
+	        
+	        int lenImage = Integer.parseInt(mat.group(2));
+	        System.out.println("Taille de l'image : "+lenImage);
+	        
+	        
+	        is.reset(); // On revient au tout début du stream.
+	        is.skip(mat.group(1).length()); // On jump après l'entête
+	        
+	        System.out.println("On a skip : "+ mat.group(1) +"\n" + mat.group(1).length());
+	
+	        
+	        
+	        FileOutputStream imageRecue = new FileOutputStream("image" + (counterImage +1) + ".jpg");
+	        byte[] bufferLecteurImage = new byte[lenImage];
+	        
+	        for (int indexLectureBuffer = 0 ; indexLectureBuffer < lenImage ; /* Rien */) {
+		        // On écrit par "accoup" d'indexLectureBuffer dans bufferLecteurImage.
+		        // On lit au maximum (lenImage - indexLectureBuffeur) octets.
+		        // Donc quand on sera arrivé à la fin de la taille annoncée, lenImage - index = 0.
+	        	int returnRead = is.read(bufferLecteurImage, indexLectureBuffer, (lenImage-indexLectureBuffer) );
+	        	if (returnRead == -1) break;
+	        	indexLectureBuffer += returnRead;
+	        }
+	        
+	        imageRecue.write(bufferLecteurImage);
+	        imageRecue.close();
         }
-        
-        int lenImage = Integer.parseInt(mat.group(2));
-        System.out.println("Taille de l'image : "+lenImage);
-		/*
+        /*
 		while ((tailleLuRead = is.read(bufferReception)) != -1) {
 			
 			int nbLuTotal = tailleLuRead;
