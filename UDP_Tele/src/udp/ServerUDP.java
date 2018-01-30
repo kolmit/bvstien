@@ -72,7 +72,7 @@ public class ServerUDP
 	}
 
 
-	private String[] parseCmd(String mes) throws IOException{
+	protected String[] parseCmd(String mes) throws IOException{
 		String[] msg = mes.split(" ");
 		
 		for (int i = 0 ; i<msg.length ; i++){
@@ -82,7 +82,7 @@ public class ServerUDP
 	}
 	
 
-	private void executeCommand(String[] message) throws IOException{
+	protected void executeCommand(String[] message) throws IOException{
 		System.out.print("Message execute :");
 		for (int i = 0 ; i < message.length ; i++){
 			System.out.print(message[i]);
@@ -100,7 +100,7 @@ public class ServerUDP
 	}
 	
 	
-	private String checkAlias(String receiveUDP) throws IOException, InterruptedException {
+	protected String checkAlias(String receiveUDP) throws IOException, InterruptedException {
         Pattern pInt = Pattern.compile("\\d+");
 		System.out.println("recu :"+receiveUDP);
 		
@@ -150,10 +150,10 @@ public class ServerUDP
 		else if (receiveUDP.matches("unmute")){
 			return "nircmd.exe mutesysvolume 0";
 		}
-		else if (receiveUDP.matches("vol.* \\+")){
+		else if (receiveUDP.matches("vol.* \\+") || receiveUDP.matches("vol.* plus")){
 			 return "nircmd.exe changesysvolume +5000";
 		}
-		else if (receiveUDP.matches("vol.* \\-")){
+		else if (receiveUDP.matches("vol.* \\-") || receiveUDP.matches("vol.* moins")){
 			 return "nircmd.exe changesysvolume -5000";
 		}
 		
@@ -325,7 +325,7 @@ public class ServerUDP
 
 
 
-	private void switchKeys(String s) {
+	protected void switchKeys(String s) {
 		if (s.matches("echap") || s.matches("esc")){
 			r.keyPress(VK_ESCAPE);
 			r.keyRelease(VK_ESCAPE);
@@ -443,12 +443,12 @@ public class ServerUDP
 		}
 	}
 	
-    private void doType(int... keyCodes) {
+	protected void doType(int... keyCodes) {
         doType(keyCodes, 0, keyCodes.length);
     }
 
     
-    private void doType(int[] keyCodes, int offset, int length) {
+    protected void doType(int[] keyCodes, int offset, int length) {
         if (length == 0) {return;}
         r.keyPress(keyCodes[offset]);
         doType(keyCodes, offset + 1, length - 1);
@@ -456,7 +456,7 @@ public class ServerUDP
     }
     
     
-	private void selectYoutubeFullscreen() throws IOException, InterruptedException {
+	protected void selectYoutubeFullscreen() throws IOException, InterruptedException {
 		String taille = receiveUDP(m_sock);
 		AltSpaceN();
 		if (taille.matches(".*youtube.*fs g.*") ||
@@ -471,7 +471,7 @@ public class ServerUDP
 	}
 	
 	
-	private void copyPaste(String textToCopy) {
+	protected void copyPaste(String textToCopy) {
 		StringSelection stringSelection = new StringSelection(textToCopy);
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clipboard.setContents(stringSelection, stringSelection);	
@@ -485,7 +485,7 @@ public class ServerUDP
 	}
 	
 
-	private void reduceAll() {
+	protected void reduceAll() {
 		r.mouseMove(1920, 1080);
 		r.mousePress(InputEvent.BUTTON1_MASK);
 		r.mouseRelease(InputEvent.BUTTON1_MASK);
@@ -493,21 +493,21 @@ public class ServerUDP
 		return;
 	}
 
-	private void fullScreenYoutubeStandard() throws IOException, InterruptedException {
+	protected void fullScreenYoutubeStandard() throws IOException, InterruptedException {
 		r.mouseMove(-20000, -20000);
 		r.mouseMove(1140, 655);
 		r.mousePress(InputEvent.BUTTON1_MASK);
 		r.mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 	
-	private void fullScreenYoutubeCinema() throws IOException, InterruptedException {
+	protected void fullScreenYoutubeCinema() throws IOException, InterruptedException {
 		r.mouseMove(-20000, -20000);
 		r.mouseMove(1868, 885);
 		r.mousePress(InputEvent.BUTTON1_MASK);
 		r.mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 
-	private void AltSpaceN() {
+	protected void AltSpaceN() {
 		 
 		/* Raccourci ALT + ESPACE + N */
 		r.keyPress(KeyEvent.VK_ALT);
@@ -520,7 +520,7 @@ public class ServerUDP
 		return;
 	}
 
-	private void copyAndEnterURL(String textToCopy) throws InterruptedException {
+	protected void copyAndEnterURL(String textToCopy) throws InterruptedException {
 		StringSelection stringSelection = new StringSelection(textToCopy);
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clipboard.setContents(stringSelection, stringSelection);	
@@ -543,7 +543,7 @@ public class ServerUDP
 	
 	
 
-	private void newTab() throws InterruptedException {
+	protected void newTab() throws InterruptedException {
 		Thread.sleep(1000);
 		r.keyPress(KeyEvent.VK_ESCAPE);
 		r.keyRelease(KeyEvent.VK_ESCAPE);
