@@ -52,7 +52,7 @@ public class ServerUDP
 			m_sock.bind(new InetSocketAddress(54321));
 		}
 		while (true){
-			Thread.sleep(100);
+			Thread.sleep(10);
 			executeCommand(
 						parseCmd(
 								checkAlias(
@@ -63,7 +63,6 @@ public class ServerUDP
 	
 	private String receiveUDP(DatagramSocket socket) throws IOException
 	{
-		System.out.println("waqsdit");
 		byte[] bufR = new byte[2048];
 		DatagramPacket dpR = new DatagramPacket(bufR, bufR.length);
 		socket.receive(dpR);
@@ -83,11 +82,14 @@ public class ServerUDP
 	
 
 	protected void executeCommand(String[] message) throws IOException{
-		System.out.print("Message execute :");
+        // DEBUG
+		//System.out.print("Message execute :");
 		for (int i = 0 ; i < message.length ; i++){
-			System.out.print(message[i]);
+	        // DEBUG
+			//System.out.print(message[i]);
 		}
-		System.out.println("\n");
+        // DEBUG
+		//System.out.println("\n");
 		if (message[0] == s_null){
 			return;
 		}
@@ -102,7 +104,8 @@ public class ServerUDP
 	
 	protected String checkAlias(String receiveUDP) throws IOException, InterruptedException {
         Pattern pInt = Pattern.compile("\\d+");
-		System.out.println("recu :"+receiveUDP);
+        // DEBUG
+		 //System.out.println("recu :"+receiveUDP);
 		
 		/*
 		 * ================= AUTRE PROGRAMME =================
@@ -113,7 +116,21 @@ public class ServerUDP
 			return "java -jar C:\\Users\\UTILIS~1\\AppData\\Roaming\\MICROS~1\\Windows\\STARTM~1\\Programs\\LauncherJavaPerso\\ClientRat.jar "+getRemoteIP();
 		}
 		
+		if (receiveUDP.matches("mouseMove_dx=.*")) {
+			int dx = Integer.parseInt( receiveUDP.substring( receiveUDP.indexOf("=")+1, receiveUDP.indexOf(":") ));
+			int dy = Integer.parseInt( receiveUDP.substring( receiveUDP.lastIndexOf("=")+1 ));
+			
+			/**
+			 * TODO
+			 */
+		    //r.mouseMove((dx/1000000), (dy/1000000));    
+			return "nircmd sendmouse move "+ dx/1000000 + " " + dy/1000000;
+		}
 		
+		if (receiveUDP.matches("click.*")) {
+			String direction = receiveUDP.substring( receiveUDP.indexOf(' ')+1 );
+			return "nircmd sendmouse " + direction + " click";
+		}
 		
 		/*
 		 * ================= SHUTDOWN =================
@@ -187,7 +204,7 @@ public class ServerUDP
 				reduceAll();
 				executeCommand(parseCmd("TASKKILL /F /IM firefox.exe"));
 				Thread.sleep(1000);
-				executeCommand(parseCmd("\"C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe\" "+receiveUDP));
+				executeCommand(parseCmd("\"C:\\Program Files\\Mozilla Firefox\\firefox.exe\" "+receiveUDP));
 				selectYoutubeFullscreen();
 				state.setYoutube(true);
 				return s_null;

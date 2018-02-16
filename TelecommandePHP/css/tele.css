@@ -30,7 +30,7 @@ body {
  padding:0;
  list-style-type:none
 }
-#home a,#sitemap a,#buttonPlus a,#buttonYoutube a,#button3 a,#buttonMoins a,#buttonJoystick a,#button6 a,#button7 a,#button8 a,#button9 a,#button10 a,#button11 a,#button12 a,#view a,#info a,#help a,#rewind a,#back a,#forward a,#top a,#bottom a,#ok a {
+#home a,#sitemap a,#buttonPlus a,#buttonYoutube a,#buttonLeftClick a,#buttonMoins a,#buttonJoystick a,#buttonRightClick a,#buttonTwitch a,#button8 a,#button9 a,#button10 a,#button11 a,#button12 a,#view a,#info a,#help a,#rewind a,#back a,#forward a,#top a,#bottom a,#ok a {
  position:absolute;
  display:block
 }
@@ -74,6 +74,8 @@ body {
  left:35px;
  top:114px
 }
+
+
 #remote-control li#buttonMoins a {
  width:55px;
  height:55px;
@@ -83,6 +85,8 @@ body {
  left:35px;
  top:174px
 }
+
+
 #remote-control li#buttonYoutube a {
  width:55px;
  height:55px;
@@ -100,6 +104,37 @@ body {
  background:url(pointeursouris.jpg) no-repeat
 }
 #remote-control li#buttonJoystick a {
+ left:130px;
+ top:29px
+}
+
+
+#remote-control li#buttonLeftClick a {
+ width:55px;
+ height:55px;
+ background:url(leftclick.jpg) no-repeat
+}
+#remote-control li#buttonLeftClick a {
+ left:35px;
+ top:244px
+}
+#remote-control li#buttonRightClick a {
+ width:55px;
+ height:55px;
+ background:url(rightclick.jpg) no-repeat
+}
+#remote-control li#buttonRightClick a {
+ left:130px;
+ top:244px
+}
+
+
+#remote-control li#buttonTwitch a {
+ width:55px;
+ height:55px;
+ background:url(twitch.jpg) no-repeat
+}
+#remote-control li#buttonTwitch a {
  left:130px;
  top:174px
 }

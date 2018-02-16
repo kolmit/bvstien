@@ -35,24 +35,27 @@ class TelecommandeUI {
 
 			<ul>
 				<li id=home><a href="#" title=Home onclick="ChoixNbSeconde()"><span>Home</span></a></li>
-				<li id=sitemap><a href="#" title=Sitemap><span>Sitemap</span></a></li>
 			</ul>
 
 			<h2>Select a site section</h2>
 
 			<ul>
-				<li id=buttonPlus><a href="#" title="Bouton+" onclick="Volume(\'' . TelecommandeUI::$plus . '\')"><span>Volume +</span></a></li>
 				<li id=buttonYoutube><a href="#" title="BoutonYoutube" onclick="ChoixVideo()"><span>YouTube</span></a></li>
-				<li id=button3><a href="#" title="Section 3"><span>Section 3</span></a></li>
+				
+				<li id=buttonPlus><a href="#" title="Bouton+" onclick="Volume(\'' . TelecommandeUI::$plus . '\')"><span>Volume +</span></a></li>
 				<li id=buttonMoins><a href="#" title="Bouton-" onclick="Volume(\'' . TelecommandeUI::$moins . '\')"><span>Section 4</span></a></li>
-				<li id=buttonJoystick><a href="#" title="Section 5" onclick="joyStick('. $this->changeEtatJoystick() .')"><span>Section 5</span></a></li>
-				<li id=button6><a href="#" title="Section 6"><span>Section 6</span></a></li>
-				<li id=button7><a href="#" title="Section 7"><span>Section 7</span></a></li>
-				<li id=button8><a href="#" title="Section 8"><span>Section 8</span></a></li>
+				<li id=buttonJoystick><a href="#" title="Section 5" onclick="joyStick()"><span>Section 5</span></a></li>
+				
+				<li id=buttonLeftClick><a href="#" title="Section 3" onclick="SendClick(\'left\')" ><span>Section 6</span></a></li>
+				<li id=buttonRightClick><a href="#" title="Section 7" onclick="SendClick(\'right\')"><span>Section 7</span></a></li>
+				
+				<li id=buttonTwitch><a href="#" title="Twitch"><span>Twitch</span></a></li>
 				<li id=button9><a href="#" title="Section 9"><span>Section 9</span></a></li>
 				<li id=button10><a href="#" title="Section 10"><span>Section 10</span></a></li>
 				<li id=button11><a href="#" title="Section 11"><span>Section 11</span></a></li>
 				<li id=button12><a href="#" title="Section 12"><span>Section 12</span></a></li>
+				<span id="result">aze</span>
+				<div id="screenCoords"></div>
 			</ul>
 			<h2>
 			Photo gallery viewer
@@ -78,10 +81,10 @@ class TelecommandeUI {
 
 	}
 
-	function changeEtatJoystick(){
+	/*function changeEtatJoystick(){
 		$this->setJoystickActif( !$this->getJoystickActif() );
 		return $this->getJoystickActif();
-	}
+	}*/
 
 }
 
@@ -95,12 +98,20 @@ class TelecommandeUI {
 	/***********
 	* Joystick *
 	************/
-	function joyStick(joystickActif){
+	var joystickActif = false;
 
+	function joyStick(){
+		joystickActif = !joystickActif;
+		
 		if (!joystickActif){
-			$("body").closest("canvas").fadeOut().remove();
+			canvasbase = document.getElementById('canvas-base');
+			canvasstick = document.getElementById('canvas-stick');
+			canvasbase.remove();
+			canvasstick.remove();
+			return;
 		}
-		console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
+
+		//console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
 
 		var joystick	= new VirtualJoystick({
 			container	: document.getElementById('Joystick'),
@@ -112,27 +123,47 @@ class TelecommandeUI {
 	  		stickRadius: 100
 		});
 		joystick.addEventListener('touchStart', function(){
-			console.log('down')
+			console.log('down');
 		})
 		joystick.addEventListener('touchEnd', function(){
-			console.log('up')
+			console.log('up');
 		})
 
 		setInterval(function(){
 			var outputEl	= document.getElementById('result');
-			outputEl.innerHTML	= '<b>Result:</b> '
-				+ ' dx:'+joystick.deltaX()
-				+ ' dy:'+joystick.deltaY()
-				+ (joystick.right()	? ' right'	: '')
-				+ (joystick.up()	? ' up'		: '')
-				+ (joystick.left()	? ' left'	: '')
-				+ (joystick.down()	? ' down' 	: '')	
+			var dx	= 'dx='+Math.round(joystick.deltaX()*1000000/5);
+			var dy =  'dy='+Math.round(joystick.deltaY()*1000000/5);
+			if (joystick._pressed){
+				sendToMouse(dx, dy);
+			}
 		}, 1/30 * 1000);
-
 	}
 
-		
 
+	var initialX;
+	var initialY;
+	function sendToMouse(coordX, coordY){
+
+		if (coordX == initialX && coordY == initialY) return; 
+		else {
+			initialX = coordX;
+			initialY = coordY;
+
+			$.ajax({
+				url: 'Executeur.class.php',
+				type: 'POST',
+				data: 'cmd=mouseMove_' + '&dx=' + coordX + '&dy='  + coordY,
+
+				error: function(msg){
+					alert( "Erreur" );
+				},
+				success: function(data){
+					console.log(data);
+				}
+			});
+		}
+
+	}
 
 
 	function Volume(signe){
@@ -188,6 +219,42 @@ class TelecommandeUI {
 			}
 		});
 	}
+
+
+	function Twitch(){
+		var urlVideoYoutube = prompt("Lien de la vidéo :","");
+
+
+		$.ajax({
+			url: 'Executeur.class.php',
+			type: 'POST',
+			data: 'cmd=' + escape( "https://www.twitch.tv/overwatchleague_fr" ),
+
+			error: function(msg){
+				alert( "Erreur" );
+				},
+			success: function(data){
+				console.log(data);
+			}
+		});
+	}
+
+	function SendClick(direction){
+		$.ajax({
+			url: 'Executeur.class.php',
+			type: 'POST',
+			data: 'cmd=click_' + direction,
+
+			error: function(msg){
+				alert( "Erreur" );
+			},
+			success: function(data){
+				console.log(data);
+			}
+		});
+	}
+
+	
 
 </script>
 
