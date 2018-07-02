@@ -1,4 +1,11 @@
+
+:root{
+
+}
 body {
+
+	--bouttonWidth = 65;
+	--bouttonHeight = 55;
  margin:0;
  padding:20px;
  font-family:"Helvetica Neue",Helvetica,Arial,Geneva,sans-serif
@@ -9,17 +16,21 @@ body {
 }
 #Joystick{
  position:relative;
- width:500px;
- height: 500px;
- top: 350px;
+ width:50px;
+ height: 50px;
+ top: 35px;
  margin: auto
-
 }
+
+
 #remote-control {
  position:relative;
  background:url(remote-back2.jpg) no-repeat;
- width:224px;
- height:507px
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain; 
+ height:550px
 }
 #remote-control h2,#remote-control span {
  position:absolute;
@@ -30,7 +41,11 @@ body {
  padding:0;
  list-style-type:none
 }
-#home a,#sitemap a,#buttonPlus a,#buttonYoutube a,#buttonLeftClick a,#buttonMoins a,#buttonJoystick a,#buttonRightClick a,#buttonTwitch a,#button8 a,#button9 a,#button10 a,#button11 a,#button12 a,#view a,#info a,#help a,#rewind a,#back a,#forward a,#top a,#bottom a,#ok a {
+#home a,#sitemap a,#buttonPlus a,#buttonYoutube a,#buttonLeftClick a,#buttonMoins a,#buttonJoystick a,#buttonRightClick a,#buttonTwitch a {
+ position:absolute;
+ display:block
+}
+#boutonPower, #boutonPlus, #boutonMoins, #boutonLeftClick, #boutonRightClick, #boutonMiddleDownClick, #boutonMiddleUpClick, #boutonHeadset{
  position:absolute;
  display:block
 }
@@ -58,33 +73,73 @@ body {
  background-repeat:no-repeat;
  background-position:0 -36px
 }
-/*
-#remote-control li#button2 a,#remote-control li#button3 a,#remote-control li#button4 a,#remote-control li#button5 a,#remote-control li#button6 a,#remote-control li#button7 a,#remote-control li#button8 a,#remote-control li#button9 a,#remote-control li#button10 a,#remote-control li#button11 a,#remote-control li#button12 a {
- width:41px;
- height:21px;
- background:url(remote-button.jpg) no-repeat
+
+
+#boutonPlus {
+	left:33px;
+	top:150px;
+	height:65px;
+ 	width:75px;
 }
-*/
-#remote-control li#buttonPlus a {
- width:55px;
- height:55px;
- background:url(+.jpg) no-repeat
+#boutonMoins {
+	left:33px;
+	top:215px;
+	height:65px;
+ 	width:75px;
 }
-#remote-control li#buttonPlus a {
- left:35px;
- top:114px
+#boutonPower{
+	left:33px;
+	top:29px;
+	height:65px;
+ 	width:75px;
+}
+.bouton:hover {
+ filter: brightness(115%);
+        -webkit-filter: brightness(115%);
+        -moz-filter: brightness(115%);
+        -o-filter: brightness(115%);
+        -ms-filter: brightness(115%);
+        -webkit-transition: all 0.30s;
+        transition: all 0.10s;
+       }
+.bouton:active {
+	transform: translateY(10px);
 }
 
 
-#remote-control li#buttonMoins a {
- width:55px;
- height:55px;
- background:url(-.jpg) no-repeat
+#boutonLeftClick {
+	left:33px;
+	top:330px;
+	width:75px;
+	height:65px;
 }
-#remote-control li#buttonMoins a {
- left:35px;
- top:174px
+#boutonMiddleUpClick {
+	left:140px;
+	top:300px;
+	width:75px;
+	height:65px;
 }
+#boutonMiddleDownClick {
+	left:140px;
+	top:365px;
+	width:75px;
+	height:65px;
+}
+#boutonRightClick {
+	left:250px;
+	top:330px;
+	width:75px;
+	height:65px;
+}
+
+
+#boutonHeadset {
+	left:33px;
+	top:450px;
+	width:75px;
+	height:65px;
+}
+
 
 
 #remote-control li#buttonYoutube a {
@@ -99,25 +154,16 @@ body {
 
 
 #remote-control li#buttonJoystick a {
- width:55px;
- height:55px;
- background:url(pointeursouris.jpg) no-repeat
-}
-#remote-control li#buttonJoystick a {
- left:130px;
- top:29px
+	 left:250px;
+ top:29px;
+ width:75px;
+ height:65px;
+ background:url(pointeursouris.png) no-repeat;
 }
 
 
-#remote-control li#buttonLeftClick a {
- width:55px;
- height:55px;
- background:url(leftclick.jpg) no-repeat
-}
-#remote-control li#buttonLeftClick a {
- left:35px;
- top:244px
-}
+
+
 #remote-control li#buttonRightClick a {
  width:55px;
  height:55px;
@@ -125,7 +171,7 @@ body {
 }
 #remote-control li#buttonRightClick a {
  left:130px;
- top:244px
+ top:294px
 }
 
 
@@ -139,147 +185,18 @@ body {
  top:174px
 }
 
-/*
-#remote-control li#button2 a {
- left:91px;
- top:114px
-}
-#remote-control li#button3 a {
- left:145px;
- top:114px
-}
-#remote-control li#button4 a {
- left:38px;
- top:155px
-}
-#remote-control li#button5 a {
- left:91px;
- top:155px
-}
-#remote-control li#button6 a {
- left:145px;
- top:155px
-}
-#remote-control li#button7 a {
- left:38px;
- top:196px
-}
-#remote-control li#button8 a {
- left:91px;
- top:196px
-}
-#remote-control li#button9 a {
- left:145px;
- top:196px
-}
-#remote-control li#button10 a {
- left:38px;
- top:237px
-}
-#remote-control li#button11 a {
- left:91px;
- top:237px
-}
-#remote-control li#button12 a {
- left:145px;
- top:237px
-}
-*/
-#remote-control li#button1 a:hover,#remote-control li#button2 a:hover,#remote-control li#button3 a:hover,#remote-control li#button4 a:hover,#remote-control li#button5 a:hover,#remote-control li#button6 a:hover,#remote-control li#button7 a:hover,#remote-control li#button8 a:hover,#remote-control li#button9 a:hover,#remote-control li#button10 a:hover,#remote-control li#button11 a:hover,#remote-control li#button12 a:hover {
- background-image:url(remote-button.jpg);
- background-repeat:no-repeat;
- background-position:0 -20px
-}
-#remote-control li#view a {
- width:29px;
- height:30px;
- left:41px;
- top:331px;
- background:url(remote-circle3.jpg) no-repeat 0 -19px
-}
-#remote-control li#info a {
- width:33px;
- height:23px;
- left:74px;
- top:312px;
- background:url(remote-circle3.jpg) no-repeat -33px 0px
-}
-#remote-control li#help a {
- width:33px;
- height:23px;
- left:116px;
- top:312px;
- background:url(remote-circle3.jpg) no-repeat -75px 0
-}
-#remote-control li#rewind a {
- width:29px;
- height:30px;
- left:154px;
- top:332px;
- background:url(remote-circle3.jpg) no-repeat -113px -20px
-}
-#remote-control li#back a {
- width:25px;
- height:59px;
- left:58px;
- top:365px;
- background:url(remote-circle3.jpg) no-repeat -17px -53px
-}
-#remote-control li#forward a {
- width:23px;
- height:59px;
- left:139px;
- top:365px;
- background:url(remote-circle3.jpg) no-repeat -98px -53px
-}
-#remote-control li#top a {
- width:62px;
- height:23px;
- left:80px;
- top:342px;
- background:url(remote-circle3.jpg) no-repeat -39px -30px
-}
-#remote-control li#bottom a {
- width:61px;
- height:22px;
- left:80px;
- top:424px;
- background:url(remote-circle3.jpg) no-repeat -39px -112px
-}
-#remote-control li#ok a {
- width:44px;
- height:46px;
- left:89px;
- top:371px;
- background:url(remote-circle3.jpg) no-repeat -48px -59px
-}
-#remote-control li#view a:hover {
- background:url(remote-circle3.jpg) no-repeat 0 -156px
-}
-#remote-control li#info a:hover {
- background:url(remote-circle3.jpg) no-repeat -33px -137px
-}
-#remote-control li#help a:hover {
- background:url(remote-circle3.jpg) no-repeat -75px -137px
-}
-#remote-control li#rewind a:hover {
- background:url(remote-circle3.jpg) no-repeat -113px -156px
-}
-#remote-control li#back a:hover {
- background:url(remote-circle3.jpg) no-repeat -17px -190px
-}
-#remote-control li#forward a:hover {
- background:url(remote-circle3.jpg) no-repeat -98px -190px
-}
-#remote-control li#top a:hover {
- background:url(remote-circle3.jpg) no-repeat -39px -167px
-}
-#remote-control li#bottom a:hover {
- background:url(remote-circle3.jpg) no-repeat -39px -249px
-}
-#remote-control li#ok a:hover {
- background:url(remote-circle3.jpg) no-repeat -48px -196px
-}
 
 
 
+#divPopup { align-items: center; display: none; height: 100%; justify-content: center; left: 0; position: fixed; top: 0; width: 100%; z-index: 100; }
+#divPopupFond { background-color: #001a33; display: none; height: 100%; left: 0; opacity: 0.8; position: fixed; top: 0; width: 100%; z-index: 100; }
+#divPopupContenu { background-color: #fff; min-height: 200px; padding: 20px; width: 500px; z-index: 101;  }
+#divPopupContenu label { font-size: 0.8em; }
+#divPopupContenu .row { padding-bottom: 7px; }
+#divPopupContenu .divBoutonAction { display: flex; justify-content: center; }
+#divPopupContenu .divBoutonAction span { margin: 12px; }
+
+.boutonPower {
+    height: 50px;
+    width: 120px;
+}
