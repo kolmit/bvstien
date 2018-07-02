@@ -44,6 +44,8 @@ public class ServerUDP
 	public static void main(String[] args) throws Exception
 	{		
 		ServerUDP s = new ServerUDP();
+		//KeyListenerExample lk = new KeyListenerExample ();
+		//lk.main(args);
 		s.startServ();
 	}
 	
@@ -129,7 +131,22 @@ public class ServerUDP
 		
 		if (receiveUDP.matches("click.*")) {
 			String direction = receiveUDP.substring( receiveUDP.indexOf(' ')+1 );
+			
+			if (direction.matches("middle.*")) {
+				String signe = ""; 
+				
+				if (direction.matches("middleup.*")) { signe = "+";	}
+				else if (direction.matches("middledown.*")) { signe = "-"; }
+
+				return "nircmd sendmouse wheel "+ signe +"1000";
+			}
+			
 			return "nircmd sendmouse " + direction + " click";
+		}
+		
+		if (receiveUDP.matches("headset")) {
+			r.keyPress(KeyEvent.VK_END);
+			r.keyRelease(KeyEvent.VK_END);
 		}
 		
 		/*
@@ -156,6 +173,10 @@ public class ServerUDP
 	        }
 	        
 			return "shutdown -s -t "+String.valueOf(timeBeforeShutdown);
+		}
+		
+		else if (receiveUDP.matches("pc veille.*")){
+			return "nircmd.exe standby";
 		}
 		
 		/*
@@ -199,12 +220,12 @@ public class ServerUDP
 		 * ================= YOUTUBE =================
 		 */
 		else if (receiveUDP.matches(".*youtube.com/.*")){
-			 
+
 			if(!state.getYoutube()){
-				reduceAll();
-				executeCommand(parseCmd("TASKKILL /F /IM firefox.exe"));
-				Thread.sleep(1000);
-				executeCommand(parseCmd("\"C:\\Program Files\\Mozilla Firefox\\firefox.exe\" "+receiveUDP));
+				//reduceAll();
+				//executeCommand(parseCmd("TASKKILL /F /IM firefox.exe"));
+				//Thread.sleep(1000);
+				executeCommand(parseCmd("\"C:\\Program Files\\Mozilla Firefox\\firefox.exe\" -new-tab "+receiveUDP));
 				selectYoutubeFullscreen();
 				state.setYoutube(true);
 				return s_null;
@@ -222,7 +243,9 @@ public class ServerUDP
 				executeCommand(parseCmd(s_EcranOff));
 			}
 			return s_null;
+
 		}
+
 		
 		else if (receiveUDP.matches("http://.*") || receiveUDP.matches("www..*")){
 			
@@ -503,7 +526,7 @@ public class ServerUDP
 	
 
 	protected void reduceAll() {
-		r.mouseMove(1920, 1080);
+		r.mouseMove(1918, 1044);
 		r.mousePress(InputEvent.BUTTON1_MASK);
 		r.mouseRelease(InputEvent.BUTTON1_MASK);
 		state.setFullScreen(false);
