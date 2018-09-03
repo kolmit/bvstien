@@ -36,7 +36,7 @@ class TelecommandeUI {
 			<h2>Main navigation</h2>
 
 			<ul>
-				<img src="../css/power.png" id="boutonPower" class="bouton" onclick="ChoixNbSeconde()"/>
+				<img src="../css/power.png" id="boutonPower" class="bouton" onclick="ChoixActionButton()"/>
 			</ul>
 
 			<h2>Select a site section</h2>
@@ -48,12 +48,13 @@ class TelecommandeUI {
 				<img src="../css/wheeldown.png" id="boutonMiddleDownClick" class="bouton" onclick="SendClick(\'middledown\')"/>
 				<img src="../css/rightclick.png" id="boutonRightClick" class="bouton" onclick="SendClick(\'right\')"/>
 				<img src="../css/headset.png" id="boutonHeadset" class="bouton" onclick="SoundOutput(\'headset\')"/>
+				<img src="../css/keyboard.png" id="boutonKeyboard" class="bouton" onclick="OuvrirPopupTextToType()"/>
+				<img src="../css/keyboard.png" id="boutonTestClipBoard" class="bouton" onclick="boutonTestClipBoard()"/>
 
 			</div>
 			<ul>
 				<li id=buttonYoutube><a href="#" title="BoutonYoutube" class="bouton" onclick="ChoixVideo()"><span>YouTube</span></a></li>
-				
-				<li id=buttonJoystick><a href="#" title="Section 5" class="bouton" onclick="joyStick()"><span>Section 5</span></a></li>
+				<img src="../css/pointeursouris.png" id="buttonJoystick" class="bouton" onclick="joyStick()"/>
 
 				
 				<li id=buttonTwitch><a href="#" title="Twitch"><span>Twitch</span></a></li>
@@ -61,10 +62,7 @@ class TelecommandeUI {
 				<li id=button10><a href="#" title="Section 10"><span>Section 10</span></a></li>
 				<li id=button11><a href="#" title="Section 11"><span>Section 11</span></a></li>
 				<li id=button12><a href="#" title="Section 12"><span>Section 12</span></a></li>
-				<span id="result">aze</span>
-				<div id="screenCoords"></div>
 			</ul>
-			</div>
 		</div>';
 
 	}
@@ -78,17 +76,15 @@ class TelecommandeUI {
 
 <script>
 	$( document ).ready(function() {
-
-	});
+        var htmlDivPopup = "<div class=\"divPopupFond\" id=\"divPopupFond\"></div><div class=\"divPopup\" id=\"divPopup\"><div class=\"divPopupContenu\" id=\"divPopupContenu\"></div></div>";
+        $(htmlDivPopup).insertBefore("#remote-control");
+    });
 	/***********
 	* Joystick *
 	************/
 	var joystickActif = false;
 
 	function OuvrirPopup($contenu) {
-		var htmlDivPopup = "<div class=\"divPopupFond\" id=\"divPopupFond\"></div><div class=\"divPopup\" id=\"divPopup\"><div class=\"divPopupContenu\" id=\"divPopupContenu\"><span id=\"spanFermer\">fermer</span></div></div>";
-		$(htmlDivPopup).insertBefore("#remote-control");
-
         $('#divPopupContenu').empty ().append ($contenu);
         $('#divPopupFond').show ();
 		$('#divPopup').css('display', 'flex');
@@ -115,7 +111,7 @@ class TelecommandeUI {
 
 
 		var joystick	= new VirtualJoystick({
-			container	: document.getElementById('divPopupContenu'),
+			container	: document.getElementById('container'),
 			mouseSupport	: true,
 		    stationaryBase: true,
 	        baseX: 250,
@@ -189,17 +185,20 @@ class TelecommandeUI {
 	    retour =
             '<div class="row justify-content-center">' +
                 '<div class="col-4"><button class="btn btn-danger boutonPower" onclick="ChoixNbSeconde(0)">Eteindre</button></div>' +
-            '<div class="col-4"><button class="btn btn-warning boutonPower" onclick="ChoixNbSeconde(1)" style="">Veille</button></div>' +
+                '<div class="col-4"><button class="btn btn-warning boutonPower" onclick="ChoixNbSeconde(1)" style="">Veille</button></div>' +
             '</div>' +
-            '' +
-            '' +
+                '<br><br>' +
+            '<div class="row justify-content-center">' +
+                '<div class="col-4"><button class="btn btn-info boutonPower" onclick="FermerPopup()">Fermer</button></div>' +
+            '</div>' +
             '';
 	    return retour;
     }
-
+    function ChoixActionButton() {
+        OuvrirPopup( GetContenuPopupPowerButton() );
+    }
 
 	function ChoixNbSeconde(pAction){
-        OuvrirPopup( GetContenuPopupPowerButton() );
         if (pAction === 0) {
             var commande = 'cmd=pc_off_';
             var timeBeforeShutdown = prompt("Dans combien de temps ? (seconde) :","0");
@@ -209,6 +208,7 @@ class TelecommandeUI {
             var timeBeforeShutdown = '';
         }
 
+        FermerPopup();
 		$.ajax({
 			url: 'Executeur.class.php',
 			type: 'POST',
@@ -223,6 +223,65 @@ class TelecommandeUI {
 		});
 	}
 
+	function GetContenuPopupTexteATaper() {
+
+
+        retour =
+            '<div class="row justify-content-center">' +
+                '<textarea cols="30" rows="3" id="TexteAEnvoyer"></textarea> ' +
+                '<button class="btn btn-success" id="BoutonTexteAEnvoyer">Envoyer</button>' +
+            '</div>' +
+            '<br><br>' +
+            '<div class="row justify-content-center">' +
+            '<div class="col-4"><button class="btn btn-info boutonPower" onclick="FermerPopup()">Fermer</button></div>' +
+            '</div>' +
+            '';
+
+        $('#BoutonTexteAEnvoyer').click(function() {
+            console.log('krkr')
+            var text = $('#TexteAEnvoyer').text();
+            console.log(text);
+            //send to server and process response
+        });
+
+        return retour;
+    }
+
+
+    function OuvrirPopupTextToType() {
+        OuvrirPopup(GetContenuPopupTexteATaper());
+    }
+
+    function boutonTestClipBoard() {
+	    $.ajax({
+        url: 'Executeur.class.php',
+        type: 'POST',
+        data: 'cmd=testclipboard',
+
+        error: function(msg){
+            alert( "Erreur" );
+        },
+        success: function(data){
+            console.log(data);
+        }
+    });
+
+	}
+
+    function EnvoyerTextToType(pTexte) {
+	    $.ajax({
+            url: 'Executeur.class.php',
+            type: 'POST',
+            data: commande + timeBeforeShutdown,
+
+            error: function(msg){
+                alert( "Erreur" );
+            },
+            success: function(data){
+                console.log(data);
+            }
+        });
+    }
 	function ChoixVideo(){
 		var urlVideoYoutube = prompt("Lien de la vidéo :","");
 

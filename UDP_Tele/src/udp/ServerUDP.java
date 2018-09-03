@@ -16,6 +16,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -147,6 +148,19 @@ public class ServerUDP
 		if (receiveUDP.matches("headset")) {
 			r.keyPress(KeyEvent.VK_END);
 			r.keyRelease(KeyEvent.VK_END);
+		}
+		
+		/**
+		 * Test du clipboard qui permet de copier des bouts de texte depuis une iframe.
+		 */
+		if (receiveUDP.matches("testclipboard")) {
+			try {
+				CopyPasteWindow window = (new CopyPasteWindow());
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		/*

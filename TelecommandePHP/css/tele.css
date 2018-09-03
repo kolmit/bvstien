@@ -41,13 +41,13 @@ body {
  padding:0;
  list-style-type:none
 }
-#home a,#sitemap a,#buttonPlus a,#buttonYoutube a,#buttonLeftClick a,#buttonMoins a,#buttonJoystick a,#buttonRightClick a,#buttonTwitch a {
+#home a,#sitemap a,#buttonPlus a,#buttonYoutube a,#buttonLeftClick a,#buttonMoins a,#buttonRightClick a,#buttonTwitch a {
  position:absolute;
  display:block
 }
-#boutonPower, #boutonPlus, #boutonMoins, #boutonLeftClick, #boutonRightClick, #boutonMiddleDownClick, #boutonMiddleUpClick, #boutonHeadset{
- position:absolute;
- display:block
+.bouton{
+    position:absolute;
+    display:block
 }
 #remote-control li#home a {
  left:33px;
@@ -139,7 +139,25 @@ body {
 	width:75px;
 	height:65px;
 }
+#boutonKeyboard {
+    left:280px;
+    top:29px;
+    width:75px;
+    height:65px;
+}
+#buttonJoystick {
+    left:200px;
+    top:29px;
+    width:75px;
+    height:65px;
+}
 
+#boutonTestClipBoard {
+    left:200px;
+    top:450px;
+    width:75px;
+    height:65px;
+}
 
 
 #remote-control li#buttonYoutube a {
@@ -150,15 +168,6 @@ body {
 #remote-control li#buttonYoutube a {
  left:130px;
  top:114px
-}
-
-
-#remote-control li#buttonJoystick a {
-	 left:250px;
- top:29px;
- width:75px;
- height:65px;
- background:url(pointeursouris.png) no-repeat;
 }
 
 

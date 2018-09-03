@@ -21,7 +21,7 @@ class Executeur{
 	$executeur = new Executeur();
 	$commandToExecute = '';
 	if (isset($_POST['dx'])) $commandToExecute = $_POST['cmd'] . $_POST['dx'] . ':' . $_POST['dy'];
-	else $commandToExecute = str_replace("_", " ", $_POST['cmd']);
+	else $commandToExecute = strpos($_POST['cmd'], '_') ? str_replace("_", " ", $_POST['cmd']) : $_POST['cmd'];
 
 	echo 'cmd : '. $commandToExecute;
 	
