@@ -156,11 +156,10 @@ public class ServerUDP
 		if (receiveUDP.matches("testclipboard")) {
 			try {
 				CopyPasteWindow window = (new CopyPasteWindow());
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+				window.setVisible(true);
+			} 
+			catch (ClassNotFoundException e) {e.printStackTrace();} 
+			catch (SQLException e) {e.printStackTrace();}
 		}
 		
 		/*
