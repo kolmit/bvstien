@@ -1,0 +1,16 @@
+<mat-grid-list cols="4" rowHeight="100px">
+  <mat-grid-tile
+      *ngFor="let tuile of listeTuile"
+      [colspan]="tuile.nbColonne"
+      [rowspan]="tuile.nbLigne"
+      [style.background]="tuile.couleur"
+      [style.class]="tuile.classe"
+      (click)='this[tuile.action]()'>
+      <i class='material-icons'>{{tuile.icone}}</i>
+
+     
+    {{tuile.texte}}
+  </mat-grid-tile>
+</mat-grid-list>
+<button mat-raised-button (click)="bite()">Pick one</button>
+<i class="material-icons">power_settings_new</i>

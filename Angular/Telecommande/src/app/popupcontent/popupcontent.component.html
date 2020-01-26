@@ -1,0 +1,5 @@
+<p>Combien de temps avant shutdown ?</p>
+    <mat-form-field>
+        <input matInput [(ngModel)]="data.tempsSeconde">
+    </mat-form-field>
+    <button mat-raised-button  [mat-dialog-close]="data.tempsSeconde" cdkFocusInitial>Ok</button>
