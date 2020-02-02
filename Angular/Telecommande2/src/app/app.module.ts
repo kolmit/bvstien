@@ -4,35 +4,33 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TelecommandeComponent } from './telecommande/telecommande.component';
-import { TuileShutdownComponent } from './tuile-shutdown/tuile-shutdown.component';
-
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar'; 
-import { MatCardModule, MatDialogModule, MatInputModule, MatSliderModule, MatSlideToggleModule } from '@angular/material';
+import { MatCardModule, MatDialogModule, MatInputModule } from '@angular/material';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import { PopupContentComponent } from './popup-content/popup-content.component';
-import { PopupContentVolumeComponent } from './popup-content-volume/popup-content-volume.component';
-import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http';
-import { PopupToJavaService } from './service/popup-to-java.service';
-import { SliderVolumeComponent } from './slider-volume/slider-volume.component';
+import { TuileConcreteComponent } from './tuile-concrete/tuile-concrete.component';
+import { DialogOverviewExampleDialogComponent } from './dialog-overview-example-dialog/dialog-overview-example-dialog.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
     AppComponent,
     TelecommandeComponent,
-    TuileShutdownComponent,
-    PopupContentComponent,
-    PopupContentVolumeComponent,
-    SliderVolumeComponent,
+    TuileConcreteComponent,
+    DialogOverviewExampleDialogComponent,
+    
   ],
   imports: [
     MatCardModule,
     MatToolbarModule,
     BrowserModule,
     AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
     MatGridListModule,
     MatDialogModule,
@@ -40,15 +38,12 @@ import { SliderVolumeComponent } from './slider-volume/slider-volume.component';
     MatInputModule,
     MatButtonModule,
     MatButtonToggleModule,
-    HttpClientModule,
-    MatSliderModule,
-    MatSlideToggleModule,
+    FlexLayoutModule,
   ],
-  providers: [HttpClient, PopupToJavaService],
-  entryComponents: [
-    PopupContentComponent, 
-    PopupContentVolumeComponent
-  ],
-  bootstrap: [AppComponent]
+  entryComponents: [TuileConcreteComponent, DialogOverviewExampleDialogComponent
+], 
+  providers: [],
+  bootstrap: [AppComponent],
+  exports: []
 })
 export class AppModule { }

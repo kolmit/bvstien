@@ -1,0 +1,19 @@
+<div class="card my-5">
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+        <div class="form-group">
+          <label for="arguments">Secondes</label>
+          <input type="text" [(ngModel)]="commande.arguments" 
+            class="form-control"
+            id="arguments"
+            name="arguments"
+            placeholder="Seconde"
+            required #name="ngModel">
+        </div>
+        <div [hidden]="!name.pristine" class="alert alert-danger">Name is required</div>
+        <button type="submit" [disabled]="!userForm.form.valid" 
+          class="btn btn-info">Submit</button>
+      </form>
+    </div>
+  </div>
+  

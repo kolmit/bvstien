@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { PopupToJavaService } from './service/popup-to-java.service';
+import { TelecommandeComponent } from './telecommande/telecommande.component';
 
 
 const routes: Routes = [
-  { path: 'telecommandeJava', component: PopupToJavaService }
+  { path: 'telecommande', component: TelecommandeComponent },
+  { path: '', component: TelecommandeComponent },
 ];
 
 @NgModule({
