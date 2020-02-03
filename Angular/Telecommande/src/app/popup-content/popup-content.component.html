@@ -2,7 +2,7 @@
 
 <div class="card my-5">
   <div class="card-body">
-    <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+    <!--<form (ngSubmit)="onSubmit()" #userForm="ngForm">
       <div class="form-group">
         
         <label for="arguments">Secondes</label>
@@ -12,15 +12,17 @@
           name="arguments"
           placeholder="Seconde"
           required #name="ngModel">
-      </div>
+      </div>-->
       <div>
-        <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
-        <div *cdkVirtualFor="let item of items" class="example-item">{{item}}</div>
-      </cdk-virtual-scroll-viewport>
-    </div>
-      <div [hidden]="!name.pristine" class="alert alert-danger">Name is required</div>
-      <button type="submit" [disabled]="!userForm.form.valid" 
-        class="btn btn-info">Submit</button>
-    </form>
+        <mat-form-field>
+          <mat-select placeholder="Eteindre">
+            <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
+              <mat-option *cdkVirtualFor="let choix of heures" [value]="choix" (click)="selectionnerHeure(choix)">{{choix}}</mat-option>
+            </cdk-virtual-scroll-viewport>
+          </mat-select>
+      </mat-form-field>
+      <button mat-button type="submit" class="btn btn-info" (click)="onSubmit()">Submit</button>
+      </div>
+      
   </div>
 </div>

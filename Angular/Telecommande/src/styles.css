@@ -6,7 +6,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 
-    mat-slider {
-        justify-content: center;
-        width: 100%;
-      }
+.titre-telecommande{
+  text-align: center;
+}

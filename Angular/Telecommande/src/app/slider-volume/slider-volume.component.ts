@@ -15,10 +15,9 @@ export class SliderVolumeComponent {
     invert = false;
     max = 100;
     min = 0;
-    showTicks = false;
     step = 1;
     thumbLabel = false;
-    value = 0;
+    currentVolume = 0;
     vertical = false;
   
     constructor(private javaService: PopupToJavaService){
@@ -26,22 +25,12 @@ export class SliderVolumeComponent {
       this.commande.radical = "nircmd changesysvolume ";
     }
 
-    get tickInterval(): number | 'auto' {
-      return this.showTicks ? (this.autoTicks ? 'auto' : this._tickInterval) : 0;
-    }
-    set tickInterval(value) {
-      //this._tickInterval = coerceNumberProperty(value);
-    }
-    private _tickInterval = 1;
-
     getCurrentVolume(){
       this.javaService.getCurrentVolume();
     }
-    onChangeVolume(event: MatSliderChange){
-      console.log(event.value);
-      this.commande.arguments = event.value.toString();
-      this.javaService.postVolume(this.commande).subscribe(result => console.log('RESULT'));
-    }
-  
 
+    onChangeVolume(event: MatSliderChange){
+      this.commande.arguments = event.value.toString();
+      this.javaService.postVolume(this.commande).subscribe(result => this.currentVolume = event.value);
+    }
 }

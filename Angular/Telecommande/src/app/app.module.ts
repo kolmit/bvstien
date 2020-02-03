@@ -8,7 +8,7 @@ import { TuileShutdownComponent } from './tuile-shutdown/tuile-shutdown.componen
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar'; 
-import { MatCardModule, MatDialogModule, MatInputModule, MatSliderModule, MatSlideToggleModule } from '@angular/material';
+import { MatCardModule, MatDialogModule, MatInputModule, MatSliderModule, MatSlideToggleModule, MatSelectModule } from '@angular/material';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -31,6 +31,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
   ],
   imports: [
     MatCardModule,
+    MatButtonModule,
     MatToolbarModule,
     BrowserModule,
     AppRoutingModule,
@@ -45,6 +46,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     MatSliderModule,
     MatSlideToggleModule,
     ScrollingModule,
+    MatSelectModule,
   ],
   providers: [HttpClient, PopupToJavaService],
   entryComponents: [

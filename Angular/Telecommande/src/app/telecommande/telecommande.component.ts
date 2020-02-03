@@ -23,7 +23,7 @@ export class TelecommandeComponent implements OnInit {
   actionShutdown(){
     const dialogRef = this.dialog.open(PopupContentComponent, {
       width: '250px',
-      data: {radical : "shutdown" }
+      data: {radical : "shutdown -s -t " }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -31,15 +31,4 @@ export class TelecommandeComponent implements OnInit {
     });
   }
 
-
-  actionVolume(){
-    const dialogRef = this.dialog.open(PopupContentVolumeComponent, {
-      width: '500px',
-      data: {}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
-  }
 }

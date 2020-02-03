@@ -1,5 +1,7 @@
-<p>telecommande works!</p>
-<mat-grid-list cols="4" rowHeight="100px">
+<div class="titre-telecommande">
+  <h1>Télécommande</h1>
+</div>
+<mat-grid-list cols="3" rowHeight="100px">
 
     <mat-grid-tile
         [colspan]="1"
@@ -11,20 +13,15 @@
     </mat-grid-tile>
 
     <mat-grid-tile
-        [colspan]="3"
+        [colspan]="2"
         [rowspan]="1"
         style='background-color:lightblue'
         class="material-icons">
+        <h1>volume_up</h1>  
         <app-slider-volume></app-slider-volume>
     </mat-grid-tile>
 
   </mat-grid-list>
   
 <br>
-  <button mat-raised-button (click)="test()">Pick one</button>
-  <i class="material-icons">power_settings_new</i>
-                <a routerLink="/adduser" class="btn btn-info">Add User</a>
 
-  <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
-    <div *cdkVirtualFor="let item of items" class="example-item">{{item}}</div>
-  </cdk-virtual-scroll-viewport>
