@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ChangeDetectionStrategy } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,6 +18,7 @@ import { PopupContentVolumeComponent } from './popup-content-volume/popup-conten
 import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http';
 import { PopupToJavaService } from './service/popup-to-java.service';
 import { SliderVolumeComponent } from './slider-volume/slider-volume.component';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { SliderVolumeComponent } from './slider-volume/slider-volume.component';
     HttpClientModule,
     MatSliderModule,
     MatSlideToggleModule,
+    ScrollingModule,
   ],
   providers: [HttpClient, PopupToJavaService],
   entryComponents: [

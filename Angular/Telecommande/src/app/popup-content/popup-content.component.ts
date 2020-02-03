@@ -3,6 +3,7 @@ import { PopupToJavaService } from '../service/popup-to-java.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Commande } from '../model/commande';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-popup-content',
@@ -12,6 +13,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 export class PopupContentComponent implements OnInit {
 
   commande: Commande;
+  items = Array.from({length: 100000}).map((_, i) => `Item #${Date.now()}`);
+
  
   constructor(private route: ActivatedRoute, 
     private router: Router, 
@@ -20,8 +23,8 @@ export class PopupContentComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) {
       this.commande = new Commande();
       this.commande.radical = data.radical;
-      console.log("data ! " + data.radical);
-  }
+      console.log("Date.now();" + Date.now());
+    }
  
   onSubmit() {
     console.log("commande.radical = " + this.commande.radical + this.commande.arguments);
