@@ -10,11 +10,11 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./telecommande.component.css']
 })
 export class TelecommandeComponent implements OnInit {
-  usersUrl: string;
+  shutdownCountdown: number;
 
-  constructor(public dialog: MatDialog/*, private http: HttpClient*/) {
-    /*this.usersUrl = 'http://localhost:8080/users';*/
-   }
+  constructor(public dialog: MatDialog) {
+
+  }
 
   ngOnInit() {
   }
@@ -23,11 +23,14 @@ export class TelecommandeComponent implements OnInit {
   actionShutdown(){
     const dialogRef = this.dialog.open(PopupContentComponent, {
       width: '250px',
-      data: {radical : "shutdown -s -t " }
+      data: {
+        radical : "shutdown", 
+        shutdownCountdown : this.shutdownCountdown}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      this.shutdownCountdown = result;
+      console.log('Le pc s\'éteindra dans : ' + this.shutdownCountdown + ' secondes.');
     });
   }
 

@@ -10,39 +10,67 @@ import { DatePipe } from '@angular/common';
   templateUrl: './popup-content.component.html',
   styleUrls: ['./popup-content.component.css']
 })
-export class PopupContentComponent implements OnInit {
+export class PopupContentComponent {
 
   commande: Commande;
   heures : string[];
   ticksMinutes = [15, 30, 45, 60];
   
-  heureChoisie: string;
- 
+  heureSelected: string;
+  shutdownActive: boolean;
+  shutdownIn: number;
+
+  
+
   constructor(private route: ActivatedRoute, 
     private router: Router, 
     private userService: PopupToJavaService, 
     public dialogRef: MatDialogRef<PopupContentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
+
+      dialogRef.beforeClosed().subscribe(() => this.closePopup())
       this.commande = new Commande();
       this.commande.radical = data.radical;
+
+      if (data.shutdownCountdown != undefined){
+        this.shutdownActive = true;
+        this.shutdownIn = data.shutdownCountdown;
+      }
       this.heures = this.generateQuartDheure();
     }
  
-  onSubmit() {
-    this.commande.arguments = this.convertHeureToSeconde();
-    console.log("commande.radical = " + this.commande.radical + this.commande.arguments);
-    this.userService.save(this.commande).subscribe(result => this.gotoUserList());
-  }
- 
-  gotoUserList() {
-    this.router.navigate(['/telecommandeJava']);
+  onSubmitShutdown() {
+    let cmdShutdown = new Commande(); 
+    cmdShutdown.radical = this.commande.radical;
+    cmdShutdown.arguments = " -s -t " + this.convertHeureToSeconde().toString();
+
+    console.log("commande.radical = " + cmdShutdown.radical + cmdShutdown.arguments);
+    this.userService.save(cmdShutdown).subscribe();
+    this.shutdownActive = true;
+    this.shutdownIn = this.convertHeureToSeconde();
+    this.heureSelected = null; 
+
+    this.closePopup();
   }
 
-  ngOnInit() {}
+  onSubmitCancel(){
+    let cmdCancel = new Commande(); 
+    cmdCancel.radical = this.commande.radical;
+    cmdCancel.arguments = " -a";
+    this.userService.save(cmdCancel).subscribe();
+    this.shutdownActive = false;
+    this.shutdownIn = null;
+
+    this.closePopup();
+  }
+
+  closePopup(){
+    this.dialogRef.close(this.shutdownIn);
+  }
 
 
   selectionnerHeure(choix: string){
-    this.heureChoisie = choix;
+    this.heureSelected = choix;
     console.log("selectHeure() = " + choix);
   }
 
@@ -60,10 +88,21 @@ export class PopupContentComponent implements OnInit {
   }
 
   convertHeureToSeconde(){
-    const heureMinutes = this.heureChoisie.split(":");
+    if (this.heureSelected == undefined){
+      return;
+    }
+    const heureMinutes = this.heureSelected.split(":");
     const nbSecondes = Number(heureMinutes[0]) * 3600 + Number(heureMinutes[1])*60; 
     console.log("NB SEC " + nbSecondes);
-    return nbSecondes.toString();
+    this.shutdownIn = nbSecondes;
+    return nbSecondes;
+  }
+
+
+  convertSecondeToHeure(){
+    const hh = Math.floor(this.shutdownIn/3600);
+    const mm = (this.shutdownIn%3600)/60;
+    return hh.toString() + 'h' + mm.toString();
   }
 
   
@@ -83,5 +122,4 @@ export class PopupContentComponent implements OnInit {
       }
     });
   }*/
-
 }

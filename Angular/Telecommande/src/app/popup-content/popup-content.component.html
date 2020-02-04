@@ -13,15 +13,20 @@
           placeholder="Seconde"
           required #name="ngModel">
       </div>-->
-      <div>
+      <div *ngIf="!shutdownActive">
         <mat-form-field>
-          <mat-select placeholder="Eteindre">
+          <mat-select placeholder="Eteindre dans ...">
             <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
               <mat-option *cdkVirtualFor="let choix of heures" [value]="choix" (click)="selectionnerHeure(choix)">{{choix}}</mat-option>
             </cdk-virtual-scroll-viewport>
           </mat-select>
-      </mat-form-field>
-      <button mat-button type="submit" class="btn btn-info" (click)="onSubmit()">Submit</button>
+        </mat-form-field>
+        <button *ngIf="heureSelected != undefined" mat-raised-button type="submit" class="btn btn-info" (click)="onSubmitShutdown()">Valider</button>
+      </div>
+
+      <div *ngIf="shutdownActive">
+        Le PC s'éteindra dans {{convertSecondeToHeure()}}
+        <button mat-raised-button type="submit" color="accent" class="btn btn-info" (click)="onSubmitCancel()">Annuler</button>
       </div>
       
   </div>

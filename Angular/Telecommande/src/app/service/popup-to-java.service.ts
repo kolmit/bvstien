@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Commande } from '../model/commande';
+import { ConfigService } from '../config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,8 @@ export class PopupToJavaService {
   private volumeUrl: string;
  
   constructor(private http: HttpClient) {
-    this.usersUrl = 'http://localhost:8080/postCmd';
-    this.volumeUrl = 'http://localhost:8080/volume';
+    this.usersUrl = ConfigService.BACKEND_URL + '/postCmd';
+    this.volumeUrl = ConfigService.BACKEND_URL + '/volume';
   }
  
   public findAll(): Observable<Commande[]> {
