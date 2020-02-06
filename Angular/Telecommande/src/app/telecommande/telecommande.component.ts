@@ -30,8 +30,9 @@ export class TelecommandeComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.shutdownCountdown = result;
-      console.log('Le pc s\'éteindra dans : ' + this.shutdownCountdown + ' secondes.');
+      
     });
   }
+
 
 }

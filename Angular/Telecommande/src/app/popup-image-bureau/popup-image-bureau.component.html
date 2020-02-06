@@ -1,0 +1,7 @@
+<p>popup-image-bureau works!</p>
+<img [src]="blobData"
+     alt="Place image title"
+     *ngIf="!isImageLoading; else noImageFound">
+<ng-template #noImageFound>
+     Nada
+</ng-template>

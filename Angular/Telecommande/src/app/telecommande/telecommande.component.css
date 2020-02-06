@@ -8,3 +8,8 @@
     height: 50px;
   }
   
+  .video-title {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}

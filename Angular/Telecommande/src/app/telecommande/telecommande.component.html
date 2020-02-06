@@ -9,9 +9,9 @@
         style='background-color:lightpink'
         class="material-icons"
         (click)="actionShutdown()">
-        <h1>power_settings_new</h1>
+        <h1 *ngIf='this.shutdownCountdown == undefined; else elseShutdownActif'>power_settings_new</h1>
     </mat-grid-tile>
-  
+
     <mat-grid-tile
         [colspan]="2"
         [rowspan]="1"
@@ -21,7 +21,16 @@
         <app-slider-volume></app-slider-volume>
     </mat-grid-tile>
 
+    <mat-grid-tile
+    [colspan]="1"
+    [rowspan]="1"
+    style='background-color:aliceblue'
+    class="material-icons"
+    (click)="bureau()">
+    </mat-grid-tile>
+
   </mat-grid-list>
-  {{this.shutdownCountdown}}ss
+
 <br>
+<app-popup-image-bureau></app-popup-image-bureau>
 

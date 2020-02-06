@@ -19,6 +19,8 @@ import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http'
 import { PopupToJavaService } from './service/popup-to-java.service';
 import { SliderVolumeComponent } from './slider-volume/slider-volume.component';
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import { ImageService } from './service/image-service.service';
+import { PopupImageBureauComponent } from './popup-image-bureau/popup-image-bureau.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     PopupContentComponent,
     PopupContentVolumeComponent,
     SliderVolumeComponent,
+    PopupImageBureauComponent,
   ],
   imports: [
     MatCardModule,
@@ -48,7 +51,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     ScrollingModule,
     MatSelectModule,
   ],
-  providers: [HttpClient, PopupToJavaService],
+  providers: [HttpClient, PopupToJavaService, ImageService],
   entryComponents: [
     PopupContentComponent, 
     PopupContentVolumeComponent
