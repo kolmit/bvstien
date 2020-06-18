@@ -2,17 +2,6 @@
 
 <div class="card my-5">
   <div class="card-body">
-    <!--<form (ngSubmit)="onSubmit()" #userForm="ngForm">
-      <div class="form-group">
-        
-        <label for="arguments">Secondes</label>
-        <input type="text" [(ngModel)]="commande.arguments" 
-          class="form-control"
-          id="arguments"
-          name="arguments"
-          placeholder="Seconde"
-          required #name="ngModel">
-      </div>-->
       <div *ngIf="!shutdownActive">
         <mat-form-field>
           <mat-select placeholder="Eteindre dans ...">

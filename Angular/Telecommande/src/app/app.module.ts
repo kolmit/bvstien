@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ChangeDetectionStrategy } from '@angular/core';
+import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,13 +14,18 @@ import { FormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { PopupContentComponent } from './popup-content/popup-content.component';
-import { PopupContentVolumeComponent } from './popup-content-volume/popup-content-volume.component';
-import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { PopupToJavaService } from './service/popup-to-java.service';
 import { SliderVolumeComponent } from './slider-volume/slider-volume.component';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ImageService } from './service/image-service.service';
 import { PopupImageBureauComponent } from './popup-image-bureau/popup-image-bureau.component';
+import { MuteVolumeComponent } from './mute-volume/mute-volume.component';
+import { PopupYoutubeComponent } from './popup-youtube/popup-youtube.component';
+import { YoutubeUnitComponent } from './youtube-unit/youtube-unit.component';
+import { FilterYoutubePipe } from './filter-youtube.pipe';
+import { PopupRemoteTvComponent } from './popup-remote-tv/popup-remote-tv.component';
+import { PopupAlttabComponent } from './popup-remote-tv/popup-alttab/popup-alttab.component';
 
 @NgModule({
   declarations: [
@@ -28,9 +33,17 @@ import { PopupImageBureauComponent } from './popup-image-bureau/popup-image-bure
     TelecommandeComponent,
     TuileShutdownComponent,
     PopupContentComponent,
-    PopupContentVolumeComponent,
     SliderVolumeComponent,
     PopupImageBureauComponent,
+    MuteVolumeComponent,
+    PopupYoutubeComponent,
+    YoutubeUnitComponent,
+    FilterYoutubePipe,
+    PopupRemoteTvComponent,
+    PopupAlttabComponent,
+  ],
+  exports: [
+    YoutubeUnitComponent,
   ],
   imports: [
     MatCardModule,
@@ -54,7 +67,10 @@ import { PopupImageBureauComponent } from './popup-image-bureau/popup-image-bure
   providers: [HttpClient, PopupToJavaService, ImageService],
   entryComponents: [
     PopupContentComponent, 
-    PopupContentVolumeComponent
+    PopupYoutubeComponent,
+    PopupRemoteTvComponent,
+    PopupImageBureauComponent,
+    PopupAlttabComponent,
   ],
   bootstrap: [AppComponent]
 })

@@ -3,7 +3,6 @@ import { PopupToJavaService } from '../service/popup-to-java.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Commande } from '../model/commande';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-popup-content',
@@ -23,8 +22,7 @@ export class PopupContentComponent {
   
 
   constructor(private route: ActivatedRoute, 
-    private router: Router, 
-    private userService: PopupToJavaService, 
+    private javaService: PopupToJavaService, 
     public dialogRef: MatDialogRef<PopupContentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
@@ -39,13 +37,16 @@ export class PopupContentComponent {
       this.heures = this.generateQuartDheure();
     }
  
+
   onSubmitShutdown() {
     let cmdShutdown = new Commande(); 
     cmdShutdown.radical = this.commande.radical;
     cmdShutdown.arguments = " -s -t " + this.convertHeureToSeconde().toString();
 
     console.log("commande.radical = " + cmdShutdown.radical + cmdShutdown.arguments);
-    this.userService.save(cmdShutdown).subscribe();
+    this.javaService.manageShutdown(cmdShutdown).subscribe(result => {
+      this.shutdownIn = result;
+    });
     this.shutdownActive = true;
     this.shutdownIn = this.convertHeureToSeconde();
     this.heureSelected = null; 
@@ -57,7 +58,7 @@ export class PopupContentComponent {
     let cmdCancel = new Commande(); 
     cmdCancel.radical = this.commande.radical;
     cmdCancel.arguments = " -a";
-    this.userService.save(cmdCancel).subscribe();
+    this.javaService.manageShutdown(cmdCancel).subscribe(result => this.shutdownIn = result);
     this.shutdownActive = false;
     this.shutdownIn = null;
 
@@ -68,10 +69,8 @@ export class PopupContentComponent {
     this.dialogRef.close(this.shutdownIn);
   }
 
-
   selectionnerHeure(choix: string){
     this.heureSelected = choix;
-    console.log("selectHeure() = " + choix);
   }
 
   generateQuartDheure(){
@@ -104,22 +103,4 @@ export class PopupContentComponent {
     const mm = (this.shutdownIn%3600)/60;
     return hh.toString() + 'h' + mm.toString();
   }
-
-  
-  /*calculerHeure() {
-    const now = new Date(Date.now());
-    const heureNow = now.getHours();
-    const minuteNow = now.getMinutes();
-
-    let prochainQuart;
-
-    console.log(heureNow + ":" + minuteNow);
-
-    this.ticksMinutes.forEach(element => {
-      if (element - minuteNow < 15){
-        console.log('Prochain quart : ' + element);
-        prochainQuart = element%60;
-      }
-    });
-  }*/
 }

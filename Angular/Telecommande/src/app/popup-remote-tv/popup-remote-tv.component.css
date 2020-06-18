@@ -1,0 +1,80 @@
+.equalizer{
+    width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
+.verticalContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.mediaPanel {
+  width: 100%;
+  height: auto;
+  position: relative;
+}
+
+.mediaPanel  img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.controlContainer {
+  height: auto;
+}
+
+
+.chaineSlider {
+  width: 100%; 
+  height: auto; 
+  overflow-x:auto; 
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.chainetv {
+  width: 100px;
+  height: 100px;
+  background-size: 100px;
+  display: inline-block;
+  position: relative;
+  background-repeat: no-repeat;
+}
+
+.chainetv.tf1 {
+  background-image: url("/assets/tf1.png");
+}
+
+.chainetv.fr2 {
+  background-image: url("/assets/fr2.png");
+}
+
+.chainetv.fr3 {
+  background-image: url("/assets/fr3.png");
+}
+
+.chainetv.fr4 {
+  background-image: url("/assets/fr4.png");
+}
+
+.chainetv.fr5 {
+  background-image: url("/assets/fr5.png");
+}
+
+.chainetv.fro {
+  background-image: url("/assets/fro.png");
+}
+
+.chainetv.m6 {
+  background-image: url("/assets/m6.png");
+}
+
+.chainetv.bfm {
+  background-image: url("/assets/bfm.png");
+}

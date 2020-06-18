@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageService } from '../service/image-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { PopupToJavaService } from '../service/popup-to-java.service';
+import { interval, Subject, timer } from 'rxjs';
+import { mergeMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-popup-image-bureau',
@@ -9,39 +12,40 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class PopupImageBureauComponent implements OnInit {
 
-  
 
-  constructor(private imageService: ImageService, private domSanitizer: DomSanitizer) { }
+  constructor(private imageService: ImageService,
+    private javaService: PopupToJavaService,
+    private domSanitizer: DomSanitizer) { }
+
+  isImageLoading: boolean;
+  blobData: any;
+  private dialogOpened = new Subject<boolean>();
+  private refreshImage: any;
 
   ngOnInit() {
-    //this.getImageFromService();
-    this.first();
-    /*let reader = new FileReader();
-    reader.onloadend = (e) => {
-      this.blobData = this.domSanitizer.bypassSecurityTrustUrl('http://192.168.1.123:8080/imageBureau');
-      console.log(this.blobData);
-    }*/
-    }
-
-    isImageLoading: boolean;
-    blobData: any;
-  
-  first(){
-    this.isImageLoading = true;
-      this.imageService.getImageBureau().subscribe(data => {
-        this.lul(data);
-        this.isImageLoading = false;
-      }, error => {
-        this.isImageLoading = false;
-        console.log(error);
-      });
+    this.refreshImage = timer(0, 1500)
+    .pipe
+    (mergeMap(_ => this.imageService.getImageBureau()),
+      takeUntil(this.dialogOpened))
+    .subscribe(data => {
+      this.lul(data);
+      this.isImageLoading = false;
+    }, error => {
+      this.isImageLoading = false;
+      console.log(error);
+    });
   }
-    
-  lul(data){
+
+
+  ngOnDestroy() {
+    this.refreshImage.unsubscribe();
+  }
+
+
+  lul(data) {
     let reader = new FileReader();
     reader.onloadend = (e) => {
       this.blobData = this.domSanitizer.bypassSecurityTrustUrl('http://192.168.1.123:8080/imageBureau');
-      //console.log(this.blobData);
     }
 
     if (data) {
@@ -49,9 +53,43 @@ export class PopupImageBureauComponent implements OnInit {
     }
   }
 
-  
-  
+  getClickPosition(e) {
+    var container = document.querySelector(".lul");
 
+    var parentPosition = this.getPosition(container);
+    var xPosition = e.offsetX;
+    var yPosition = e.offsetY;
+    console.log("(", xPosition, " ; ", yPosition, ")");
 
+    this.javaService.sendLeftClick(xPosition, yPosition).subscribe((res) => {
+      console.log(res);
+    });
+  }
 
+  // Helper function to get an element's exact position
+  getPosition(el) {
+    var xPos = 0;
+    var yPos = 0;
+
+    while (el) {
+      if (el.tagName == "BODY") {
+        // deal with browser quirks with body/window/document and page scroll
+        var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+        var yScroll = el.scrollTop || document.documentElement.scrollTop;
+
+        xPos += (el.offsetLeft - xScroll + el.clientLeft);
+        yPos += (el.offsetTop - yScroll + el.clientTop);
+      } else {
+        // for all other non-BODY elements
+        xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+        yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+      }
+
+      el = el.offsetParent;
+    }
+    return {
+      x: xPos,
+      y: yPos
+    };
+  }
 }

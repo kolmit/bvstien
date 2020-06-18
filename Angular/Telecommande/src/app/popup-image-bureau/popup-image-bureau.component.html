@@ -1,7 +1,14 @@
-<p>popup-image-bureau works!</p>
-<img [src]="blobData"
-     alt="Place image title"
-     *ngIf="!isImageLoading; else noImageFound">
-<ng-template #noImageFound>
-     Nada
-</ng-template>
+<mat-dialog-content>
+     <div (click)="getClickPosition($event)" >
+          <img [src]="blobData"
+          class="lul"
+          alt="Screenshot du bureau récupérée en quasi temps-réel"
+          *ngIf="!isImageLoading; else noImageFound">
+     </div>
+</mat-dialog-content>
+<!--
+<h3>Quel écran ?</h3>
+<div class="verticalContainer displaySelector">
+     <div class="material-icons"><h1>desktop_windows</h1></div>
+     <div class="material-icons"><h1>desktop_windows</h1></div>
+</div>--> 

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
 import { PopupToJavaService } from '../service/popup-to-java.service';
 import { Commande } from '../model/commande';
+import { Subscription, interval } from 'rxjs';
+import { startWith, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-slider-volume',
@@ -17,9 +19,9 @@ export class SliderVolumeComponent {
     min = 0;
     step = 1;
     thumbLabel = false;
-    currentVolume = 0;
+    currentVolume = 50;
     vertical = false;
-  
+    
     constructor(private javaService: PopupToJavaService){
       this.commande = new Commande();
       this.commande.radical = "nircmd changesysvolume ";

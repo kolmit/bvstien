@@ -1,0 +1,15 @@
+.lul {
+    width: auto;
+    height: auto;
+}
+
+.verticalContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+.displaySelector h1 { 
+    font-size: 5em 
+}
+

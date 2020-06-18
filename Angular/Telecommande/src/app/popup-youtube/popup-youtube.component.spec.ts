@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PopupContentVolumeComponent } from './popup-content-volume.component';
+import { PopupYoutubeComponent } from './popup-youtube.component';
 
-describe('PopupContentVolumeComponent', () => {
-  let component: PopupContentVolumeComponent;
-  let fixture: ComponentFixture<PopupContentVolumeComponent>;
+describe('PopupYoutubeComponent', () => {
+  let component: PopupYoutubeComponent;
+  let fixture: ComponentFixture<PopupYoutubeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PopupContentVolumeComponent ]
+      declarations: [ PopupYoutubeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PopupContentVolumeComponent);
+    fixture = TestBed.createComponent(PopupYoutubeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

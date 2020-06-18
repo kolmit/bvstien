@@ -1,0 +1,22 @@
+<div class="verticalContainer">
+    <div class="mediaPanel">
+        <img src="{{currentMedia ? currentMedia : noCurrentMediaIconUri}}"/>
+    </div>
+    <div class="controlContainer">
+        <!--<div class="material-icons" (click)="switchPause()"><h1>pause_circle_outline</h1></div>-->
+        <div class="material-icons" *ngIf="currentMedia" (click)="fullScreen()"><h1>fullscreen</h1></div>
+        <div class="material-icons" (click)="currentMedia ? closeReadingTab() : closeGeneralTab()"><h1>close</h1></div>
+        <div class="material-icons" (click)="switchMonitor()"><h1>keyboard_arrow_left</h1></div>
+        <div class="material-icons" (click)="switchMonitor()"><h1>keyboard_arrow_right</h1></div>
+        <div class="material-icons" (click)="openAltTab()"><h1>view_carousel</h1></div>
+    </div>
+    <div class="chaineSlider">
+        <div *ngFor="let chaine of arrayChainetvUri" (click)="selectedChannel(chaine.nom)" class="chainetv {{chaine.nom}}">
+            <div *ngIf="chaine.reading" class="equalizer">
+                <img src={{readingIconUri}}/>
+            </div>
+        </div>
+    </div>
+</div>
+
+

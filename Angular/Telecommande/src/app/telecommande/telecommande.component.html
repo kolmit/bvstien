@@ -1,6 +1,8 @@
 <div class="titre-telecommande">
-  <h1>Télécommande</h1>
+  <h1>TELECOMMANDE</h1>
 </div>
+<!--<button mat-button>azeaez</button>-->
+
 <mat-grid-list cols="3" rowHeight="100px">
 
     <mat-grid-tile
@@ -22,15 +24,38 @@
     </mat-grid-tile>
 
     <mat-grid-tile
-    [colspan]="1"
-    [rowspan]="1"
-    style='background-color:aliceblue'
-    class="material-icons"
-    (click)="bureau()">
+        [colspan]="1"
+        [rowspan]="1"
+        class="material-icons"
+        [ngClass]="{'mutedVolume': this.currentMuted, 'notMutedVolume': !this.currentMuted}"
+        (click)="SwitchMute()">
+        <h1>{{this.currentMuted ? 'volume_off' : 'volume_mute'}}</h1>
+    </mat-grid-tile>
+
+
+    <mat-grid-tile
+        [colspan]="1"
+        [rowspan]="1"
+        style='background-color:#ffb6c1'
+        class="material-icons youtube remote"
+        (click)="openYoutubePopup()">
+    </mat-grid-tile>
+
+    
+    <mat-grid-tile
+        [colspan]="1"
+        [rowspan]="1"
+        class="material-icons chainetv remote"
+        (click)="popupTv()">
+        <h1>live_tvsettings_remote</h1>
+    </mat-grid-tile>
+    
+    <mat-grid-tile
+        [colspan]="1"
+        [rowspan]="1"
+        class="material-icons chainetv remote"
+        (click)="desktop()">
+        <h1>desktop_windowsmouse</h1>
     </mat-grid-tile>
 
   </mat-grid-list>
-
-<br>
-<app-popup-image-bureau></app-popup-image-bureau>
-

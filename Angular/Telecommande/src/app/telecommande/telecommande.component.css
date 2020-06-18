@@ -1,3 +1,15 @@
+.titre-telecommande{
+  font-family: Roboto; 
+  font-weight: 100;
+  text-align: center;
+  color: white;
+}
+
+.material-icons{
+  border-radius: 17px 17px 17px 17px;
+  opacity: 95%;
+}
+
 .example-viewport {
     height: 200px;
     width: 200px;
@@ -12,4 +24,32 @@
     position: absolute;
     top: 0px;
     left: 0px;
+}
+
+.mutedVolume {
+  background-color:lightpink;
+}
+
+.notMutedVolume {
+  background-color:aliceblue;
+}
+
+.chainetv {
+  background-repeat: no-repeat;
+  background-size: 100px 100px;
+  background-position-x: center;
+  background-position-y: center;
+}
+
+
+.chainetv.remote {
+  background-color: #ffb64f;
+}
+
+.youtube.remote {
+  background-image: url("C:/Users/gazor/Desktop/Git/bvstien/Angular/Telecommande/src/assets/youtube.png");
+  background-repeat: no-repeat;
+  background-size: 46px 32px;
+  background-position-x: center;
+  background-position-y: center;
 }
