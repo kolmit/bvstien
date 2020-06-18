@@ -5,10 +5,14 @@ import { WINDOW } from 'src/environments/window-provider';
   providedIn: 'root'
 })
 export class ConfigService {
-  static BACKEND_URL = 'http://192.168.1.123:8080';
+  static BACKEND_URL = "http://";
   
   constructor(@Inject(WINDOW) private window: Window,) { 
-    ConfigService.BACKEND_URL = this.window.location.hostname;
+    console.log("INJECT WINDOWS : ", this.window.location.hostname)
+    let uri = this.window.location.hostname;
+    let port = '8080';
+    ConfigService.BACKEND_URL = ConfigService.BACKEND_URL.concat(uri + ":" + port);
+    console.log("ConfigService.BACKEND_URL : ", ConfigService.BACKEND_URL);
   }
 
   getBackEndUrl(): string {

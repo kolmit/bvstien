@@ -23,19 +23,19 @@ export class PopupToJavaService {
   private switchMonitor: string;
   private leftClick: string;
 
-  constructor(private http: HttpClient) {
-    this.shutdownUrl = ConfigService.BACKEND_URL + '/shutdown';
-    this.volumeUrl = ConfigService.BACKEND_URL + '/volume';
-    this.isMutedUrl = ConfigService.BACKEND_URL + '/muted';
-    this.muteUrl = ConfigService.BACKEND_URL + '/muteVolume';
-    this.tvUrl = ConfigService.BACKEND_URL + '/tv';
-    this.youtubeVideo = ConfigService.BACKEND_URL + '/youtube';
-    this.switchPause = ConfigService.BACKEND_URL + '/switchPause';
-    this.fullScreen = ConfigService.BACKEND_URL + '/fullscreen';
-    this.closeTab = ConfigService.BACKEND_URL + '/closeCurrentChromeTab';
-    this.currentMedia = ConfigService.BACKEND_URL + '/currentMedia';
-    this.switchMonitor = ConfigService.BACKEND_URL + '/switchMonitor';
-    this.leftClick = ConfigService.BACKEND_URL + '/leftclick';
+  constructor(private http: HttpClient, private configService: ConfigService) {
+    this.shutdownUrl = this.configService.getBackEndUrl() + '/shutdown';
+    this.volumeUrl = this.configService.getBackEndUrl() + '/volume';
+    this.isMutedUrl = this.configService.getBackEndUrl() + '/muted';
+    this.muteUrl = this.configService.getBackEndUrl() + '/muteVolume';
+    this.tvUrl = this.configService.getBackEndUrl() + '/tv';
+    this.youtubeVideo = this.configService.getBackEndUrl() + '/youtube';
+    this.switchPause = this.configService.getBackEndUrl() + '/switchPause';
+    this.fullScreen = this.configService.getBackEndUrl() + '/fullscreen';
+    this.closeTab = this.configService.getBackEndUrl() + '/closeCurrentChromeTab';
+    this.currentMedia = this.configService.getBackEndUrl() + '/currentMedia';
+    this.switchMonitor = this.configService.getBackEndUrl() + '/switchMonitor';
+    this.leftClick = this.configService.getBackEndUrl() + '/leftclick';
   }
 
   public manageShutdown(cmd: Commande): Observable<number> {

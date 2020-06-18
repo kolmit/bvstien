@@ -12,8 +12,8 @@ export class ImageService {
 
   private imageUrl: string;
 
-  constructor(private http: HttpClient, private domSanitizer: DomSanitizer) {
-    this.imageUrl = ConfigService.BACKEND_URL + '/imageBureau';
+  constructor(private http: HttpClient, private domSanitizer: DomSanitizer, private configService: ConfigService) {
+    this.imageUrl = this.configService.getBackEndUrl() + '/imageBureau';
   }
  
   public getImageBureau(): Observable<Blob> {

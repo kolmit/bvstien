@@ -48,7 +48,7 @@ export class PopupImageBureauComponent implements OnInit {
   lul(data) {
     let reader = new FileReader();
     reader.onloadend = (e) => {
-      this.blobData = this.domSanitizer.bypassSecurityTrustUrl(`http://${this.configService.getBackEndUrl()}:8080/imageBureau`);
+      this.blobData = this.domSanitizer.bypassSecurityTrustUrl(`${this.configService.getBackEndUrl()}/imageBureau`);
     }
 
     if (data) {
