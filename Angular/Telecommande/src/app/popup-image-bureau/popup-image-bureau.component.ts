@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ImageService } from '../service/image-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PopupToJavaService } from '../service/popup-to-java.service';
-import { interval, Subject, timer } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 import { mergeMap, takeUntil } from 'rxjs/operators';
+import { WINDOW } from 'src/environments/window-provider';
+import { ConfigService } from '../config.service';
 
 @Component({
   selector: 'app-popup-image-bureau',
@@ -12,9 +14,10 @@ import { mergeMap, takeUntil } from 'rxjs/operators';
 })
 export class PopupImageBureauComponent implements OnInit {
 
-
-  constructor(private imageService: ImageService,
+  constructor(
+    private imageService: ImageService,
     private javaService: PopupToJavaService,
+    private configService: ConfigService,
     private domSanitizer: DomSanitizer) { }
 
   isImageLoading: boolean;
@@ -45,7 +48,7 @@ export class PopupImageBureauComponent implements OnInit {
   lul(data) {
     let reader = new FileReader();
     reader.onloadend = (e) => {
-      this.blobData = this.domSanitizer.bypassSecurityTrustUrl('http://192.168.1.123:8080/imageBureau');
+      this.blobData = this.domSanitizer.bypassSecurityTrustUrl(`http://${this.configService.getBackEndUrl()}:8080/imageBureau`);
     }
 
     if (data) {

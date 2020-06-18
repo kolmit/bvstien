@@ -47,7 +47,7 @@
 }
 
 .youtube.remote {
-  background-image: url("C:/Users/gazor/Desktop/Git/bvstien/Angular/Telecommande/src/assets/youtube.png");
+  background-image: url("/assets/youtube.png");
   background-repeat: no-repeat;
   background-size: 46px 32px;
   background-position-x: center;
