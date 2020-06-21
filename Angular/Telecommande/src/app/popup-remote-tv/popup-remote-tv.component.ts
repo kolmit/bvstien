@@ -33,6 +33,12 @@ export class PopupRemoteTvComponent implements OnInit {
         { "nom": "m6", "uri": "assets/m6.png", "reading": false  },
         { "nom": "fro", "uri": "assets/fro.png", "reading": false  },
         { "nom": "bfm", "uri": "assets/bfm.png", "reading": false  },
+        { "nom": "cnews", "uri": "/assets/cnews.png", "reading": false  },
+        { "nom": "c8", "uri": "/assets/c8.png", "reading": false  },
+        { "nom": "cstar", "uri": "/assets/cstar.png", "reading": false  },
+        { "nom": "w9", "uri": "/assets/w9.png", "reading": false  },
+        { "nom": "tfx", "uri": "/assets/tfx.png", "reading": false  },
+        { "nom": "tmc", "uri": "/assets/tmc.png", "reading": false  },
       ]
 
     this.javaService.getCurrentMedia().subscribe((res) => {

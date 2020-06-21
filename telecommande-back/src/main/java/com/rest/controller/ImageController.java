@@ -1,14 +1,19 @@
 package com.rest.controller;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,16 +37,34 @@ public class ImageController {
 	@Autowired
 	private CommandeRunner commandRunner;
 
-	@GetMapping(value= "/imageBureau", produces = MediaType.IMAGE_JPEG_VALUE)
+	/*@GetMapping(value= "/imageBureau", produces = MediaType.IMAGE_JPEG_VALUE)
 	public @ResponseBody byte[] getImageWithMediaType() throws IOException {
 		BufferedImage bImage = this.commandRunner.generateScreenshot();
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ImageIO.write(bImage, "jpg", bos );
+		ImageIO.write(bImage, "jpeg", bos );
 		byte [] data = bos.toByteArray();
 		
 		bImage.flush();
 		bos.close();
 	    return data;
+	}*/
+	
+	@GetMapping(value = "/imageBureau", produces = MediaType.IMAGE_JPEG_VALUE)
+	public ResponseEntity<StreamingResponseBody> runJobAndGetLogs() throws IOException {
+
+		BufferedImage bImage = this.commandRunner.generateScreenshot();
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();		
+		ImageIO.write(bImage, "jpeg", bos );
+		byte [] data = bos.toByteArray();
+		
+	    
+	    StreamingResponseBody body = (outputStream) -> {
+                outputStream.write(data);
+                outputStream.flush();
+	        };
+	    
+
+	    return new ResponseEntity<StreamingResponseBody>(body, HttpStatus.OK);
 	}
 
 			

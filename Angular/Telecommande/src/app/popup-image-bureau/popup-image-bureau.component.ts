@@ -4,7 +4,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { PopupToJavaService } from '../service/popup-to-java.service';
 import { Subject, timer } from 'rxjs';
 import { mergeMap, takeUntil } from 'rxjs/operators';
-import { WINDOW } from 'src/environments/window-provider';
 import { ConfigService } from '../config.service';
 
 @Component({
@@ -26,12 +25,24 @@ export class PopupImageBureauComponent implements OnInit {
   private refreshImage: any;
 
   ngOnInit() {
-    this.refreshImage = timer(0, 1500)
+    this.refreshImage = timer(0, 3000)
     .pipe
     (mergeMap(_ => this.imageService.getImageBureau()),
       takeUntil(this.dialogOpened))
     .subscribe(data => {
-      this.lul(data);
+      this.readData(data);
+      this.isImageLoading = false;
+    }, error => {
+      this.isImageLoading = false;
+      console.log(error);
+    });
+  }
+
+
+  callImageBureauService(){
+    this.imageService.getImageBureau()
+    .subscribe(data => {
+      this.readData(data);
       this.isImageLoading = false;
     }, error => {
       this.isImageLoading = false;
@@ -45,7 +56,7 @@ export class PopupImageBureauComponent implements OnInit {
   }
 
 
-  lul(data) {
+  readData(data) {
     let reader = new FileReader();
     reader.onloadend = (e) => {
       this.blobData = this.domSanitizer.bypassSecurityTrustUrl(`${this.configService.getBackEndUrl()}/imageBureau`);
@@ -57,7 +68,7 @@ export class PopupImageBureauComponent implements OnInit {
   }
 
   getClickPosition(e) {
-    var container = document.querySelector(".lul");
+    var container = document.querySelector(".screenshot-bureau");
 
     var parentPosition = this.getPosition(container);
     var xPosition = e.offsetX;
@@ -66,6 +77,7 @@ export class PopupImageBureauComponent implements OnInit {
 
     this.javaService.sendLeftClick(xPosition, yPosition).subscribe((res) => {
       console.log(res);
+      this.callImageBureauService();
     });
   }
 

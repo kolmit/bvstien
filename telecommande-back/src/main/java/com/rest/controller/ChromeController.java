@@ -49,6 +49,13 @@ public class ChromeController {
    		this.mapChaineUrl.put("fr5", "\"https://www.france.tv/france-5/direct.html\"");
    		this.mapChaineUrl.put("fro", "\"https://www.france.tv/france-o/direct.html\"");
    		this.mapChaineUrl.put("bfm", "\"https://www.bfmtv.com/mediaplayer/live-video\"");
+   		this.mapChaineUrl.put("cnews", "\"https://www.canalplus.com/live/?channel=480\"");
+   		this.mapChaineUrl.put("c8", "\"https://www.canalplus.com/live/?channel=450\"");
+   		this.mapChaineUrl.put("cstar", "\"https://www.canalplus.com/live/?channel=513\"");
+   		this.mapChaineUrl.put("w9", "\"https://www.6play.fr/w9/direct\"");
+   		this.mapChaineUrl.put("tfx", "\"https://www.tf1.fr/tfx/direct\"");
+   		this.mapChaineUrl.put("tmc", "\"https://www.tf1.fr/tmc/direct\"");
+   		
    	}
 
     
@@ -100,11 +107,18 @@ public class ChromeController {
     	if (this.currentMedia.equalsIgnoreCase("bfm")) {
     		System.out.println("equals bfm");
     		commandRunner.runFullScreenBfm();
+    		this.fullscreenOn = !this.fullscreenOn;
+
+    	} else if (this.currentMedia.matches("(.*)tf1(.*)")) {
+    		commandRunner.runFullScreenTf();
+    		this.fullscreenOn = !this.fullscreenOn;
+    	} else {
+    		if (this.commandRunner.pressCombination(Arrays.asList((KeyEvent.VK_F)))) {
+        		this.fullscreenOn = !this.fullscreenOn;
+        	}
     	}
     	
-    	if (this.commandRunner.pressCombination(Arrays.asList((KeyEvent.VK_F)))) {
-    		this.fullscreenOn = !this.fullscreenOn;
-    	}
+    	
     	return this.fullscreenOn;
     }
     

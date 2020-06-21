@@ -11,7 +11,7 @@
         <div class="material-icons" (click)="openAltTab()"><h1>view_carousel</h1></div>
     </div>
     <div class="chaineSlider">
-        <div *ngFor="let chaine of arrayChainetvUri" (click)="selectedChannel(chaine.nom)" class="chainetv {{chaine.nom}}">
+        <div *ngFor="let chaine of arrayChainetvUri" (click)="selectedChannel(chaine.nom)" class="chainetv" [ngStyle]="{'background-image': 'url(' + chaine.uri + ')'}">
             <div *ngIf="chaine.reading" class="equalizer">
                 <img src={{readingIconUri}}/>
             </div>

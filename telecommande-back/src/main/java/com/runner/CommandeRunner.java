@@ -146,4 +146,37 @@ public class CommandeRunner {
 	public BufferedImage generateScreenshot() {
 		return this.robot.createScreenCapture(new Rectangle(3840, 1080));
 	}
+
+
+	public void runFullScreenTf() {
+		try {
+			this.pressCombination(Arrays.asList(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_J));
+			Thread.sleep(500);
+			
+			String text = "document.querySelector(\".fullscreen-enter\").click()";
+			StringSelection stringSelection = new StringSelection(text);
+			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(stringSelection, stringSelection);
+			
+			Thread.sleep(500);
+			
+			
+			this.pressCombination(Arrays.asList(KeyEvent.VK_CONTROL, KeyEvent.VK_V));
+	
+			
+			Thread.sleep(500);
+			
+			
+			this.robot.keyPress(KeyEvent.VK_ENTER);		
+			this.robot.keyRelease(KeyEvent.VK_ENTER);
+			
+			Thread.sleep(500);
+			
+			this.robot.keyPress(KeyEvent.VK_F12);		
+			this.robot.keyRelease(KeyEvent.VK_F12);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+				
+	}
 }

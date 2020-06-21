@@ -102,7 +102,6 @@ export class PopupToJavaService {
   }
 
   sendLeftClick(xPosition: any, yPosition: any): Observable<Object> {
-    console.log("rho click", xPosition);
     let params = {"xPosition":xPosition, "yPosition": yPosition };
     return this.http.post<any>(this.leftClick, params);
   }
