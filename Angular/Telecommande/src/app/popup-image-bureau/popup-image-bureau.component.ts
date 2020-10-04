@@ -23,11 +23,21 @@ export class PopupImageBureauComponent implements OnInit {
   blobData: any;
   private dialogOpened = new Subject<boolean>();
   private refreshImage: any;
+  keyboardInputValue: string = '';
+
+
+  keyboardKeyPressed(event: KeyboardEvent){
+    if (event.isTrusted){
+      this.javaService.typeKeyboardKey(event.key).subscribe((res) => {
+      });
+    }
+  }
+
 
   ngOnInit() {
-    this.refreshImage = timer(0, 3000)
-    .pipe
-    (mergeMap(_ => this.imageService.getImageBureau()),
+    this.refreshImage = timer(0, 1500)
+    .pipe(
+      mergeMap(_ => this.imageService.getImageBureau()),
       takeUntil(this.dialogOpened))
     .subscribe(data => {
       this.readData(data);

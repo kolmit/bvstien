@@ -6,9 +6,10 @@
           *ngIf="!isImageLoading; else noImageFound">
      </div>
 </mat-dialog-content>
-<!--
-<h3>Quel écran ?</h3>
-<div class="verticalContainer displaySelector">
-     <div class="material-icons"><h1>desktop_windows</h1></div>
-     <div class="material-icons"><h1>desktop_windows</h1></div>
-</div>--> 
+
+<mat-form-field class="example-full-width">
+     <input matInput [(ngModel)]="keyboardInputValue" (keypress)="keyboardKeyPressed($event)">
+     <button mat-button *ngIf="keyboardInputValue" matSuffix mat-icon-button aria-label="Clear" (click)="keyboardInputValue=''">
+          x
+     </button>
+</mat-form-field>

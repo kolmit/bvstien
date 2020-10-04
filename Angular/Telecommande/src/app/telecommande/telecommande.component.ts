@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { PopupContentComponent } from '../popup-content/popup-content.component';
 import { MatDialog } from '@angular/material';
 import { PopupToJavaService } from '../service/popup-to-java.service';
@@ -7,9 +7,8 @@ import { Subscription, Observable, timer, interval } from 'rxjs';
 import { take, map, startWith, switchMap } from 'rxjs/operators';
 import { PopupYoutubeComponent } from '../popup-youtube/popup-youtube.component';
 import { PopupRemoteTvComponent } from '../popup-remote-tv/popup-remote-tv.component';
-import Stomp from 'stompjs';
-import * as Socket from 'socket.io-client';
 import { PopupImageBureauComponent } from '../popup-image-bureau/popup-image-bureau.component';
+import { PopupCameraComponent } from '../popup-camera/popup-camera.component';
 
 @Component({
   selector: 'app-telecommande',
@@ -23,10 +22,6 @@ export class TelecommandeComponent {
   subscription: Subscription;
   muter = new MuteVolumeComponent(this.javaService);
 
-  /** Stomp : la web-socket... */
-  private serverUrl = 'http://192.168.1.123:8080/socket'
-  private title = 'WebSockets chat';
-  private stompClient;
 
   constructor(
     private dialog: MatDialog, 
@@ -38,38 +33,17 @@ export class TelecommandeComponent {
     this.subscription = this.muter.muted$
       .subscribe(mutedNotif => this.currentMuted = mutedNotif);
 
-      interval(2000)
+      /*interval(2000)
       .pipe(
         startWith(0),
         switchMap(() => this.javaService.getMute())
       )
-      .subscribe(res => this.currentMuted = res);
-
-      //this.initializeWebSocketConnection();
+      .subscribe(res => this.currentMuted = res);*/
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-  initializeWebSocketConnection(){
-    let ws = Socket(this.serverUrl);
-    this.stompClient = Stomp.over(ws);
-    let that = this;
-    this.stompClient.connect({}, function(frame) {
-      that.stompClient.subscribe("/chat", (message) => {
-        if(message.body) {
-          //$(".chat").append("<div class='message'>"+message.body+"</div>")
-          console.log(message.body);
-        }
-      });
-    });
-  }
-
-  sendMessage(message){
-    this.stompClient.send("/app/send/message" , {}, message);
-    //$('#input').val('');
-  }
-  
 
   actionShutdown(){
     const dialogRef = this.dialog.open(PopupContentComponent, {
@@ -119,9 +93,11 @@ export class TelecommandeComponent {
   }
 
   desktop(){
-    const dialogRef = this.dialog.open(PopupImageBureauComponent, {
-      data: {}
-    });
+    const dialogRef = this.dialog.open(PopupImageBureauComponent, {maxWidth: '90%'});
+  }
+
+  camera(){
+    const dialogRef = this.dialog.open(PopupCameraComponent, {maxWidth: '90%'});
   }
 
 

@@ -22,6 +22,7 @@ export class PopupToJavaService {
   private currentMedia: string;
   private switchMonitor: string;
   private leftClick: string;
+  private pressKeyboardKey: string;
 
   constructor(private http: HttpClient, private configService: ConfigService) {
     this.shutdownUrl = this.configService.getBackEndUrl() + '/shutdown';
@@ -36,6 +37,7 @@ export class PopupToJavaService {
     this.currentMedia = this.configService.getBackEndUrl() + '/currentMedia';
     this.switchMonitor = this.configService.getBackEndUrl() + '/switchMonitor';
     this.leftClick = this.configService.getBackEndUrl() + '/leftclick';
+    this.pressKeyboardKey = this.configService.getBackEndUrl() + '/pressKeyboardKey';
   }
 
   public manageShutdown(cmd: Commande): Observable<number> {
@@ -62,10 +64,10 @@ export class PopupToJavaService {
     return this.http.get<string>(this.youtubeVideo + "?idVideo=" + idVideo)
       .subscribe(
         (res) => {
-          console.log("Youtube: " + res);
+          console.log("Youtube: ", res);
         },
-        (err) => {
-          console.error("Erreur youtube !");
+        (error) => {
+          console.error("Erreur youtube !", error);
         }
     );
   }
@@ -77,7 +79,7 @@ export class PopupToJavaService {
 
     return this.http.get<boolean>(channelRequested).subscribe(
       () => console.log("Chaine mise : " + chaineTv),
-      (err) => console.log("erreur chaine tv")
+      (err) => console.error("erreur chaine tv")
     );
   }
 
@@ -106,7 +108,7 @@ export class PopupToJavaService {
     return this.http.post<any>(this.leftClick, params);
   }
 
-  /*getRemoteStatus(): Observable<Object> {
-    this.http.get<boolean>(this.isFullScreen)
-  }*/
+  typeKeyboardKey(key: string): Observable<string>  {
+    return this.http.post<any>(this.pressKeyboardKey, key);
+  }
 }

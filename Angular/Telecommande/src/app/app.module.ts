@@ -27,6 +27,7 @@ import { FilterYoutubePipe } from './filter-youtube.pipe';
 import { PopupRemoteTvComponent } from './popup-remote-tv/popup-remote-tv.component';
 import { PopupAlttabComponent } from './popup-remote-tv/popup-alttab/popup-alttab.component';
 import { WINDOW_PROVIDERS } from 'src/environments/window-provider';
+import { PopupCameraComponent } from './popup-camera/popup-camera.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { WINDOW_PROVIDERS } from 'src/environments/window-provider';
     FilterYoutubePipe,
     PopupRemoteTvComponent,
     PopupAlttabComponent,
+    PopupCameraComponent,
   ],
   exports: [
     YoutubeUnitComponent,
@@ -65,7 +67,7 @@ import { WINDOW_PROVIDERS } from 'src/environments/window-provider';
     ScrollingModule,
     MatSelectModule,
   ],
-  providers: [HttpClient, PopupToJavaService, ImageService, WINDOW_PROVIDERS,
+  providers: [HttpClient, PopupToJavaService, ImageService, WINDOW_PROVIDERS
   ],
   entryComponents: [
     PopupContentComponent, 
