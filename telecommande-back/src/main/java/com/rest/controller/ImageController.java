@@ -24,11 +24,20 @@ public class ImageController {
 
 	
 	@GetMapping(value = "/imageBureau", produces = MediaType.IMAGE_JPEG_VALUE)
-	public ResponseEntity<StreamingResponseBody> runJobAndGetLogs() throws IOException {
+	public ResponseEntity<StreamingResponseBody> runJobAndGetLogs() {
 
 		BufferedImage bImage = this.commandRunner.generateScreenshot();
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();		
-		ImageIO.write(bImage, "jpeg", bos );
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(bImage, "jpeg", bos );
+		} catch (IOException e) {
+			System.out.println("Fermeture du stream.");
+			try {
+				bos.close();
+			} catch (IOException ioException) {
+				System.out.println("Même la fermeture de l'OutputStream a bugué, lol.");
+			}
+		}
 		byte [] data = bos.toByteArray();
 		
 	    

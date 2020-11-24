@@ -10,9 +10,10 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './popup-youtube.component.html',
   styleUrls: ['./popup-youtube.component.css']
 })
-export class PopupYoutubeComponent implements OnInit, OnChanges {
+export class PopupYoutubeComponent implements OnInit {
   videos: any[];
   search = '';
+  onRead = false;
   youtubeUrl = this.sanitizer.bypassSecurityTrustResourceUrl("www.youtube.com")
 
   constructor(private sanitizer: DomSanitizer, private spinner: NgxSpinnerService, private youTubeService: YoutubeService, private javaService: PopupToJavaService) { }
@@ -33,16 +34,21 @@ export class PopupYoutubeComponent implements OnInit, OnChanges {
       });
   }
 
-  ngOnChanges(){
-    console.log("seek" + this.search);
-    this.youTubeService.searchVideo(this.search);
+  onSubmit(){
+    this.javaService.getYoutubeVideo(this.search);
+    this.onRead = true;
+  }
+
+  closeCurrentTab(){
+    this.javaService.getCloseTab().subscribe((res) => console.log("Onglet fermé."));
+    this.onRead = false;
+  }
+
+  switchMonitor() {
+    this.javaService.getSwitchMonitor().subscribe((res) => console.log(res));
   }
 
   thisVideoGotSelected(video){
     this.javaService.getYoutubeVideo(video.id.videoId);
   }
-
-  /*playThisVideo(){
-    this.javaService.playThisVideo()
-  }*/
 }

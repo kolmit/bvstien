@@ -46,7 +46,8 @@ public class ChromeController {
    		this.mapChaineUrl.put("fr2", "\"https://www.france.tv/france-2/direct.html\"");
    		this.mapChaineUrl.put("fr3", "\"https://www.france.tv/france-3/direct.html\"");
    		this.mapChaineUrl.put("fr4", "\"https://www.france.tv/france-4/direct.html\"");
-   		this.mapChaineUrl.put("fr5", "\"https://www.france.tv/france-5/direct.html\"");
+		this.mapChaineUrl.put("fr5", "\"https://www.france.tv/france-5/direct.html\"");
+		this.mapChaineUrl.put("arte", "\"https://www.arte.tv/fr/direct/\"");
    		this.mapChaineUrl.put("fro", "\"https://www.france.tv/france-o/direct.html\"");
    		this.mapChaineUrl.put("bfm", "\"https://www.bfmtv.com/mediaplayer/live-video\"");
    		this.mapChaineUrl.put("cnews", "\"https://www.canalplus.com/live/?channel=480\"");

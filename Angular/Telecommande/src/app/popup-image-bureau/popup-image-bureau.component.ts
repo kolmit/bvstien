@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, HostListener } from '@angular/core';
 import { ImageService } from '../service/image-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PopupToJavaService } from '../service/popup-to-java.service';
@@ -25,17 +25,17 @@ export class PopupImageBureauComponent implements OnInit {
   private refreshImage: any;
   keyboardInputValue: string = '';
 
-
+  @HostListener('document:keyup', ['$event'])
   keyboardKeyPressed(event: KeyboardEvent){
+    console.log('-->up ', event);
     if (event.isTrusted){
       this.javaService.typeKeyboardKey(event.key).subscribe((res) => {
       });
     }
   }
 
-
   ngOnInit() {
-    this.refreshImage = timer(0, 1500)
+    this.refreshImage = timer(0, 750)
     .pipe(
       mergeMap(_ => this.imageService.getImageBureau()),
       takeUntil(this.dialogOpened))

@@ -30,6 +30,7 @@ export class PopupRemoteTvComponent implements OnInit {
         { "nom": "fr3", "uri": "assets/fr3.png", "reading": false  },
         { "nom": "fr4", "uri": "assets/fr4.png", "reading": false  },
         { "nom": "fr5", "uri": "assets/fr5.png", "reading": false  },
+        { "nom": "arte", "uri": "assets/arte.png", "reading": false  },
         { "nom": "m6", "uri": "assets/m6.png", "reading": false  },
         { "nom": "fro", "uri": "assets/fro.png", "reading": false  },
         { "nom": "bfm", "uri": "assets/bfm.png", "reading": false  },

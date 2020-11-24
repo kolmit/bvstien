@@ -22,6 +22,7 @@ public class KeyboardController {
 
     @PostMapping(value="/pressKeyboardKey")
     public boolean pressKeyboardKey(@RequestBody String key) throws NoSuchFieldException, IllegalAccessException {
+
         List<Integer> keyToPress = new ArrayList<>();
 
         // Si c'est une majuscule, on va devoir appuyer sur SHIFT.
@@ -42,6 +43,10 @@ public class KeyboardController {
             keyCode = keyCode.concat(key);
         } else if (key.matches(" ")){
             keyCode = keyCode.concat("SPACE");
+        } else if (key.matches("Enter")) {
+            keyCode = keyCode.concat("ENTER");
+        } else if (key.matches("Backspace")) {
+            keyCode = keyCode.concat("BACK_SPACE");
         } else {
             keyCode = keyCode.concat("UNDEFINED");
         }

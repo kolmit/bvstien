@@ -28,6 +28,8 @@ import { PopupRemoteTvComponent } from './popup-remote-tv/popup-remote-tv.compon
 import { PopupAlttabComponent } from './popup-remote-tv/popup-alttab/popup-alttab.component';
 import { WINDOW_PROVIDERS } from 'src/environments/window-provider';
 import { PopupCameraComponent } from './popup-camera/popup-camera.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -66,6 +68,7 @@ import { PopupCameraComponent } from './popup-camera/popup-camera.component';
     MatSlideToggleModule,
     ScrollingModule,
     MatSelectModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [HttpClient, PopupToJavaService, ImageService, WINDOW_PROVIDERS
   ],

@@ -8,7 +8,7 @@
 </mat-dialog-content>
 
 <mat-form-field class="example-full-width">
-     <input matInput [(ngModel)]="keyboardInputValue" (keypress)="keyboardKeyPressed($event)">
+     <input matInput [(ngModel)]="keyboardInputValue">
      <button mat-button *ngIf="keyboardInputValue" matSuffix mat-icon-button aria-label="Clear" (click)="keyboardInputValue=''">
           x
      </button>
