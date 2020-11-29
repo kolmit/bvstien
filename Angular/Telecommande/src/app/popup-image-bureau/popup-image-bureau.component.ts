@@ -60,12 +60,6 @@ export class PopupImageBureauComponent implements OnInit {
     });
   }
 
-
-  ngOnDestroy() {
-    this.refreshImage.unsubscribe();
-  }
-
-
   readData(data) {
     let reader = new FileReader();
     reader.onloadend = (e) => {
@@ -75,6 +69,10 @@ export class PopupImageBureauComponent implements OnInit {
     if (data) {
       reader.readAsDataURL(data);
     }
+  }
+
+  ngOnDestroy() {
+    this.refreshImage.unsubscribe();
   }
 
   getClickPosition(e) {

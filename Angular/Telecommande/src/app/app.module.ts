@@ -78,6 +78,7 @@ import { environment } from '../environments/environment';
     PopupRemoteTvComponent,
     PopupImageBureauComponent,
     PopupAlttabComponent,
+    PopupCameraComponent
   ],
   bootstrap: [AppComponent]
 })

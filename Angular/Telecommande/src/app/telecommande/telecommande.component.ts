@@ -9,6 +9,7 @@ import { PopupYoutubeComponent } from '../popup-youtube/popup-youtube.component'
 import { PopupRemoteTvComponent } from '../popup-remote-tv/popup-remote-tv.component';
 import { PopupImageBureauComponent } from '../popup-image-bureau/popup-image-bureau.component';
 import { PopupCameraComponent } from '../popup-camera/popup-camera.component';
+import { ImageService } from '../service/image-service.service';
 
 @Component({
   selector: 'app-telecommande',
@@ -25,20 +26,14 @@ export class TelecommandeComponent {
 
   constructor(
     private dialog: MatDialog, 
-    private javaService: PopupToJavaService
+    private javaService: PopupToJavaService, 
+    private imageService: ImageService
     ) {}
 
   ngOnInit() {
     this.currentMuted = false;
     this.subscription = this.muter.muted$
       .subscribe(mutedNotif => this.currentMuted = mutedNotif);
-
-      /*interval(2000)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.javaService.getMute())
-      )
-      .subscribe(res => this.currentMuted = res);*/
   }
 
   ngOnDestroy() {
@@ -69,12 +64,6 @@ export class TelecommandeComponent {
       width: '500px',
       data: {}
     });
-
-    dialogRef.afterClosed().subscribe(urlVideo => {
-      if (urlVideo){
-        this.javaService.getYoutubeVideo(urlVideo);
-      }
-    });
   }
 
   SwitchMute(){
@@ -98,6 +87,10 @@ export class TelecommandeComponent {
 
   camera(){
     const dialogRef = this.dialog.open(PopupCameraComponent, {maxWidth: '90%'});
+
+    dialogRef.afterClosed().subscribe(() => {
+        this.imageService.closeWebcamStream().subscribe( (res) => { console.log("Caméra fermée : " + res)});
+    });
   }
 
 
