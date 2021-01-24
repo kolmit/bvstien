@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PopupToJavaService } from '../service/popup-to-java.service';
+import { PopupToJavaService } from '../../service/popup-to-java.service';
 import { MatDialog } from '@angular/material';
 import { PopupAlttabComponent } from './popup-alttab/popup-alttab.component';
 
@@ -91,7 +91,7 @@ export class PopupRemoteTvComponent implements OnInit {
   }
 
   switchMonitor() {
-    this.javaService.getSwitchMonitor().subscribe((res) => console.log("balek du result ", res));
+    this.javaService.getSwitchMonitor().subscribe(() => {});
   }
 
   openAltTab() {

@@ -1,9 +1,9 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
-import { YoutubeService } from '../service/youtube.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { PopupToJavaService } from '../service/popup-to-java.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { PopupToJavaService } from 'src/app/service/popup-to-java.service';
+import { YoutubeService } from 'src/app/service/youtube.service';
 
 @Component({
   selector: 'app-popup-youtube',
@@ -16,7 +16,11 @@ export class PopupYoutubeComponent implements OnInit {
   onRead = false;
   youtubeUrl = this.sanitizer.bypassSecurityTrustResourceUrl("www.youtube.com")
 
-  constructor(private sanitizer: DomSanitizer, private spinner: NgxSpinnerService, private youTubeService: YoutubeService, private javaService: PopupToJavaService) { }
+  constructor(
+    private sanitizer: DomSanitizer, 
+    private spinner: NgxSpinnerService, 
+    private youTubeService: YoutubeService, 
+    private javaService: PopupToJavaService) { }
 
   ngOnInit() {
     this.spinner.show()
@@ -35,8 +39,11 @@ export class PopupYoutubeComponent implements OnInit {
   }
 
   onSubmit(){
-    this.javaService.getYoutubeVideo(this.search);
-    this.onRead = true;
+    if (this.search){
+      this.javaService.getYoutubeVideo(this.search);
+      this.onRead = true;
+      this.search = '';
+    }
   }
 
   closeCurrentTab(){

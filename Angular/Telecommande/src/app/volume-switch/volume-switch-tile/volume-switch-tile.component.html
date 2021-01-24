@@ -1,0 +1,6 @@
+<div [ngClass]="getMuteClass()" 
+    (click)="switchVolumeMute()">
+    <div>
+        <h1>{{ this.currentMuted ? 'volume_off' : 'volume_mute' }}</h1>
+    </div>
+</div>

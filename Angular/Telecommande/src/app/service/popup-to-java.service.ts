@@ -23,12 +23,14 @@ export class PopupToJavaService {
   private switchMonitor: string;
   private leftClick: string;
   private pressKeyboardKey: string;
+  private switchSoundDeviceUrl: string;
 
   constructor(private http: HttpClient, private configService: ConfigService) {
     this.shutdownUrl = this.configService.getBackEndUrl() + '/shutdown';
     this.volumeUrl = this.configService.getBackEndUrl() + '/volume';
     this.isMutedUrl = this.configService.getBackEndUrl() + '/muted';
     this.muteUrl = this.configService.getBackEndUrl() + '/muteVolume';
+    this.switchSoundDeviceUrl = this.configService.getBackEndUrl() + '/switchSoundDevice';
     this.tvUrl = this.configService.getBackEndUrl() + '/tv';
     this.youtubeVideo = this.configService.getBackEndUrl() + '/youtube';
     this.switchPause = this.configService.getBackEndUrl() + '/switchPause';
@@ -50,6 +52,10 @@ export class PopupToJavaService {
 
   public postVolume(cmd: Commande): Observable<number> {
     return this.http.post<number>(this.volumeUrl, cmd);
+  }
+
+  public getSwitchSoundDevice(): Observable<Object> {
+    return this.http.get<Object>(this.switchSoundDeviceUrl);
   }
 
   public postMute(cmd: Commande): Observable<boolean> {

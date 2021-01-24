@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subject, timer } from 'rxjs';
 import { mergeMap, takeUntil } from 'rxjs/operators';
-import { ConfigService } from '../config.service';
-import { ImageService } from '../service/image-service.service';
-import { PopupToJavaService } from '../service/popup-to-java.service';
+import { ConfigService } from '../../config.service';
+import { ImageService } from '../../service/image-service.service';
+import { PopupToJavaService } from '../../service/popup-to-java.service';
 
 @Component({
   selector: 'app-popup-camera',

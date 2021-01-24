@@ -1,11 +1,10 @@
 package com.rest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.model.Commande;
 import com.parser.CommandeParser;
@@ -25,6 +24,8 @@ public class VolumeController {
 
 	private final double tickVolume = 655.35; // 
 	private final String speakersOutput = "Haut-parleurs";
+	private final String headsetOutput = "Casque pour téléphone";
+	private String currentSoundDevice;
 
     public VolumeController() {
     }
@@ -42,9 +43,6 @@ public class VolumeController {
 
 	
 	private Integer firstVolumeAcquisition() {
-		String[] initOutput = {"nircmd", "setdefaultsounddevice", "\""+ speakersOutput + "\""};
-		commandRunner.execute(initOutput);
-		
 		String[] initVolume = {"nircmd", "changesysvolume", "-65535"};
 		commandRunner.execute(initVolume);
 		return 0;
@@ -80,6 +78,18 @@ public class VolumeController {
 		}
     	return this.muted;
     }
+
+    @GetMapping(value = "/switchSoundDevice", produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> switchSoundDevice() {
+    	String deviceToSet = this.currentSoundDevice == null ? speakersOutput : this.currentSoundDevice == speakersOutput ? headsetOutput : speakersOutput;
+		String[] initOutput = {"nircmd", "setdefaultsounddevice", "\""+ deviceToSet + "\""};
+
+		if (commandRunner.execute(initOutput)){
+			this.currentSoundDevice = deviceToSet;
+		}
+
+		return ResponseEntity.ok("{\"device\": \"" + this.currentSoundDevice + "\" }");
+	}
 
    /*
     * On fait la différence notée "x" entre : 

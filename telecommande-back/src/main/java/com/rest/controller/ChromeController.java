@@ -83,8 +83,10 @@ public class ChromeController {
     
     @GetMapping("/youtube")
     public boolean getYoutube(@RequestParam(value = "idVideo") String idVideo) {
-    	String urlRequested = "https://www.youtube.com/watch?v=" + idVideo;
-    	
+		String urlRequested;
+
+		urlRequested = idVideo;
+
     	Commande openYoutubeVideoCmd = new Commande(Commande.CHROME, " -fullscreen " + urlRequested);
 		String[] commandToExecute = this.parser.parse(openYoutubeVideoCmd);
 		

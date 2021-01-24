@@ -47,7 +47,11 @@ public class CommandeController {
     		String[] commandToExecute = this.parser.parse(cmd);
         	if (commandRunner.execute(commandToExecute)) {
         		String number = cmd.getArguments().replaceAll("[^0-9]", "");
-        		this.shutdownIn = Integer.parseInt(number);
+        		try {
+					this.shutdownIn = Integer.parseInt(number);
+				} catch (NumberFormatException e){
+        			System.out.println("Ce n'est pas un nombre ! => " + e.getMessage());
+				}
         	}
     	}
     	return shutdownIn;

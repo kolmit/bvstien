@@ -1,69 +1,13 @@
 <div class="titre-telecommande">
-  <h1>TELECOMMANDE</h1>
+    <h1>TELECOMMANDE</h1>
 </div>
-<!--<button mat-button>azeaez</button>-->
 
-<mat-grid-list cols="3" rowHeight="100px">
-
-    <mat-grid-tile
-        [colspan]="1"
-        [rowspan]="1"
-        style='background-color:lightpink'
-        class="material-icons"
-        (click)="actionShutdown()">
-        <h1 *ngIf='this.shutdownCountdown == undefined; else elseShutdownActif'>power_settings_new</h1>
-    </mat-grid-tile>
-
-    <mat-grid-tile
-        [colspan]="2"
-        [rowspan]="1"
-        style='background-color:lightblue'
-        class="material-icons">
-        <h1>volume_up</h1>  
-        <app-slider-volume></app-slider-volume>
-    </mat-grid-tile>
-
-    <mat-grid-tile
-        [colspan]="1"
-        [rowspan]="1"
-        class="material-icons"
-        [ngClass]="{'mutedVolume': this.currentMuted, 'notMutedVolume': !this.currentMuted}"
-        (click)="SwitchMute()">
-        <h1>{{this.currentMuted ? 'volume_off' : 'volume_mute'}}</h1>
-    </mat-grid-tile>
-
-
-    <mat-grid-tile
-        [colspan]="1"
-        [rowspan]="1"
-        style='background-color:#ffb6c1'
-        class="material-icons youtube remote"
-        (click)="openYoutubePopup()">
-    </mat-grid-tile>
-
-    
-    <mat-grid-tile
-        [colspan]="1"
-        [rowspan]="1"
-        class="material-icons chainetv remote"
-        (click)="popupTv()">
-        <h1>live_tvsettings_remote</h1>
-    </mat-grid-tile>
-    
-    <mat-grid-tile
-        [colspan]="1"
-        [rowspan]="1"
-        class="material-icons chainetv remote"
-        (click)="desktop()">
-        <h1>desktop_windowsmouse</h1>
-    </mat-grid-tile>
-
-    <mat-grid-tile
-        [colspan]="1"
-        [rowspan]="1"
-        class="material-icons camera"
-        (click)="camera()">
-        <h1>camera_alt</h1>
-    </mat-grid-tile>
-
-  </mat-grid-list>
+<div class="remote-container">
+    <app-shutdown-tile></app-shutdown-tile>
+    <app-slider-volume></app-slider-volume>
+    <app-volume-switch-tile></app-volume-switch-tile>
+    <app-television-tile></app-television-tile>
+    <app-desktop-tile></app-desktop-tile>
+    <app-camera-tile></app-camera-tile>
+    <app-youtube-tile></app-youtube-tile>
+</div>

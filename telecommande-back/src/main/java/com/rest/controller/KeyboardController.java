@@ -26,7 +26,7 @@ public class KeyboardController {
         List<Integer> keyToPress = new ArrayList<>();
 
         // Si c'est une majuscule, on va devoir appuyer sur SHIFT.
-        if (this.isUppercase(key)) {
+        if (this.isUppercase(key) || key.matches("[0-9]")) {
             keyToPress.add(KeyEvent.VK_SHIFT);
         }
 

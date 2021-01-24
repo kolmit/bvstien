@@ -1,10 +1,10 @@
-import { Component, OnInit, Inject, HostListener } from '@angular/core';
-import { ImageService } from '../service/image-service.service';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { ImageService } from '../../service/image-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PopupToJavaService } from '../service/popup-to-java.service';
+import { PopupToJavaService } from '../../service/popup-to-java.service';
 import { Subject, timer } from 'rxjs';
 import { mergeMap, takeUntil } from 'rxjs/operators';
-import { ConfigService } from '../config.service';
+import { ConfigService } from '../../config.service';
 
 @Component({
   selector: 'app-popup-image-bureau',
@@ -34,6 +34,7 @@ export class PopupImageBureauComponent implements OnInit {
     }
   }
 
+  
   ngOnInit() {
     this.refreshImage = timer(0, 750)
     .pipe(

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TuileShutdownComponent } from './tuile-shutdown.component';
+import { YoutubeTileComponent } from './youtube-tile.component';
 
-describe('TuileShutdownComponent', () => {
-  let component: TuileShutdownComponent;
-  let fixture: ComponentFixture<TuileShutdownComponent>;
+describe('YoutubeTileComponent', () => {
+  let component: YoutubeTileComponent;
+  let fixture: ComponentFixture<YoutubeTileComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TuileShutdownComponent ]
+      declarations: [ YoutubeTileComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TuileShutdownComponent);
+    fixture = TestBed.createComponent(YoutubeTileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

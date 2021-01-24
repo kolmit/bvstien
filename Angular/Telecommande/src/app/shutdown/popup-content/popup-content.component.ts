@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { PopupToJavaService } from '../service/popup-to-java.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Commande } from '../model/commande';
+import { Component, Inject } from '@angular/core';
+import { PopupToJavaService } from '../../service/popup-to-java.service';
+import { ActivatedRoute } from '@angular/router';
+import { Commande } from '../../model/commande';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({

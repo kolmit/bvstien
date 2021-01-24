@@ -2,13 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
 import { PopupToJavaService } from '../service/popup-to-java.service';
 import { Commande } from '../model/commande';
-import { Subscription, interval } from 'rxjs';
-import { startWith, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-slider-volume',
   templateUrl: './slider-volume.component.html',
-  styleUrls: ['./slider-volume.component.css']
+  styleUrls: ['./slider-volume.component.css', '../telecommande/telecommande.component.css']
 })
 export class SliderVolumeComponent {
     commande: Commande;
@@ -32,6 +30,7 @@ export class SliderVolumeComponent {
     }
 
     onChangeVolume(event: MatSliderChange){
+      console.log(event.value.toString());
       this.commande.arguments = event.value.toString();
       this.javaService.postVolume(this.commande).subscribe(result => this.currentVolume = event.value);
     }

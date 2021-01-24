@@ -5,55 +5,32 @@
   color: white;
 }
 
-.material-icons{
+.remote-container {
+  flex-wrap: wrap;
+  user-select: none;
+}
+
+.tuile_1x1{
   border-radius: 17px 17px 17px 17px;
+  margin: 0.5px;
+  height: 33%;
+  width: 33%;
+  max-height: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tuile_2x1{
+  border-radius: 17px 17px 17px 17px;
+  height: 33%;
+  width: 66%;
+  max-height: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.material-icons{
   opacity: 95%;
-}
-
-.example-viewport {
-    height: 200px;
-    width: 200px;
-    border: 1px solid black;
-  }
-  
-  .example-item {
-    height: 50px;
-  }
-  
-  .video-title {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-}
-
-.mutedVolume {
-  background-color:lightpink;
-}
-
-.notMutedVolume {
-  background-color:aliceblue;
-}
-
-.chainetv {
-  background-repeat: no-repeat;
-  background-size: 100px 100px;
-  background-position-x: center;
-  background-position-y: center;
-}
-
-
-.chainetv.remote {
-  background-color: #ffb64f;
-}
-
-.youtube.remote {
-  background-image: url("/assets/youtube.png");
-  background-repeat: no-repeat;
-  background-size: 46px 32px;
-  background-position-x: center;
-  background-position-y: center;
-}
-
-.camera {
-  background-color: darkseagreen;
 }
