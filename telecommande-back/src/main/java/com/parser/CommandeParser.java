@@ -12,14 +12,6 @@ import com.model.Commande;
 @Service
 public class CommandeParser {
 	ArrayList<String> authorizedCmd = new ArrayList<String>();
-	/*final List<String> LISTE_COMMANDES = List.of(
-			"shutdown"
-			);*/
-	
-	
-	public CommandeParser(){
-		//this.authorizedCmd.addAll(LISTE_COMMANDES);
-	}
 
 	
 	public String[] parse(Commande c){
@@ -36,16 +28,6 @@ public class CommandeParser {
 		return commandToExecute;
 	}
 
-	@SuppressWarnings("unused")
-	private boolean validate(String radical) {
-		for (String itemRegex : authorizedCmd) {
-			if (radical.matches(itemRegex)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	
 	protected String[] parseCmd(String mes){
 		String[] msg = mes.trim().split(" ");

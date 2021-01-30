@@ -11,11 +11,13 @@ export class PopupToJavaService {
 
 
   private shutdownUrl: string;
+  private shutdownCancelUrl: string;
   private volumeUrl: string;
   private muteUrl: string;
   private isMutedUrl: string;
   private tvUrl: string;
   private youtubeVideo: string;
+  private netflixTab: string;
   private switchPause: string;
   private fullScreen: string;
   private closeTab: string;
@@ -27,12 +29,14 @@ export class PopupToJavaService {
 
   constructor(private http: HttpClient, private configService: ConfigService) {
     this.shutdownUrl = this.configService.getBackEndUrl() + '/shutdown';
+    this.shutdownCancelUrl = this.configService.getBackEndUrl() + '/shutdown/cancel';
     this.volumeUrl = this.configService.getBackEndUrl() + '/volume';
     this.isMutedUrl = this.configService.getBackEndUrl() + '/muted';
     this.muteUrl = this.configService.getBackEndUrl() + '/muteVolume';
     this.switchSoundDeviceUrl = this.configService.getBackEndUrl() + '/switchSoundDevice';
     this.tvUrl = this.configService.getBackEndUrl() + '/tv';
     this.youtubeVideo = this.configService.getBackEndUrl() + '/youtube';
+    this.netflixTab = this.configService.getBackEndUrl() + '/netflix';
     this.switchPause = this.configService.getBackEndUrl() + '/switchPause';
     this.fullScreen = this.configService.getBackEndUrl() + '/fullscreen';
     this.closeTab = this.configService.getBackEndUrl() + '/closeCurrentChromeTab';
@@ -44,6 +48,14 @@ export class PopupToJavaService {
 
   public manageShutdown(cmd: Commande): Observable<number> {
     return this.http.post<number>(this.shutdownUrl, cmd);
+  }
+
+  public cancelShutdown(): Observable<boolean> {
+    return this.http.get<boolean>(this.shutdownCancelUrl);
+  }
+
+  public getShutdownCount(): Observable<Date> {
+    return this.http.get<Date>(this.shutdownUrl);
   }
 
   public getCurrentVolume(): Observable<number> {
@@ -87,6 +99,10 @@ export class PopupToJavaService {
       () => console.log("Chaine mise : " + chaineTv),
       (err) => console.error("erreur chaine tv")
     );
+  }
+
+  public openNetflixTab() {
+    return this.http.get<boolean>(this.netflixTab);
   }
 
   getCurrentMedia(): Observable<string> {

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { PopupToJavaService } from '../service/popup-to-java.service';
-import { MuteVolumeComponent } from '../mute-volume/mute-volume.component';
 import { Subscription } from 'rxjs';
 import { ImageService } from '../service/image-service.service';
 
@@ -14,7 +13,6 @@ export class TelecommandeComponent {
 
   currentMuted: boolean;
   subscription: Subscription;
-  muter = new MuteVolumeComponent(this.javaService);
 
 
   constructor(
@@ -25,8 +23,6 @@ export class TelecommandeComponent {
 
   ngOnInit() {
     this.currentMuted = false;
-    this.subscription = this.muter.muted$
-      .subscribe(mutedNotif => this.currentMuted = mutedNotif);
   }
 
   ngOnDestroy() {

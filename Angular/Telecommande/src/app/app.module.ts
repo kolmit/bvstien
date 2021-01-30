@@ -7,7 +7,7 @@ import { TelecommandeComponent } from './telecommande/telecommande.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar'; 
-import { MatCardModule, MatDialogModule, MatInputModule, MatSliderModule, MatSlideToggleModule, MatSelectModule } from '@angular/material';
+import { MatCardModule, MatDialogModule, MatInputModule, MatSliderModule, MatSlideToggleModule, MatSelectModule, MatListModule } from '@angular/material';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -18,7 +18,6 @@ import { SliderVolumeComponent } from './slider-volume/slider-volume.component';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ImageService } from './service/image-service.service';
 import { PopupImageBureauComponent } from './desktop/popup-image-bureau/popup-image-bureau.component';
-import { MuteVolumeComponent } from './mute-volume/mute-volume.component';
 import { YoutubeUnitComponent } from './youtube-unit/youtube-unit.component';
 import { FilterYoutubePipe } from './filter-youtube.pipe';
 import { WINDOW_PROVIDERS } from 'src/environments/window-provider';
@@ -43,7 +42,6 @@ import { PopupContentComponent } from './shutdown/popup-content/popup-content.co
     PopupContentComponent,
     SliderVolumeComponent,
     PopupImageBureauComponent,
-    MuteVolumeComponent,
     PopupYoutubeComponent,
     YoutubeUnitComponent,
     FilterYoutubePipe,
@@ -71,6 +69,7 @@ import { PopupContentComponent } from './shutdown/popup-content/popup-content.co
     MatDialogModule,
     FormsModule,
     MatInputModule,
+    MatListModule,
     MatButtonModule,
     MatButtonToggleModule,
     HttpClientModule,

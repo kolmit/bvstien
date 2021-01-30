@@ -1,42 +1,39 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { PopupToJavaService } from '../../service/popup-to-java.service';
 import { ActivatedRoute } from '@angular/router';
 import { Commande } from '../../model/commande';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { StateService } from 'src/app/service/state.service';
 
 @Component({
   selector: 'app-popup-content',
   templateUrl: './popup-content.component.html',
   styleUrls: ['./popup-content.component.css']
 })
-export class PopupContentComponent {
-
+export class PopupContentComponent{
   commande: Commande;
   heures : string[];
-  ticksMinutes = [15, 30, 45, 60];
   
   heureSelected: string;
   shutdownActive: boolean;
-  shutdownIn: number;
+  shutdownTimeRequested: number;
 
-  
 
-  constructor(private route: ActivatedRoute, 
-    private javaService: PopupToJavaService, 
+  constructor(private javaService: PopupToJavaService, 
+    public stateService: StateService,
     public dialogRef: MatDialogRef<PopupContentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
-      dialogRef.beforeClosed().subscribe(() => this.closePopup())
       this.commande = new Commande();
       this.commande.radical = data.radical;
 
       if (data.shutdownCountdown != undefined){
         this.shutdownActive = true;
-        this.shutdownIn = data.shutdownCountdown;
+        this.shutdownTimeRequested = data.shutdownCountdown;
       }
       this.heures = this.generateQuartDheure();
     }
- 
+
 
   onSubmitShutdown() {
     let cmdShutdown = new Commande(); 
@@ -45,28 +42,20 @@ export class PopupContentComponent {
 
     console.log("commande.radical = " + cmdShutdown.radical + cmdShutdown.arguments);
     this.javaService.manageShutdown(cmdShutdown).subscribe(result => {
-      this.shutdownIn = result;
+      this.shutdownTimeRequested = result;
+      this.stateService.setShutdownActive(true);
     });
     this.shutdownActive = true;
-    this.shutdownIn = this.convertHeureToSeconde();
+    this.shutdownTimeRequested = this.convertHeureToSeconde();
     this.heureSelected = null; 
-
-    this.closePopup();
   }
 
   onSubmitCancel(){
-    let cmdCancel = new Commande(); 
-    cmdCancel.radical = this.commande.radical;
-    cmdCancel.arguments = " -a";
-    this.javaService.manageShutdown(cmdCancel).subscribe(result => this.shutdownIn = result);
+    this.javaService.cancelShutdown().subscribe(result => {
+      this.stateService.setShutdownActive(!result);
+    });
     this.shutdownActive = false;
-    this.shutdownIn = null;
-
-    this.closePopup();
-  }
-
-  closePopup(){
-    this.dialogRef.close(this.shutdownIn);
+    this.shutdownTimeRequested = null;
   }
 
   selectionnerHeure(choix: string){
@@ -92,15 +81,8 @@ export class PopupContentComponent {
     }
     const heureMinutes = this.heureSelected.split(":");
     const nbSecondes = Number(heureMinutes[0]) * 3600 + Number(heureMinutes[1])*60; 
-    console.log("NB SEC " + nbSecondes);
-    this.shutdownIn = nbSecondes;
+
+    this.shutdownTimeRequested = nbSecondes;
     return nbSecondes;
-  }
-
-
-  convertSecondeToHeure(){
-    const hh = Math.floor(this.shutdownIn/3600);
-    const mm = (this.shutdownIn%3600)/60;
-    return hh.toString() + 'h' + mm.toString();
   }
 }

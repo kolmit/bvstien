@@ -1,29 +1,21 @@
 package com.rest.controller;
 
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.model.Commande;
 import com.parser.CommandeParser;
 import com.runner.CommandeRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.awt.event.KeyEvent;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CommandeController {
-	
+
 	Integer shutdownIn;
+	LocalDateTime shutdownRequestHour;
  
    	@Autowired
 	private CommandeParser parser;
@@ -33,13 +25,18 @@ public class CommandeController {
    	
    	
    	@GetMapping("/shutdown")
-   	public Integer getShutdownCount() {
-   		return this.shutdownIn;
+   	public LocalDateTime getShutdownCount() {
+   		return this.shutdownRequestHour != null ? this.shutdownRequestHour
+				.plusSeconds(this.shutdownIn)
+				.minusHours(LocalDateTime.now().getHour())
+				.minusMinutes(LocalDateTime.now().getMinute())
+				.minusSeconds(LocalDateTime.now().getSecond()) : null;
    	}
 
  
     @PostMapping("/shutdown")
     public Integer sendShutdown(@RequestBody Commande cmd) {
+   		this.shutdownRequestHour = LocalDateTime.now();
     	if (cmd.getRadical() == null && cmd.getArguments() == null) {
     		return null;
     	}
@@ -56,6 +53,19 @@ public class CommandeController {
     	}
     	return shutdownIn;
     }
+
+	@GetMapping("/shutdown/cancel")
+	public boolean cancelShutdown() {
+   		Commande cmdCancel = new Commande("shutdown", "-a");
+		String[] commandToExecute = this.parser.parse(cmdCancel);
+
+		if (commandRunner.execute(commandToExecute)) {
+			this.shutdownIn = null;
+			this.shutdownRequestHour = null;
+			return true;
+		}
+		return false;
+	}
     
     @GetMapping("/switchMonitor")
     public boolean switchMonitor() {

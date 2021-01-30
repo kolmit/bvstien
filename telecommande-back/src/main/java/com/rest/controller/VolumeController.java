@@ -45,6 +45,7 @@ public class VolumeController {
 	private Integer firstVolumeAcquisition() {
 		String[] initVolume = {"nircmd", "changesysvolume", "-65535"};
 		commandRunner.execute(initVolume);
+		this.switchSoundDevice();
 		return 0;
 	}
 	
@@ -55,7 +56,7 @@ public class VolumeController {
     	}
     	else {
     		if (this.currentVolume == null) {
-    			this.currentVolume = this.firstVolumeAcquisition();
+				this.currentVolume = this.firstVolumeAcquisition();
     		}
     		
     		int volumeValue = computeVolumeValue(cmd);
@@ -72,23 +73,22 @@ public class VolumeController {
     @PostMapping("/muteVolume")
     public boolean muteVolume(@RequestBody Commande cmd) {
     	String[] commandToExecute = this.parser.parse(cmd);
-    	
-    	if (commandRunner.execute(commandToExecute)) {
+		this.switchSoundDevice();
+
+		if (commandRunner.execute(commandToExecute)) {
 			this.muted = cmd.getArguments().matches("1") ? true : false;
 		}
     	return this.muted;
     }
 
-    @GetMapping(value = "/switchSoundDevice", produces = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<String> switchSoundDevice() {
-    	String deviceToSet = this.currentSoundDevice == null ? speakersOutput : this.currentSoundDevice == speakersOutput ? headsetOutput : speakersOutput;
-		String[] initOutput = {"nircmd", "setdefaultsounddevice", "\""+ deviceToSet + "\""};
+	private String switchSoundDevice() {
+		String[] initOutput = {"nircmd", "setdefaultsounddevice", "\""+ this.speakersOutput + "\""};
 
 		if (commandRunner.execute(initOutput)){
-			this.currentSoundDevice = deviceToSet;
+			this.currentSoundDevice = this.speakersOutput;
 		}
 
-		return ResponseEntity.ok("{\"device\": \"" + this.currentSoundDevice + "\" }");
+		return this.currentSoundDevice;
 	}
 
    /*

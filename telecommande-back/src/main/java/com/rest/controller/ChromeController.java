@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
+import com.model.Commande;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.model.Commande;
 import com.parser.CommandeParser;
 import com.runner.CommandeRunner;
 
@@ -56,7 +56,6 @@ public class ChromeController {
    		this.mapChaineUrl.put("w9", "\"https://www.6play.fr/w9/direct\"");
    		this.mapChaineUrl.put("tfx", "\"https://www.tf1.fr/tfx/direct\"");
    		this.mapChaineUrl.put("tmc", "\"https://www.tf1.fr/tmc/direct\"");
-   		
    	}
 
     
@@ -83,9 +82,7 @@ public class ChromeController {
     
     @GetMapping("/youtube")
     public boolean getYoutube(@RequestParam(value = "idVideo") String idVideo) {
-		String urlRequested;
-
-		urlRequested = idVideo;
+		String urlRequested = idVideo;
 
     	Commande openYoutubeVideoCmd = new Commande(Commande.CHROME, " -fullscreen " + urlRequested);
 		String[] commandToExecute = this.parser.parse(openYoutubeVideoCmd);
