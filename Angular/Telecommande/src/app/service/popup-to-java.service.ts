@@ -46,7 +46,7 @@ export class PopupToJavaService {
     this.pressKeyboardKey = this.configService.getBackEndUrl() + '/pressKeyboardKey';
   }
 
-  public manageShutdown(cmd: Commande): Observable<number> {
+  public manageShutdown(cmd: number): Observable<number> {
     return this.http.post<number>(this.shutdownUrl, cmd);
   }
 
@@ -62,7 +62,7 @@ export class PopupToJavaService {
     return this.http.get<number>(this.volumeUrl);
   }
 
-  public postVolume(cmd: Commande): Observable<number> {
+  public postVolume(cmd: string): Observable<number> {
     return this.http.post<number>(this.volumeUrl, cmd);
   }
 
@@ -70,8 +70,8 @@ export class PopupToJavaService {
     return this.http.get<Object>(this.switchSoundDeviceUrl);
   }
 
-  public postMute(cmd: Commande): Observable<boolean> {
-    return this.http.post<boolean>(this.muteUrl, cmd);
+  public postMute(muteOrUnmute: string): Observable<boolean> {
+    return this.http.post<boolean>(this.muteUrl, muteOrUnmute);
   }
 
   public getMute() {

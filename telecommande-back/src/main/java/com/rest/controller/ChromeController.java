@@ -1,28 +1,17 @@
 package com.rest.controller;
 
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.PostConstruct;
-
-import com.model.Commande;
+import com.constant.Constants;
+import com.parser.CommandeParser;
+import com.runner.CommandeRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.parser.CommandeParser;
-import com.runner.CommandeRunner;
+import javax.annotation.PostConstruct;
+import java.awt.event.KeyEvent;
+import java.util.*;
+
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -61,10 +50,8 @@ public class ChromeController {
     
     @GetMapping("/tv")
     public boolean getTvChannel(@RequestParam(value = "chaine") String chaine) {
-    	String urlRequested = this.mapChaineUrl.get(chaine);
-    	
-    	Commande cmdTv = new Commande(Commande.CHROME, " -fullscreen " + urlRequested);
-		String[] commandToExecute = this.parser.parse(cmdTv);
+		String commandToParse = Constants.getCommand(Constants.CMD_CHROME, this.mapChaineUrl.get(chaine));
+		List<String> commandToExecute = this.parser.parseString(commandToParse);
 
 		try {
 			Thread.sleep(500);
@@ -75,30 +62,24 @@ public class ChromeController {
 		if (this.currentMedia != null) {
 			this.currentMedia = this.closeCurrentChromeTab() ? null : this.currentMedia;
 		}
-		this.currentMedia = commandRunner.execute(commandToExecute) ? chaine : null;
+		this.currentMedia = commandRunner.executeV2(commandToExecute) ? chaine : this.currentMedia;
 		
 		return (this.currentMedia != null);
     }
-    
+
+
     @GetMapping("/youtube")
     public boolean getYoutube(@RequestParam(value = "idVideo") String idVideo) {
-		String urlRequested = idVideo;
+		String commandToParse = Constants.getCommand(Constants.CMD_CHROME, idVideo);
+		List<String> commandToExecute = this.parser.parseString(commandToParse);
 
-    	Commande openYoutubeVideoCmd = new Commande(Commande.CHROME, " -fullscreen " + urlRequested);
-		String[] commandToExecute = this.parser.parse(openYoutubeVideoCmd);
-		
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return commandRunner.execute(commandToExecute);
+		return commandRunner.executeV2(commandToExecute);
     }
 
     
     @GetMapping("/switchPause")
     public boolean getSwitchPause() {
-    	return this.commandRunner.pressCombination(new ArrayList<>(Arrays.asList(KeyEvent.VK_BACK_SPACE)));
+    	return this.commandRunner.pressCombination(new ArrayList<>(Collections.singletonList(KeyEvent.VK_BACK_SPACE)));
     }
     
     
@@ -113,7 +94,7 @@ public class ChromeController {
     		commandRunner.runFullScreenTf();
     		this.fullscreenOn = !this.fullscreenOn;
     	} else {
-    		if (this.commandRunner.pressCombination(Arrays.asList((KeyEvent.VK_F)))) {
+    		if (this.commandRunner.pressCombination(Collections.singletonList((KeyEvent.VK_F)))) {
         		this.fullscreenOn = !this.fullscreenOn;
         	}
     	}
@@ -125,10 +106,10 @@ public class ChromeController {
     
     @GetMapping("/killChrome")
     public boolean killChrome() {
-		Commande killAllChrome = new Commande("taskkill /F /IM ", "chrome* /T");
-		String[] cmdKillChrome = this.parser.parse(killAllChrome);
+		String commandToParse = Constants.getCommand(Constants.CMD_KILL_CHROME);
+		List<String> cmdKillChrome = this.parser.parseString(commandToParse);
 		
-		return commandRunner.execute(cmdKillChrome);
+		return commandRunner.executeV2(cmdKillChrome);
     }
     
     

@@ -36,12 +36,7 @@ export class PopupContentComponent{
 
 
   onSubmitShutdown() {
-    let cmdShutdown = new Commande(); 
-    cmdShutdown.radical = this.commande.radical;
-    cmdShutdown.arguments = " -s -t " + this.convertHeureToSeconde().toString();
-
-    console.log("commande.radical = " + cmdShutdown.radical + cmdShutdown.arguments);
-    this.javaService.manageShutdown(cmdShutdown).subscribe(result => {
+    this.javaService.manageShutdown(this.convertHeureToSeconde()).subscribe(result => {
       this.shutdownTimeRequested = result;
       this.stateService.setShutdownActive(true);
     });

@@ -35,16 +35,15 @@ public class CommandeRunner {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	public boolean execute(String[] cmdArgs) {
 
+
+	public boolean executeV2(List<String> cmdArgs) {
 		try {
 			ProcessBuilder pb = new ProcessBuilder(cmdArgs);
 			pb.redirectErrorStream(true);
 			Process process;
 			process = pb.start();
-			new BufferedReader(new InputStreamReader(process.getInputStream()) ); 
+			new BufferedReader(new InputStreamReader(process.getInputStream()) );
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
@@ -62,7 +61,6 @@ public class CommandeRunner {
 					this.robot.keyRelease(keyEvent.get(2));
 				this.robot.keyRelease(keyEvent.get(1));
 			this.robot.keyRelease(keyEvent.get(0));
-			
 	 * @param keyEvent
 	 */
 	public boolean pressCombination(List<Integer> keyEvent) {

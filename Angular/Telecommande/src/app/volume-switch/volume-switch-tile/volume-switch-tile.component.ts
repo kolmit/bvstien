@@ -27,9 +27,9 @@ export class VolumeSwitchTileComponent implements OnInit {
   }
 
   switchVolumeMute(){
-    this.commandeMute.arguments = this.currentMuted ? this.UNMUTE : this.MUTE;
+    let muteOrUnmute = this.currentMuted ? this.UNMUTE : this.MUTE;
 
-    this.javaService.postMute(this.commandeMute).subscribe(result =>{
+    this.javaService.postMute(muteOrUnmute).subscribe(result =>{
       this.currentMuted = result;
     });  
   }

@@ -1,6 +1,6 @@
 package com.rest.controller;
 
-import com.model.Commande;
+import com.constant.Constants;
 import com.parser.CommandeParser;
 import com.runner.CommandeRunner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import java.awt.event.KeyEvent;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CommandeController {
-
-	Integer shutdownIn;
-	LocalDateTime shutdownRequestHour;
+	private Integer shutdownIn;
+	private LocalDateTime shutdownRequestHour;
  
    	@Autowired
 	private CommandeParser parser;
@@ -33,33 +33,24 @@ public class CommandeController {
 				.minusSeconds(LocalDateTime.now().getSecond()) : null;
    	}
 
- 
-    @PostMapping("/shutdown")
-    public Integer sendShutdown(@RequestBody Commande cmd) {
-   		this.shutdownRequestHour = LocalDateTime.now();
-    	if (cmd.getRadical() == null && cmd.getArguments() == null) {
-    		return null;
-    	}
-    	else {
-    		String[] commandToExecute = this.parser.parse(cmd);
-        	if (commandRunner.execute(commandToExecute)) {
-        		String number = cmd.getArguments().replaceAll("[^0-9]", "");
-        		try {
-					this.shutdownIn = Integer.parseInt(number);
-				} catch (NumberFormatException e){
-        			System.out.println("Ce n'est pas un nombre ! => " + e.getMessage());
-				}
-        	}
-    	}
-    	return shutdownIn;
-    }
+	@PostMapping("/shutdown")
+	public Integer sendShutdown(@RequestBody Integer seconds) {
+		String commandToParse = Constants.getCommand(Constants.CMD_SHUTDOWN, seconds.toString());
+		List<String> commandToExecute = this.parser.parseString(commandToParse);
+
+		if (commandRunner.executeV2(commandToExecute)) {
+			this.shutdownRequestHour = LocalDateTime.now();
+			this.shutdownIn = seconds;
+		}
+		return shutdownIn;
+	}
 
 	@GetMapping("/shutdown/cancel")
 	public boolean cancelShutdown() {
-   		Commande cmdCancel = new Commande("shutdown", "-a");
-		String[] commandToExecute = this.parser.parse(cmdCancel);
+		String commandToParse = Constants.getCommand(Constants.CMD_CANCEL_SHUTDOWN);
+		List<String> commandToExecute = this.parser.parseString(commandToParse);
 
-		if (commandRunner.execute(commandToExecute)) {
+		if (commandRunner.executeV2(commandToExecute)) {
 			this.shutdownIn = null;
 			this.shutdownRequestHour = null;
 			return true;
@@ -76,6 +67,4 @@ public class CommandeController {
     	
     	return commandRunner.pressCombination(cmdSwitchMonitor);
     }
-
-    
 }
