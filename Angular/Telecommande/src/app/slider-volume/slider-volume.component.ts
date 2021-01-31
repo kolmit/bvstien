@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
 import { PopupToJavaService } from '../service/popup-to-java.service';
-import { Commande } from '../model/commande';
 
 @Component({
   selector: 'app-slider-volume',
@@ -9,7 +8,6 @@ import { Commande } from '../model/commande';
   styleUrls: ['./slider-volume.component.css', '../telecommande/telecommande.component.css']
 })
 export class SliderVolumeComponent {
-    commande: Commande;
     autoTicks = false;
     disabled = false;
     invert = false;
@@ -21,8 +19,6 @@ export class SliderVolumeComponent {
     vertical = false;
     
     constructor(private javaService: PopupToJavaService){
-      this.commande = new Commande();
-      this.commande.radical = "nircmd changesysvolume ";
     }
 
     getCurrentVolume(){
@@ -31,7 +27,6 @@ export class SliderVolumeComponent {
 
     onChangeVolume(event: MatSliderChange){
       console.log(event.value.toString());
-      this.commande.arguments = event.value.toString();
-      this.javaService.postVolume(this.commande).subscribe(result => this.currentVolume = event.value);
+      this.javaService.postVolume(event.value.toString()).subscribe(result => this.currentVolume = event.value);
     }
 }

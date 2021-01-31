@@ -49,7 +49,6 @@ public class ImageController {
                 outputStream.write(data);
                 outputStream.flush();
 	        };
-	    
 
 	    return new ResponseEntity<StreamingResponseBody>(body, HttpStatus.OK);
 	}
