@@ -8,6 +8,7 @@
 .remote-container {
   flex-wrap: wrap;
   user-select: none;
+  user-zoom: none;
 }
 
 .tuile_1x1{

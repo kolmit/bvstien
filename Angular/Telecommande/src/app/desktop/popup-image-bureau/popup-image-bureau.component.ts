@@ -2,8 +2,8 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { ImageService } from '../../service/image-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PopupToJavaService } from '../../service/popup-to-java.service';
-import { Subject, timer } from 'rxjs';
-import { mergeMap, takeUntil } from 'rxjs/operators';
+import { timer } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 import { ConfigService } from '../../config.service';
 
 @Component({
@@ -15,15 +15,12 @@ export class PopupImageBureauComponent implements OnInit {
 
   constructor(
     private imageService: ImageService,
-    private javaService: PopupToJavaService,
-    private configService: ConfigService,
-    private domSanitizer: DomSanitizer) { }
+    private javaService: PopupToJavaService) { }
 
-  isImageLoading: boolean;
   blobData: any;
-  private dialogOpened = new Subject<boolean>();
-  private refreshImage: any;
+  private imageObservableTimer: any;
   keyboardInputValue: string = '';
+  private myCaptureDevice: string = 'imageBureau'
 
   @HostListener('document:keyup', ['$event'])
   keyboardKeyPressed(event: KeyboardEvent){
@@ -33,87 +30,21 @@ export class PopupImageBureauComponent implements OnInit {
       });
     }
   }
-
   
   ngOnInit() {
-    this.refreshImage = timer(0, 750)
-    .pipe(
-      mergeMap(_ => this.imageService.getImageBureau()),
-      takeUntil(this.dialogOpened))
-    .subscribe(data => {
-      this.readData(data);
-      this.isImageLoading = false;
-    }, error => {
-      this.isImageLoading = false;
-      console.log(error);
-    });
+    this.imageService.startCapture(this.myCaptureDevice);
   }
-
-
-  callImageBureauService(){
-    this.imageService.getImageBureau()
-    .subscribe(data => {
-      this.readData(data);
-      this.isImageLoading = false;
-    }, error => {
-      this.isImageLoading = false;
-      console.log(error);
-    });
-  }
-
-  readData(data) {
-    let reader = new FileReader();
-    reader.onloadend = (e) => {
-      this.blobData = this.domSanitizer.bypassSecurityTrustUrl(`${this.configService.getBackEndUrl()}/imageBureau`);
-    }
-
-    if (data) {
-      reader.readAsDataURL(data);
-    }
-  }
-
+  
   ngOnDestroy() {
-    this.refreshImage.unsubscribe();
+    this.imageService.stopCapture(this.myCaptureDevice);
   }
 
   getClickPosition(e) {
-    var container = document.querySelector(".screenshot-bureau");
-
-    var parentPosition = this.getPosition(container);
     var xPosition = e.offsetX;
     var yPosition = e.offsetY;
-    console.log("(", xPosition, " ; ", yPosition, ")");
+    console.log("(", xPosition, " ; ", yPosition, ")", e);
 
     this.javaService.sendLeftClick(xPosition, yPosition).subscribe((res) => {
-      console.log(res);
-      this.callImageBureauService();
     });
-  }
-
-  // Helper function to get an element's exact position
-  getPosition(el) {
-    var xPos = 0;
-    var yPos = 0;
-
-    while (el) {
-      if (el.tagName == "BODY") {
-        // deal with browser quirks with body/window/document and page scroll
-        var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
-        var yScroll = el.scrollTop || document.documentElement.scrollTop;
-
-        xPos += (el.offsetLeft - xScroll + el.clientLeft);
-        yPos += (el.offsetTop - yScroll + el.clientTop);
-      } else {
-        // for all other non-BODY elements
-        xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
-        yPos += (el.offsetTop - el.scrollTop + el.clientTop);
-      }
-
-      el = el.offsetParent;
-    }
-    return {
-      x: xPos,
-      y: yPos
-    };
   }
 }

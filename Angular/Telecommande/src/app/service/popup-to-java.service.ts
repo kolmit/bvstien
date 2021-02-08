@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Commande } from '../model/commande';
 import { ConfigService } from '../config.service';
 
 @Injectable({
@@ -9,8 +8,8 @@ import { ConfigService } from '../config.service';
 })
 export class PopupToJavaService {
 
-
   private shutdownUrl: string;
+  private shutdownUrl2: string;
   private shutdownCancelUrl: string;
   private volumeUrl: string;
   private muteUrl: string;
@@ -54,8 +53,8 @@ export class PopupToJavaService {
     return this.http.get<boolean>(this.shutdownCancelUrl);
   }
 
-  public getShutdownCount(): Observable<Date> {
-    return this.http.get<Date>(this.shutdownUrl);
+  public getShutdownCount(): Observable<number> {
+    return this.http.get<number>(this.shutdownUrl);
   }
 
   public getCurrentVolume(): Observable<number> {

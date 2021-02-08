@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { PopupToJavaService } from '../service/popup-to-java.service';
-import { Subscription } from 'rxjs';
-import { ImageService } from '../service/image-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-telecommande',
@@ -10,24 +7,9 @@ import { ImageService } from '../service/image-service.service';
   styleUrls: ['./telecommande.component.css']
 })
 export class TelecommandeComponent {
+  constructor(private router: Router) {}
 
-  currentMuted: boolean;
-  subscription: Subscription;
-
-
-  constructor(
-    private dialog: MatDialog, 
-    private javaService: PopupToJavaService, 
-    private imageService: ImageService
-    ) {}
-
-  ngOnInit() {
-    this.currentMuted = false;
+  onSwipeLeft(){
+    this.router.navigateByUrl('/desktop');
   }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
-
 }

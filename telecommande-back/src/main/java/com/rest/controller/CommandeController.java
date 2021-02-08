@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.event.KeyEvent;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +24,15 @@ public class CommandeController {
    	@Autowired
    	private CommandeRunner commandRunner;
    	
-   	
+
    	@GetMapping("/shutdown")
-   	public LocalDateTime getShutdownCount() {
-   		return this.shutdownRequestHour != null ? this.shutdownRequestHour
-				.plusSeconds(this.shutdownIn)
-				.minusHours(LocalDateTime.now().getHour())
-				.minusMinutes(LocalDateTime.now().getMinute())
-				.minusSeconds(LocalDateTime.now().getSecond()) : null;
-   	}
+	public Duration getCount() {
+		Duration dur = null;
+   		if (this.shutdownRequestHour != null) {
+			dur = Duration.between(LocalDateTime.now().withNano(0), this.shutdownRequestHour.plusSeconds(this.shutdownIn).withNano(0));
+		}
+		return dur;
+	}
 
 	@PostMapping("/shutdown")
 	public Integer sendShutdown(@RequestBody Integer seconds) {

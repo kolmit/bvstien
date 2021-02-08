@@ -1,34 +1,26 @@
 import { Component, Inject, OnDestroy } from '@angular/core';
 import { PopupToJavaService } from '../../service/popup-to-java.service';
-import { ActivatedRoute } from '@angular/router';
-import { Commande } from '../../model/commande';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { StateService } from 'src/app/service/state.service';
 
 @Component({
-  selector: 'app-popup-content',
-  templateUrl: './popup-content.component.html',
-  styleUrls: ['./popup-content.component.css']
+  selector: 'app-popup-shutdown',
+  templateUrl: './popup-shutdown.component.html',
+  styleUrls: ['./popup-shutdown.component.css']
 })
-export class PopupContentComponent{
-  commande: Commande;
+export class PopupShutdownComponent{
   heures : string[];
   
   heureSelected: string;
-  shutdownActive: boolean;
   shutdownTimeRequested: number;
 
 
   constructor(private javaService: PopupToJavaService, 
     public stateService: StateService,
-    public dialogRef: MatDialogRef<PopupContentComponent>,
+    public dialogRef: MatDialogRef<PopupShutdownComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
-      this.commande = new Commande();
-      this.commande.radical = data.radical;
-
       if (data.shutdownCountdown != undefined){
-        this.shutdownActive = true;
         this.shutdownTimeRequested = data.shutdownCountdown;
       }
       this.heures = this.generateQuartDheure();
@@ -39,17 +31,16 @@ export class PopupContentComponent{
     this.javaService.manageShutdown(this.convertHeureToSeconde()).subscribe(result => {
       this.shutdownTimeRequested = result;
       this.stateService.setShutdownActive(true);
+      this.stateService.fetchShutdownState();
     });
-    this.shutdownActive = true;
     this.shutdownTimeRequested = this.convertHeureToSeconde();
     this.heureSelected = null; 
   }
 
   onSubmitCancel(){
     this.javaService.cancelShutdown().subscribe(result => {
-      this.stateService.setShutdownActive(!result);
+      this.stateService.setShutdownActive(false);
     });
-    this.shutdownActive = false;
     this.shutdownTimeRequested = null;
   }
 
@@ -79,5 +70,12 @@ export class PopupContentComponent{
 
     this.shutdownTimeRequested = nbSecondes;
     return nbSecondes;
+  }
+
+
+  displayCountdown(){
+    this.javaService.getShutdownCount().subscribe( (res) => {
+        console.log(res);
+    });
   }
 }

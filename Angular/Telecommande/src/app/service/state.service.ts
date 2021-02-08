@@ -12,28 +12,32 @@ export class StateService implements OnDestroy{
 
   shutdownTimer;
 
+  secondsLeftBeforeShutdown: number;
+
   
   constructor(private javaService: PopupToJavaService) {
     this.fetchShutdownState();
-   }
+  }
 
-  private fetchShutdownState() {
-    if (!this.shutdownTimer){
-      this.shutdownTimer = setInterval( () => {
 
-        this.javaService.getShutdownCount().subscribe((res) => {
-          if (res){
-            this.shutdown_active = true;
-            let timerLeftBeforeShutdown = new Date(res);
-            this.setHourBeforeShutdown(timerLeftBeforeShutdown.getHours());
-            this.setMinuteBeforeShutdown(timerLeftBeforeShutdown.getMinutes());
-            this.setSecondBeforeShutdown(timerLeftBeforeShutdown.getSeconds());
-          }
+  public fetchShutdownState() {
+
+      this.javaService.getShutdownCount().subscribe((res: number) => {
+        if (res) {
+          this.shutdown_active = true;
+          this.secondsLeftBeforeShutdown = res;
           
-        });
-
-      }, 1000);
-    }
+          this.shutdownTimer = setInterval( () => {
+            if (!this.shutdown_active) {
+              clearTimeout(this.shutdownTimer);
+            }
+            this.secondsLeftBeforeShutdown = this.secondsLeftBeforeShutdown - 1;
+            this.setHourBeforeShutdown(Math.floor(this.secondsLeftBeforeShutdown/3600));
+            this.setMinuteBeforeShutdown(Math.floor((this.secondsLeftBeforeShutdown%3600)/60));
+            this.setSecondBeforeShutdown(Math.floor((this.secondsLeftBeforeShutdown%3600)%60));
+          }, 1000);
+        }
+      });
   }
    
   ngOnDestroy(): void {

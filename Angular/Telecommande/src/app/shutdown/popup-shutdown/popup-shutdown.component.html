@@ -3,7 +3,7 @@
       <div *ngIf="!stateService.getShutdownActive()">
           <mat-form-field>
             <mat-select placeholder="Eteindre dans ...">
-              <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
+              <cdk-virtual-scroll-viewport itemSize="50" class="menu">
                 <mat-option *ngFor="let choix of heures" [value]="choix" (click)="selectionnerHeure(choix)">{{choix}}</mat-option>
               </cdk-virtual-scroll-viewport>
             </mat-select>
@@ -11,10 +11,15 @@
         <button *ngIf="heureSelected != undefined" mat-raised-button type="submit" class="btn btn-info" (click)="onSubmitShutdown()">Valider</button>
       </div>
 
-      <div *ngIf="stateService.getShutdownActive()">
-        Le PC s'éteindra dans {{stateService.getHourBeforeShutdown()}}H{{stateService.getMinuteBeforeShutdown()}}:{{stateService.getSecondBeforeShutdown()}}
+      <div *ngIf="stateService.getShutdownActive()" class="shutdown-text">
+        <span>
+          Le PC s'éteindra dans
+        </span>
+        <span>
+          <h3>{{stateService.getHourBeforeShutdown()}}H{{stateService.getMinuteBeforeShutdown()}}:{{stateService.getSecondBeforeShutdown()}}</h3>
+        </span>
+        <br/>
         <button mat-raised-button type="submit" color="accent" class="btn btn-info" (click)="onSubmitCancel()">Annuler</button>
       </div>
-      
   </div>
 </div>

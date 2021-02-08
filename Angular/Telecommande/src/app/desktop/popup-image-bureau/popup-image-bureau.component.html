@@ -1,13 +1,12 @@
 <mat-dialog-content>
      <div (click)="getClickPosition($event)" >
-          <img [src]="blobData"
+          <img [src]="this.imageService.getDesktopBlobUrl()"
           class="screenshot-bureau"
-          alt="Screenshot du bureau récupérée en quasi temps-réel"
-          *ngIf="!isImageLoading; else noImageFound">
+          alt="Screenshot du bureau récupérée temps-réel">
      </div>
 </mat-dialog-content>
 
-<mat-form-field class="example-full-width">
+<mat-form-field class="keyboard-input">
      <input matInput [(ngModel)]="keyboardInputValue">
      <button mat-button *ngIf="keyboardInputValue" matSuffix mat-icon-button aria-label="Clear" (click)="keyboardInputValue=''">
           x

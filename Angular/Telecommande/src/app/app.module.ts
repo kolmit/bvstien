@@ -33,13 +33,14 @@ import { YoutubeTileComponent } from './youtube/youtube-tile/youtube-tile.compon
 import { PopupYoutubeComponent } from './youtube/popup-youtube/popup-youtube.component';
 import { VolumeSwitchTileComponent } from './volume-switch/volume-switch-tile/volume-switch-tile.component';
 import { ShutdownTileComponent } from './shutdown/shutdown-tile/shutdown-tile.component';
-import { PopupContentComponent } from './shutdown/popup-content/popup-content.component';
+import { PopupShutdownComponent } from './shutdown/popup-shutdown/popup-shutdown.component';
+import { DesktopMainComponent } from './desktop-main/desktop-main.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TelecommandeComponent,
-    PopupContentComponent,
+    PopupShutdownComponent,
     SliderVolumeComponent,
     PopupImageBureauComponent,
     PopupYoutubeComponent,
@@ -54,6 +55,7 @@ import { PopupContentComponent } from './shutdown/popup-content/popup-content.co
     YoutubeTileComponent,
     VolumeSwitchTileComponent,
     ShutdownTileComponent,
+    DesktopMainComponent,
   ],
   exports: [
     YoutubeUnitComponent,
@@ -82,7 +84,7 @@ import { PopupContentComponent } from './shutdown/popup-content/popup-content.co
   providers: [HttpClient, PopupToJavaService, ImageService, WINDOW_PROVIDERS
   ],
   entryComponents: [
-    PopupContentComponent, 
+    PopupShutdownComponent, 
     PopupYoutubeComponent,
     PopupRemoteTvComponent,
     PopupImageBureauComponent,

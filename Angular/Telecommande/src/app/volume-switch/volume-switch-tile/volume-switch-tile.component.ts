@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Commande } from 'src/app/model/commande';
 import { PopupToJavaService } from 'src/app/service/popup-to-java.service';
 
 @Component({
@@ -8,17 +7,12 @@ import { PopupToJavaService } from 'src/app/service/popup-to-java.service';
   styleUrls: ['./volume-switch-tile.component.css', '../../telecommande/telecommande.component.css']
 })
 export class VolumeSwitchTileComponent implements OnInit {
-  commandeMute: Commande;
   MUTE: string = "1";
   UNMUTE: string = "0";
   currentMuted: boolean = false;
 
 
-  constructor(private javaService: PopupToJavaService) {
-    this.commandeMute = new Commande();
-    this.commandeMute.radical = "nircmd.exe mutesysvolume ";
-    this.commandeMute.arguments = this.MUTE;
-  }
+  constructor(private javaService: PopupToJavaService) { }
 
   ngOnInit() {
     this.javaService.getMute().subscribe( (isMuted) => {
@@ -38,5 +32,4 @@ export class VolumeSwitchTileComponent implements OnInit {
     let classList = 'material-icons tuile_1x1';
     return classList + (this.currentMuted ? ' mutedVolume' : ' notMutedVolume');
   }
-
 }

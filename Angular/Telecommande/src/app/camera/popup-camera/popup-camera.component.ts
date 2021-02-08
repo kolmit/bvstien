@@ -4,7 +4,6 @@ import { Subject, timer } from 'rxjs';
 import { mergeMap, takeUntil } from 'rxjs/operators';
 import { ConfigService } from '../../config.service';
 import { ImageService } from '../../service/image-service.service';
-import { PopupToJavaService } from '../../service/popup-to-java.service';
 
 @Component({
   selector: 'app-popup-camera',
@@ -15,7 +14,6 @@ export class PopupCameraComponent implements OnInit, OnDestroy {
 
   constructor(
     private imageService: ImageService,
-    private javaService: PopupToJavaService,
     private configService: ConfigService,
     private domSanitizer: DomSanitizer) { }
 
