@@ -1,15 +1,11 @@
-<div (swipeleft)="onSwipeLeft($event)">
-    <div class="titre-telecommande">
-        <h1>TELECOMMANDE</h1>
-    </div>
+<app-header [swipeLeft]="desktopView" [swipeRight]="cameraView"></app-header>
 
-    <div class="remote-container">
-        <app-shutdown-tile></app-shutdown-tile>
-        <app-slider-volume></app-slider-volume>
-        <app-volume-switch-tile></app-volume-switch-tile>
-        <app-television-tile></app-television-tile>
-        <app-desktop-tile></app-desktop-tile>
-        <app-camera-tile></app-camera-tile>
-        <app-youtube-tile></app-youtube-tile>
-    </div>
+<div class="remote-container">
+    <app-shutdown-tile></app-shutdown-tile>
+    <app-slider-volume></app-slider-volume>
+    <app-volume-switch-tile></app-volume-switch-tile>
+    <app-television-tile></app-television-tile>
+    <app-desktop-tile></app-desktop-tile>
+    <app-camera-tile></app-camera-tile>
+    <app-youtube-tile></app-youtube-tile>
 </div>

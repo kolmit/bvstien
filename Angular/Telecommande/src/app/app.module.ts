@@ -34,7 +34,9 @@ import { PopupYoutubeComponent } from './youtube/popup-youtube/popup-youtube.com
 import { VolumeSwitchTileComponent } from './volume-switch/volume-switch-tile/volume-switch-tile.component';
 import { ShutdownTileComponent } from './shutdown/shutdown-tile/shutdown-tile.component';
 import { PopupShutdownComponent } from './shutdown/popup-shutdown/popup-shutdown.component';
-import { DesktopMainComponent } from './desktop-main/desktop-main.component';
+import { DesktopViewComponent } from './desktop/desktop-view/desktop-view.component';
+import { CameraViewComponent } from './camera/camera-view/camera-view.component';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,9 @@ import { DesktopMainComponent } from './desktop-main/desktop-main.component';
     YoutubeTileComponent,
     VolumeSwitchTileComponent,
     ShutdownTileComponent,
-    DesktopMainComponent,
+    DesktopViewComponent,
+    CameraViewComponent,
+    HeaderComponent
   ],
   exports: [
     YoutubeUnitComponent,

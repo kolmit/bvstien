@@ -27,6 +27,7 @@
     "@stomp/ng2-stompjs": "^7.2.0",
     "@types/socket.io": "^2.1.8",
     "@types/sockjs-client": "^1.1.1",
+    "animate.css": "^4.1.1",
     "hammerjs": "^2.0.8",
     "net": "^1.0.2",
     "ng-joystick": "0.0.8",

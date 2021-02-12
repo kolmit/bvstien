@@ -3,16 +3,14 @@
     height: auto;
 }
 
-.verticalContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-  }
-
 .displaySelector h1 { 
     font-size: 5em 
 }
   
 .keyboard-input {
   width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: relative;
 }

@@ -1,10 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { ImageService } from '../../service/image-service.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { PopupToJavaService } from '../../service/popup-to-java.service';
-import { timer } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
-import { ConfigService } from '../../config.service';
 
 @Component({
   selector: 'app-popup-image-bureau',
