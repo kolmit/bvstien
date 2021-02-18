@@ -1,0 +1,25 @@
+.map-image {
+    position: absolute;
+}
+
+.tips-frame {
+    position: absolute;
+}
+
+.app-container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+.map-container {
+    height: 100%;
+    width: 80%;
+}
+
+.left-menu{
+    height: 100%;
+    width: 20%;
+    border: 1px solid white;
+    color: white;
+}

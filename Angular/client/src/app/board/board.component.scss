@@ -1,0 +1,34 @@
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    height: 75vw;
+    width: 75vw;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    
+    td {
+        border: thin solid black;
+    }
+}
+
+.player-list{
+    color: whitesmoke;
+    background-color: indigo;
+}
+
+.fixed-size-cell {
+
+}
+
+.cross {
+    background-color: red;
+}
+
+.round {
+    background-color: green;
+}
+
+.notPlayed {
+    background-color: snow;
+}

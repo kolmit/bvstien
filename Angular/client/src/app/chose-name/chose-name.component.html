@@ -1,0 +1,10 @@
+<div class="container">
+  <div>
+    <form #form (submit)="rename()">
+      <input type="text" [(ngModel)]="playerName" name="name" maxlength=15> 
+    </form>
+  </div>
+  <div (click)="rename()" style="margin-top: 1em;">
+    <button mat-raised-button color="primary">Valider</button>   
+  </div>
+</div>
