@@ -3,6 +3,8 @@ package com.constant;
 public class Constants {
 
     public static final String CMD_SHUTDOWN = "shutdown -s -f -t";
+    public static final String CMD_STANDBY = "nircmd standby";
+
     public static final String CMD_CANCEL_SHUTDOWN = "shutdown -a";
 
     public static final String PATH_CHROME = "\"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome\"";

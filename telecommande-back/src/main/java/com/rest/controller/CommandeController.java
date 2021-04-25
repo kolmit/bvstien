@@ -1,6 +1,7 @@
 package com.rest.controller;
 
 import com.constant.Constants;
+import com.model.ShutdownCommand;
 import com.parser.CommandeParser;
 import com.runner.CommandeRunner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +36,14 @@ public class CommandeController {
 	}
 
 	@PostMapping("/shutdown")
-	public Integer sendShutdown(@RequestBody Integer seconds) {
-		String commandToParse = Constants.getCommand(Constants.CMD_SHUTDOWN, seconds.toString());
+	public Integer sendShutdown(@RequestBody ShutdownCommand shutdownCommand) {
+   		String commandType = shutdownCommand.isShutdown() ? Constants.CMD_SHUTDOWN : Constants.CMD_STANDBY;
+		String commandToParse = Constants.getCommand(commandType, shutdownCommand.getTime().toString());
 		List<String> commandToExecute = this.parser.parseString(commandToParse);
 
 		if (commandRunner.executeV2(commandToExecute)) {
 			this.shutdownRequestHour = LocalDateTime.now();
-			this.shutdownIn = seconds;
+			this.shutdownIn = shutdownCommand.getTime();
 		}
 		return shutdownIn;
 	}
