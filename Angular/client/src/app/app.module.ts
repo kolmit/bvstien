@@ -10,12 +10,14 @@ import { FormsModule } from '@angular/forms';
 import { ChoseNameComponent } from '../app/chose-name/chose-name.component';
 import { MatDialogModule } from '@angular/material';
 import {MatButtonModule} from '@angular/material/button';
+import { PlayAgainComponent } from './play-again/play-again.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BoardComponent,
     ChoseNameComponent,
+    PlayAgainComponent,
   ],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
   imports: [

@@ -13,6 +13,7 @@ export class ServerUpdateService implements OnDestroy{
   mySymbolNumber: number;
   myPlayerName: string;
   gameStarted: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  gameFinished: BehaviorSubject<string> = new BehaviorSubject("");
 
   boardGrid: number[][];// = [[-1, -1, -1 ], [-1, -1, -1], [-1, -1, -1]];
   playerList: Player[] = [];
@@ -28,6 +29,10 @@ export class ServerUpdateService implements OnDestroy{
 
     this.socket.on("tictactoe:initBoard", (boardGrid) => {
       this.boardGrid = boardGrid;
+    });
+
+    this.socket.on("tictactoe:endGame", (winner) => {
+      this.gameFinished.next(winner);
     });
 
     this.socket.on("gameIsStarting", (symbolMessage) => {
@@ -87,9 +92,7 @@ export class ServerUpdateService implements OnDestroy{
   }
 
   public getCell(x: number, y:number){
-    //if (this.boardGrid){
       return this.boardGrid[x][y];
-    //}
   }
 
   public getBoardGrid(){

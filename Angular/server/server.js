@@ -34,8 +34,10 @@ const MAX_PLAYERS = 2;
 var playerList = [];
 var playerMap = new Map();
 var lastPlayedIndex = 0;
-const NB_LINE = 5;
-const NB_COLUMN = 5;
+const NB_LINE = 10;
+const NB_COLUMN = 10;
+const WIN_GOAL = 4;
+const DEFAULT_VALUE = -1;
 var boardGrid = [[]];// = [[-1, -1, -1 ], [-1, -1, -1], [-1, -1, -1]];
 
 
@@ -57,7 +59,6 @@ io.on('connection', (socket) => {
     for (let x = 0 ; x < NB_LINE ; x++){
       boardGrid[x] = [];
       for (let y = 0 ; y < NB_COLUMN ; y++){
-        console.log("(" + x + ';' + y + ")");
         boardGrid[x][y] = -1;
       }
     }
@@ -109,17 +110,129 @@ io.on('connection', (socket) => {
       });
 
       boardGrid[xPlayed][yPlayed] = positions.symbolNumber;
-      checkWin(boardGrid);
-      nextPlayer();
+      if (!checkWin(boardGrid, positions.symbolNumber)) {
+        endGame(positions.symbolNumber);
+        //nextPlayer();
+      } else {
+        endGame(positions.symbolNumber);
+      }
+      
     }
     return ack(thisPlayIsPossible);
   });
 }); 
 
-function checkWin(boardGrid) {
-  /*for (let x = 0 ; x < 3 ; x++){
-    if (boardGrid[x])
-  }*/
+
+function checkWin(boardGrid, potentialWinner) {
+  if (checkHorizontal(boardGrid) || checkVertical(boardGrid) || checkDiagonal(boardGrid) || checkDiagonal2(boardGrid)) {
+    console.log("WINNER IS ", potentialWinner);
+  }
+}
+
+function checkHorizontal(boardGrid) {
+  let colNumber = 0
+  while(colNumber + (WIN_GOAL-1) < NB_COLUMN){
+    for (let ligne = 0 ; ligne < NB_LINE ; ligne++){
+
+      let cellWithSameColorInARow = 1;
+      for (let winDeep = 1 ; winDeep < WIN_GOAL+1 ; winDeep++){
+        if (boardGrid[ligne][colNumber + (winDeep-1)] !== DEFAULT_VALUE && 
+          boardGrid[ligne][colNumber + (winDeep-1)] === boardGrid[ligne][colNumber + winDeep]) 
+        {
+          cellWithSameColorInARow++;
+          if (cellWithSameColorInARow === WIN_GOAL) {
+            return true;
+          }
+        } else {
+          cellWithSameColorInARow = 0;
+        }
+      }
+    }
+    colNumber++;
+  }
+
+  return false;
+}
+
+function checkVertical(boardGrid) {
+  let colNumber = 0;
+  while(colNumber < NB_COLUMN){
+    for (let ligne = 0 ; ligne < NB_LINE; ligne++){
+
+      let cellWithSameColorInARow = 1;
+      for (let winDeep = 1 ; winDeep < WIN_GOAL+1 ; winDeep++){
+
+        if (boardGrid[ligne + (winDeep-1)] && boardGrid[ligne + winDeep] &&
+          boardGrid[ligne + (winDeep-1)][colNumber] !== DEFAULT_VALUE && 
+          boardGrid[ligne + (winDeep-1)][colNumber] === boardGrid[ligne + winDeep][colNumber]) 
+        {
+          cellWithSameColorInARow++;
+          if (cellWithSameColorInARow === WIN_GOAL) {
+            cellWithSameColorInARow = 0;
+            return true;
+          }
+        } else {
+          cellWithSameColorInARow = 0;
+        }
+      }
+    }
+    colNumber++;
+  }
+}
+
+function checkDiagonal2(boardGrid) {
+
+  for (let colNumber = 0 ; colNumber < NB_COLUMN ; colNumber++) {
+    for (let ligne = 0 ; ligne < NB_LINE ; ligne++) {
+
+      let cellWithSameColorInARow = 1;
+
+      for (let winDeep = 1 ; winDeep < WIN_GOAL+1 ; winDeep++){
+          if (boardGrid[ligne + (winDeep-1)]
+            && boardGrid[ligne + winDeep]) {
+
+              if (boardGrid[ligne + (winDeep-1)][colNumber - (winDeep-1)] !== DEFAULT_VALUE 
+              && boardGrid[ligne + (winDeep-1)][colNumber - (winDeep-1)] === boardGrid[ligne + winDeep][colNumber - winDeep]) {
+                cellWithSameColorInARow++;
+                if (cellWithSameColorInARow === WIN_GOAL) {
+                  return true;
+                }
+              } else {
+                cellWithSameColorInARow = 0;
+              }
+
+            }
+            
+        }
+      }
+    }
+    return false;
+}
+
+function checkDiagonal(boardGrid) {
+
+  for (let colNumber = 0 ; colNumber < NB_COLUMN ; colNumber++) {
+    for (let ligne = 0 ; ligne < NB_LINE ; ligne++) {
+
+      let cellWithSameColorInARow = 1;
+
+      for (let winDeep = 1 ; winDeep < WIN_GOAL+1 ; winDeep++){
+
+        if (boardGrid[ligne + winDeep] 
+            && boardGrid[ligne + (winDeep-1)][colNumber + (winDeep-1)] !== DEFAULT_VALUE 
+            && boardGrid[ligne + (winDeep-1)][colNumber + (winDeep-1)] === boardGrid[ligne + winDeep][colNumber + winDeep]) {
+            
+            cellWithSameColorInARow++;
+            if (cellWithSameColorInARow === WIN_GOAL) {
+              return true;
+            }
+          } else {
+            cellWithSameColorInARow = 0;
+          }
+        }
+      }
+    }
+    return false;
 }
 
 /**
@@ -143,6 +256,10 @@ function startGame(){
   
   nextPlayer();
 } 
+
+function endGame(winnerSymbol) {
+  io.to("Room1").emit("tictactoe:endGame", winnerSymbol);
+}
 
 function nextPlayer(){
   let playerIndex = lastPlayedIndex++;
