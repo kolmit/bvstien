@@ -1,0 +1,14 @@
+<div id="title" class="titre-telecommande" 
+    (click)="headshake()" 
+    (swipeleft)="onSwipeLeft()" 
+    (swiperight)="onSwipeRight()">
+    
+
+    <div class="icons" style="display: flex; justify-content: space-around;">
+    
+            <h1><div class="material-icons" (click)="onSwipeRight()">{{this.symbolMap.get(this.swipeRight)}}</div></h1>
+            <h1>TELECOMMANDE</h1>
+            <h1><div class="material-icons" (click)="onSwipeLeft()">{{this.symbolMap.get(this.swipeLeft)}}</div></h1>
+
+    </div>
+</div>

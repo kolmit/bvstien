@@ -1,0 +1,1 @@
+mvn clean install && copy target\telecommande-back-1.0.jar C:\Users\gazor\Desktop\TelecommandeFolder /Y

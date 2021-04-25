@@ -1,0 +1,24 @@
+Liste des joueurs :
+<div class="container">
+  <div class="player-list">
+    <div *ngFor="let playerPerSocket of this.serverUpdate.getPlayerList()">
+      <div *ngFor="let player of playerPerSocket" (click)="this.changeName(player)">
+        <span *ngIf="this.serverUpdate.getPlayerName() === player.name">></span>
+        {{player.name}}
+      </div>
+    </div>
+  </div>
+  <table class="styled-table">
+    <tbody>
+        <tr *ngFor="let i of this.xArray">
+            <td *ngFor="let j of this.yArray" 
+            [ngClass]="determineClass(this.serverUpdate.getCell(i,j))" 
+            (click)="this.serverUpdate.played(i, j)"></td>
+        </tr>
+    </tbody>
+  </table>
+  <span>
+    {{this.serverUpdate.isItMyTurn() ? "C'est à vous de jouer..." : "En attente de l'adversaire..."}}
+  </span>
+  <button (click)="this.serverUpdate.deco()">Quitter la partie</button>
+</div>

@@ -1,0 +1,32 @@
+<div class="card my-5">
+  <div class="card-body">
+      <div *ngIf="!stateService.getShutdownActive()">
+
+        <div style="display: flex; justify-content: space-around;">
+          <button class="material-icons shutdown-action" [class.pressed]="isShutdown" (click)="shutdownAction(true)">power_settings_new</button>
+          <button class="material-icons shutdown-action" [class.pressed]="!isShutdown" (click)="shutdownAction(false)">dark_mode</button>
+        </div>
+
+          <mat-form-field *ngIf="isShutdown">
+            <mat-select placeholder="Eteindre dans ...">
+              <cdk-virtual-scroll-viewport itemSize="50" class="menu">
+                <mat-option *ngFor="let choix of heures" [value]="choix" (click)="selectionnerHeure(choix)">{{choix}}</mat-option>
+              </cdk-virtual-scroll-viewport>
+            </mat-select>
+          </mat-form-field>
+
+        <button *ngIf="heureSelected != undefined || !isShutdown" mat-raised-button type="submit" class="btn btn-info" (click)="onSubmitShutdown()">Valider</button>
+      </div>
+
+      <div *ngIf="stateService.getShutdownActive()" class="shutdown-text">
+        <span>
+          Le PC s'éteindra dans
+        </span>
+        <span>
+          <h3>{{stateService.getHourBeforeShutdown()}}H{{stateService.getMinuteBeforeShutdown()}}:{{stateService.getSecondBeforeShutdown()}}</h3>
+        </span>
+        <br/>
+        <button mat-raised-button type="submit" color="accent" class="btn btn-info" (click)="onSubmitCancel()">Annuler</button>
+      </div>
+  </div>
+</div>

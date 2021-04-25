@@ -1,0 +1,27 @@
+<div *ngIf="!videoSurveillanceMode">
+    <app-header [swipeLeft]="desktopView" [swipeLeftIcon]="swipeLeftIcon" [swipeRight]="cameraView" [swipeRightIcon]="swipeRightIcon"></app-header>
+
+    <div class="remote-container">
+        <app-shutdown-tile></app-shutdown-tile>
+        <app-slider-volume></app-slider-volume>
+        <app-volume-switch-tile></app-volume-switch-tile>
+        <app-television-tile></app-television-tile>
+        <app-desktop-tile></app-desktop-tile>
+        <app-camera-tile></app-camera-tile>
+        <app-youtube-tile></app-youtube-tile>
+    </div>
+</div>
+
+<div *ngIf="videoSurveillanceMode">
+    <app-header [swipeLeft]="desktopView" [swipeLeftIcon]="swipeLeftIcon" [swipeRight]="cameraView" [swipeRightIcon]="swipeRightIcon"></app-header>
+
+    <div class="remote-container">
+        <div class="tuile_1x1 disabled-tile">Désactivé</div>
+        <div class="tuile_2x1 disabled-tile">Désactivé</div>
+        <div class="tuile_1x1 disabled-tile">Désactivé</div>
+        <div class="tuile_1x1 disabled-tile">Désactivé</div>
+        <div class="tuile_1x1 disabled-tile">Désactivé</div>
+        <div class="tuile_1x1 disabled-tile">Désactivé</div>
+        <div class="tuile_1x1 disabled-tile">Désactivé</div>
+    </div>
+</div>

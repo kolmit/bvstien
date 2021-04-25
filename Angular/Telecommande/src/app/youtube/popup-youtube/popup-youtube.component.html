@@ -1,0 +1,13 @@
+<div class="youtube-container">
+    <div>
+        <mat-form-field class="example-full-width">
+        <input matInput placeholder="URL de la vidéo à lire" type="search"  [(ngModel)]="search" onsubmit="onSubmit()">
+        </mat-form-field>
+    </div>
+    <div>
+        <div class="material-icons" (click)="onSubmit()"><h1>play_arrow</h1></div>
+        <div class="material-icons" (click)="closeCurrentTab()" *ngIf="this.onRead"><h1>close</h1></div>
+        <div class="material-icons" (click)="switchMonitor()" *ngIf="this.onRead"><h1>keyboard_arrow_left</h1></div>
+        <div class="material-icons" (click)="switchMonitor()" *ngIf="this.onRead"><h1>keyboard_arrow_right</h1></div>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+.titre-telecommande{
+    font-family: Roboto; 
+    font-weight: 100;
+    text-align: center;
+    color: white;  
+  }
+
+  .animate__slideOutRight{
+    --animate-duration: 500ms;
+  }
+  .animate__slideOutLeft{
+    --animate-duration: 500ms;
+  }

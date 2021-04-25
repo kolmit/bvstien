@@ -1,0 +1,16 @@
+.screenshot-bureau {
+    width: auto;
+    height: auto;
+}
+
+.displaySelector h1 { 
+    font-size: 5em 
+}
+  
+.keyboard-input {
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: relative;
+}
