@@ -1,5 +1,0 @@
-<html>
-<body> 
-SALUT LOL
-</body>
-</html>
