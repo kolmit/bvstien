@@ -13,6 +13,7 @@ export class PopupShutdownComponent{
   
   heureSelected: string;
   shutdownTimeRequested: number;
+  isShutdown: boolean = true;
 
 
   constructor(private javaService: PopupToJavaService, 
@@ -28,7 +29,7 @@ export class PopupShutdownComponent{
 
 
   onSubmitShutdown() {
-    this.javaService.manageShutdown(this.convertHeureToSeconde()).subscribe(result => {
+    this.javaService.manageShutdown(this.convertHeureToSeconde(), this.isShutdown).subscribe(result => {
       this.shutdownTimeRequested = result;
       this.stateService.setShutdownActive(true);
       this.stateService.fetchShutdownState();
@@ -77,5 +78,9 @@ export class PopupShutdownComponent{
     this.javaService.getShutdownCount().subscribe( (res) => {
         console.log(res);
     });
+  }
+
+  shutdownAction(isShutdownAction: boolean){
+    this.isShutdown = isShutdownAction;
   }
 }

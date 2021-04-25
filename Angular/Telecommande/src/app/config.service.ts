@@ -7,7 +7,7 @@ import { WINDOW } from 'src/environments/window-provider';
 export class ConfigService {
   static BACKEND_URL = "http://";
   
-  constructor(@Inject(WINDOW) private window: Window,) { 
+  /*constructor(@Inject(WINDOW) private window: Window,) { 
     console.log("INJECT WINDOWS : ", this.window.location.hostname)
     let uri = this.window.location.hostname;
     let port = '8080';
@@ -17,5 +17,5 @@ export class ConfigService {
 
   getBackEndUrl(): string {
     return ConfigService.BACKEND_URL;
-  }
+  }*/
 }

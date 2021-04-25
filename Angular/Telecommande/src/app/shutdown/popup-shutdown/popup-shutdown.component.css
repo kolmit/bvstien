@@ -11,3 +11,13 @@
   .shutdown-text{
     text-align: center;
   }
+
+  .shutdown-action {
+    font-size: 10vw;
+    width: 25vw;
+    height: 25vw;
+  }
+  
+  .pressed {
+    background-color: lightslategray;
+  }

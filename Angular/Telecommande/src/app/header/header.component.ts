@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,15 +6,29 @@ import { Router } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
   @Input() swipeLeft: string;
+  @Input() swipeLeftIcon: string;
   @Input() swipeRight: string;
+  @Input() swipeRightIcon: string;
+  
+  symbolMap: Map<string, string> = new Map();
   
   constructor(private router: Router) {
   }
 
+  ngOnInit(): void {
+    this.symbolMap.set(this.swipeLeft, this.swipeLeftIcon);
+    this.symbolMap.set(this.swipeRight, this.swipeRightIcon);
+    console.log("left: ", this.swipeLeft, ":", this.swipeLeftIcon, " - right: ", this.swipeRight, ":", this.swipeLeftIcon);  
+  }
+
+  ngOnDestroy(): void {
+    this.symbolMap.clear();
+  }
+
   onSwipeLeft(){
-    animateCSS('#title', this.swipeLeft ? 'slideOutRight' : 'headShake');
+    animateCSS('#title', this.swipeLeft ? 'slideOutLeft' : 'headShake');
 
     setTimeout(() => {
       if (this.swipeLeft){
@@ -25,7 +39,7 @@ export class HeaderComponent {
   }
 
   onSwipeRight(){
-    animateCSS('#title', this.swipeRight ? 'slideOutLeft' : 'headShake');
+    animateCSS('#title', this.swipeRight ? 'slideOutRight' : 'headShake');
     setTimeout(() => {
       if (this.swipeRight){
         this.router.navigateByUrl('/' + this.swipeRight);

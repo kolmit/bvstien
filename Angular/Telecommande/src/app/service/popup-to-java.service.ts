@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ConfigService } from '../config.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -27,26 +28,27 @@ export class PopupToJavaService {
   private switchSoundDeviceUrl: string;
 
   constructor(private http: HttpClient, private configService: ConfigService) {
-    this.shutdownUrl = this.configService.getBackEndUrl() + '/shutdown';
-    this.shutdownCancelUrl = this.configService.getBackEndUrl() + '/shutdown/cancel';
-    this.volumeUrl = this.configService.getBackEndUrl() + '/volume';
-    this.isMutedUrl = this.configService.getBackEndUrl() + '/muted';
-    this.muteUrl = this.configService.getBackEndUrl() + '/muteVolume';
-    this.switchSoundDeviceUrl = this.configService.getBackEndUrl() + '/switchSoundDevice';
-    this.tvUrl = this.configService.getBackEndUrl() + '/tv';
-    this.youtubeVideo = this.configService.getBackEndUrl() + '/youtube';
-    this.netflixTab = this.configService.getBackEndUrl() + '/netflix';
-    this.switchPause = this.configService.getBackEndUrl() + '/switchPause';
-    this.fullScreen = this.configService.getBackEndUrl() + '/fullscreen';
-    this.closeTab = this.configService.getBackEndUrl() + '/closeCurrentChromeTab';
-    this.currentMedia = this.configService.getBackEndUrl() + '/currentMedia';
-    this.switchMonitor = this.configService.getBackEndUrl() + '/switchMonitor';
-    this.leftClick = this.configService.getBackEndUrl() + '/leftclick';
-    this.pressKeyboardKey = this.configService.getBackEndUrl() + '/pressKeyboardKey';
+    this.shutdownUrl = environment.BACKEND_URL + '/shutdown';
+    this.shutdownCancelUrl = environment.BACKEND_URL + '/shutdown/cancel';
+    this.volumeUrl = environment.BACKEND_URL + '/volume';
+    this.isMutedUrl = environment.BACKEND_URL + '/muted';
+    this.muteUrl = environment.BACKEND_URL + '/muteVolume';
+    this.switchSoundDeviceUrl = environment.BACKEND_URL + '/switchSoundDevice';
+    this.tvUrl = environment.BACKEND_URL + '/tv';
+    this.youtubeVideo = environment.BACKEND_URL + '/youtube';
+    this.netflixTab = environment.BACKEND_URL + '/netflix';
+    this.switchPause = environment.BACKEND_URL + '/switchPause';
+    this.fullScreen = environment.BACKEND_URL + '/fullscreen';
+    this.closeTab = environment.BACKEND_URL + '/closeCurrentChromeTab';
+    this.currentMedia = environment.BACKEND_URL + '/currentMedia';
+    this.switchMonitor = environment.BACKEND_URL + '/switchMonitor';
+    this.leftClick = environment.BACKEND_URL + '/leftclick';
+    this.pressKeyboardKey = environment.BACKEND_URL + '/pressKeyboardKey';
   }
 
-  public manageShutdown(cmd: number): Observable<number> {
-    return this.http.post<number>(this.shutdownUrl, cmd);
+  public manageShutdown(time: number, isShutdown: boolean): Observable<number> {
+    let command: any = { isShutdown: isShutdown, time: time}
+    return this.http.post<number>(this.shutdownUrl, command);
   }
 
   public cancelShutdown(): Observable<boolean> {

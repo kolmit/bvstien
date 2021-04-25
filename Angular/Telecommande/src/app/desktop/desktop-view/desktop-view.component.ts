@@ -7,7 +7,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./desktop-view.component.css']
 })
 export class DesktopViewComponent {
-  private remoteView: string = 'remote';
+  remoteView: string = 'remote';
+  swipeRightIcon: string ="settings_remote";
   
   constructor(private router: Router) { }
 }

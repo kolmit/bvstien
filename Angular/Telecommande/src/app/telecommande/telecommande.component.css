@@ -7,8 +7,8 @@
 .tuile_1x1{
   border-radius: 17px 17px 17px 17px;
   margin: 0.5px;
-  height: 33%;
-  width: 33%;
+  height: 33vw;
+  width: 33vw;
   max-height: 100px;
   display: inline-flex;
   align-items: center;
@@ -17,8 +17,8 @@
 
 .tuile_2x1{
   border-radius: 17px 17px 17px 17px;
-  height: 33%;
-  width: 66%;
+  height: 33vw;
+  width: 66vw;
   max-height: 100px;
   display: inline-flex;
   align-items: center;
@@ -27,4 +27,9 @@
 
 .material-icons{
   opacity: 95%;
+}
+
+.disabled-tile {
+  opacity: 50%;
+  background-color:powderblue;
 }

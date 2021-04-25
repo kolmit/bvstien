@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subject, timer } from 'rxjs';
 import { mergeMap, takeUntil } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { ConfigService } from '../../config.service';
 import { ImageService } from '../../service/image-service.service';
 
@@ -57,7 +58,7 @@ export class PopupCameraComponent implements OnInit, OnDestroy {
   readData(data) {
     let reader = new FileReader();
     reader.onloadend = (e) => {
-      this.blobData = this.domSanitizer.bypassSecurityTrustUrl(`${this.configService.getBackEndUrl()}/imageWebcam`);
+      this.blobData = this.domSanitizer.bypassSecurityTrustUrl(`${environment.BACKEND_URL}/imageWebcam`);
     } 
 
     if (data) {

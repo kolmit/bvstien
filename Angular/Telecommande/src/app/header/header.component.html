@@ -3,11 +3,12 @@
     (swipeleft)="onSwipeLeft()" 
     (swiperight)="onSwipeRight()">
     
-    <h1>TELECOMMANDE</h1>
 
-    <div class="icons" style="display: flex; align-items: space-between;">
-        <!--<div class="material-icons">camera_alt</div>
-        <div class="material-icons">desktop_windows</div>-->
-    </div>
+    <div class="icons" style="display: flex; justify-content: space-around;">
     
+            <h1><div class="material-icons" (click)="onSwipeRight()">{{this.symbolMap.get(this.swipeRight)}}</div></h1>
+            <h1>TELECOMMANDE</h1>
+            <h1><div class="material-icons" (click)="onSwipeLeft()">{{this.symbolMap.get(this.swipeLeft)}}</div></h1>
+
+    </div>
 </div>

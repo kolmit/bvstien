@@ -19,7 +19,6 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ImageService } from './service/image-service.service';
 import { PopupImageBureauComponent } from './desktop/popup-image-bureau/popup-image-bureau.component';
 import { YoutubeUnitComponent } from './youtube-unit/youtube-unit.component';
-import { FilterYoutubePipe } from './filter-youtube.pipe';
 import { WINDOW_PROVIDERS } from 'src/environments/window-provider';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
@@ -47,7 +46,6 @@ import { HeaderComponent } from './header/header.component';
     PopupImageBureauComponent,
     PopupYoutubeComponent,
     YoutubeUnitComponent,
-    FilterYoutubePipe,
     PopupRemoteTvComponent,
     PopupAlttabComponent,
     PopupCameraComponent,

@@ -4,32 +4,31 @@ import { Observable, timer } from 'rxjs';
 import { ConfigService } from '../config.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { mergeMap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImageService {
 
-  private imageUrl: string;
 
   private desktopObservableTimer;
   private desktopBlobUrl: any;
 
   constructor(private http: HttpClient, private domSanitizer: DomSanitizer, private configService: ConfigService) {
-    this.imageUrl = this.configService.getBackEndUrl() + '/imageBureau';
   }
  
   public getImageBureau(): Observable<Blob> {
-    return this.http.get(this.imageUrl, { responseType: 'blob' });
+    return this.http.get(environment.BACKEND_URL + '/imageBureau', { responseType: 'blob' });
   }
 
   public getImageWebcam(): Observable<Blob> {
-    return this.http.get(this.configService.getBackEndUrl() + '/imageWebcam', { responseType: 'blob' });
+    return this.http.get(environment.BACKEND_URL + '/imageWebcam', { responseType: 'blob' });
   }
 
   public closeWebcamStream(): Observable<any> {
-    console.log(this.configService.getBackEndUrl() + '/closeWebcam');
-    return this.http.get(this.configService.getBackEndUrl() + '/closeWebcam');
+    console.log(environment.BACKEND_URL + '/closeWebcam');
+    return this.http.get(environment.BACKEND_URL + '/closeWebcam');
   }
 
   public startCapture(whichCapture: string){
@@ -71,7 +70,7 @@ export class ImageService {
   readDesktopImageFromBackend(data) {
     let reader = new FileReader();
     reader.onloadend = () => {
-      this.setDesktopBlobUrl(this.domSanitizer.bypassSecurityTrustUrl(`${this.configService.getBackEndUrl()}/imageBureau`));
+      this.setDesktopBlobUrl(this.domSanitizer.bypassSecurityTrustUrl(`${environment.BACKEND_URL}/imageBureau`));
     }
 
     if (data) {

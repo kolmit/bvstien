@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ImageService } from 'src/app/service/image-service.service';
 
 @Component({
   selector: 'app-camera-view',
@@ -7,11 +8,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./camera-view.component.css']
 })
 export class CameraViewComponent {
-  private remoteView: string = "remote";
+  remoteView: string = "remote";
+  swipeRightIcon: string = "settings_remote";
   
-  constructor(private router: Router) { }
-
-  onSwipeLeft(){
-    this.router.navigateByUrl('/' + this.remoteView);  
-  }
+  constructor() { }
 }

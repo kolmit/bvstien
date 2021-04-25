@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-telecommande',
@@ -7,8 +8,13 @@ import { Component } from '@angular/core';
 })
 
 export class TelecommandeComponent {
-  private desktopView: string = "desktop-view";
-  private cameraView: string = "camera-view";
+  desktopView: string = "desktop-view";
+  swipeLeftIcon: string = "desktop_windows";
+  cameraView: string = "camera-view";
+  swipeRightIcon: string = "camera_alt";
+
+  videoSurveillanceMode: boolean = environment.videoSurveillance;
   
-  constructor() {}
+  constructor() {
+  }
 }

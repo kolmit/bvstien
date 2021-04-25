@@ -26,6 +26,10 @@ export class PopupImageBureauComponent implements OnInit {
       });
     }
   }
+
+  getDesktopBlobUrl() {
+    return this.imageService.getDesktopBlobUrl();
+  }
   
   ngOnInit() {
     this.imageService.startCapture(this.myCaptureDevice);
