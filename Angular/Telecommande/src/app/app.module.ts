@@ -36,6 +36,7 @@ import { PopupShutdownComponent } from './shutdown/popup-shutdown/popup-shutdown
 import { DesktopViewComponent } from './desktop/desktop-view/desktop-view.component';
 import { CameraViewComponent } from './camera/camera-view/camera-view.component';
 import { HeaderComponent } from './header/header.component';
+import { VocalTileComponent } from './vocal-tile/vocal-tile.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { HeaderComponent } from './header/header.component';
     ShutdownTileComponent,
     DesktopViewComponent,
     CameraViewComponent,
-    HeaderComponent
+    HeaderComponent,
+    VocalTileComponent
   ],
   exports: [
     YoutubeUnitComponent,

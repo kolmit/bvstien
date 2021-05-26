@@ -1,0 +1,8 @@
+<div #vocalTile class="tuile_3x1" style="background-color: lightcyan;" (click)="listen()">
+    <div>
+        {{this.keyboardInputValue}}
+    </div>
+    <div>
+        <input matInput *ngIf="inputDisplayed" #vocalCommandInput class="vocal-input" [(ngModel)]="keyboardInputValue" (ngModelChange)="onModelChange($event)">
+    </div>
+</div>
