@@ -7,10 +7,18 @@
     font-size: 5em 
 }
   
-.keyboard-input {
-  width: 100%;
-  left: 0;
-  right: 0;
+.menu-bar {
   bottom: 0;
-  position: relative;
+  position: fixed;
+}
+
+.menu-input {
+  position: fixed;
+  margin: 1em 1em 1em 1em;
+}
+
+.keyboard-input {
+  width: 80%;
+  position: fixed;
+  margin-left: 4em;
 }
