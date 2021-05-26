@@ -1,0 +1,13 @@
+<div class="selector-container">
+    <div *ngFor="let agentName of agentList" (click)="selectAgent(agentName)" class="selector-item">
+        {{agentName}}
+    </div>
+</div>
+
+<!--<canvas #canvas style="border-style: solid;" width="200" height="200"></canvas>-->
+<div *ngIf="currentAgent" style="display: flex; justify-content: space-around; align-items:center">
+    <img src="/assets/agents-icons/{{currentAgent}}.png"/>
+    <div *ngFor="let ability of agentAbilities.get(currentAgent)">
+        <img title={{ability.name}} src="/assets/spells-icons/{{ability.name}}-logo.png"/>
+    </div>
+</div>

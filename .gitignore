@@ -1,1 +1,3 @@
 *.class
+node_modules/
+telecommande-back/ressource/dist/

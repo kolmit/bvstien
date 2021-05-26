@@ -1,0 +1,18 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+    color: white;
+    background-color: rgb(24, 33, 70);
+}
+
+.selector-item {
+    border: thin solid rgb(196, 196, 196); 
+    padding: 10px
+}
+
+.selector-container {
+    display: flex; 
+    justify-content: center; 
+    margin-bottom: 10px;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

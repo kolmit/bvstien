@@ -1,0 +1,12 @@
+<div class="canvas" (click)="addElement()">    
+    <img src="assets/maps/{{mapSelected}}.png"/>
+    <div *ngFor="let items of draggableItems"></div>
+</div>
+<div #parent> </div> // Dynamic component will be loaded here
+
+<app-resizable-draggable 
+[width]="120" 
+[height]="120" 
+[left]="0" 
+[top]="0">
+</app-resizable-draggable>
