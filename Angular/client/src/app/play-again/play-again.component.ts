@@ -10,8 +10,7 @@ export class PlayAgainComponent {
 
   constructor (public dialogRef: MatDialogRef<PlayAgainComponent>) { }
 
-  andTheWinnerIs(){
-    this.dialogRef.
+  playAgain(playAgain: boolean){
+    this.dialogRef.close(playAgain);
   }
-
 }

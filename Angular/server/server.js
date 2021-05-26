@@ -1,4 +1,5 @@
-const httpServer = require("http").createServer();
+const httpServer = require("http").createServer(); 
+const Player = require('./models/player.js');
 const io = require("socket.io")(httpServer, {
   cors: {
     origin: ["http://192.168.1.123:4201", 
@@ -14,18 +15,7 @@ httpServer.listen(3000, '192.168.1.123', () => {
   console.log('listen 3000');
 });
 
-/**
- * Models
- */
-class Player {
-  constructor(name) {
-    this.name = name;
-  }
 
-  rename(newName){
-    this.name = newName;
-  }
-}
 
 /**
  * Connection & Waiting Room
@@ -36,7 +26,7 @@ var playerMap = new Map();
 var lastPlayedIndex = 0;
 const NB_LINE = 10;
 const NB_COLUMN = 10;
-const WIN_GOAL = 4;
+const WIN_GOAL = 5;
 const DEFAULT_VALUE = -1;
 var boardGrid = [[]];// = [[-1, -1, -1 ], [-1, -1, -1], [-1, -1, -1]];
 
@@ -49,21 +39,7 @@ io.on('connection', (socket) => {
     idPlayer: playerName
   });
 
-  playerList.push(socket);
-  playerMap.set(socket, new Player(playerName));
-  socket.join("Room1");
-
-  broadcastInformationsGame();
-
-  if (playerList.length === MAX_PLAYERS){
-    for (let x = 0 ; x < NB_LINE ; x++){
-      boardGrid[x] = [];
-      for (let y = 0 ; y < NB_COLUMN ; y++){
-        boardGrid[x][y] = -1;
-      }
-    }
-    startGame();
-  }
+  joinRoom();
 
   /**
    * Déconnexion
@@ -87,8 +63,15 @@ io.on('connection', (socket) => {
   })
 
   socket.on("rename", (newName) => {
-    playerMap.get(socket).rename(newName);
-    broadcastInformationsGame();
+    if (playerMap.get(socket)) {
+      playerMap.get(socket).rename(newName);
+      broadcastInformationsGame();
+    }
+  });
+
+  socket.on("tictactoe:playagain", () => {
+    console.log("OKAY LETS PLAY AGAIN !");
+    joinRoom();
   });
 
   /**
@@ -110,22 +93,41 @@ io.on('connection', (socket) => {
       });
 
       boardGrid[xPlayed][yPlayed] = positions.symbolNumber;
-      if (!checkWin(boardGrid, positions.symbolNumber)) {
+      if (checkWin(boardGrid, positions.symbolNumber)) {
         endGame(positions.symbolNumber);
-        //nextPlayer();
       } else {
-        endGame(positions.symbolNumber);
+        nextPlayer();
       }
       
     }
     return ack(thisPlayIsPossible);
   });
+
+
+  function joinRoom(sessionPlayerName) {  
+    playerList.push(socket);
+    playerMap.set(socket, new Player(sessionPlayerName ? sessionPlayerName : playerName));
+    socket.join("Room1");
+    
+    broadcastInformationsGame();
+  
+    if (playerList.length === MAX_PLAYERS){
+      for (let x = 0 ; x < NB_LINE ; x++){
+        boardGrid[x] = [];
+        for (let y = 0 ; y < NB_COLUMN ; y++){
+          boardGrid[x][y] = -1;
+        }
+      }
+      startGame();
+    }
+  }
 }); 
 
 
 function checkWin(boardGrid, potentialWinner) {
   if (checkHorizontal(boardGrid) || checkVertical(boardGrid) || checkDiagonal(boardGrid) || checkDiagonal2(boardGrid)) {
     console.log("WINNER IS ", potentialWinner);
+    return true;
   }
 }
 
@@ -258,6 +260,7 @@ function startGame(){
 } 
 
 function endGame(winnerSymbol) {
+  playerList = [];
   io.to("Room1").emit("tictactoe:endGame", winnerSymbol);
 }
 
@@ -265,10 +268,13 @@ function nextPlayer(){
   let playerIndex = lastPlayedIndex++;
 
   var keySocket = Array.from(playerMap.keys())[playerIndex];
-  console.log("C'est au joueur "+playerIndex+": " + keySocket.id);
-  keySocket.to("Room1").emit("youHaveToPlay"); 
+  if (keySocket) {
+    console.log("C'est au joueur "+playerIndex+": " + keySocket.id);
+    keySocket.to("Room1").emit("youHaveToPlay"); 
 
-  if (playerIndex === playerList.length - 1){
-    lastPlayedIndex = 0;
+    if (playerIndex === playerList.length - 1){
+      lastPlayedIndex = 0;
+    }
   }
+  
 }

@@ -1,1 +1,9 @@
-<p>play-again works!</p>
+<div class="container">
+    Voulez-vous rejouer ?
+    <div (click)="playAgain(true)" style="margin-top: 1em;">
+      <button mat-raised-button color="primary">Rejouer</button>   
+    </div>
+    <div (click)="playAgain(false)" style="margin-top: 1em;">
+        <button mat-raised-button color="warn">Quitter</button>   
+      </div>
+  </div>

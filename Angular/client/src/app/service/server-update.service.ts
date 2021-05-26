@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Player } from '../model/player.model';
 import { environment } from 'src/environments/environment';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class ServerUpdateService implements OnDestroy{
   mySymbolNumber: number;
   myPlayerName: string;
   gameStarted: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  gameFinished: BehaviorSubject<string> = new BehaviorSubject("");
+  gameFinished: Subject<string> = new ReplaySubject<string>();
 
   boardGrid: number[][];// = [[-1, -1, -1 ], [-1, -1, -1], [-1, -1, -1]];
   playerList: Player[] = [];
@@ -66,6 +66,10 @@ export class ServerUpdateService implements OnDestroy{
   deco(): void {  
     this.socket.close();
   }  
+
+  readyToPlayAgain() {
+     this.socket.emit('tictactoe:playagain');
+  }
 
 
   public played(x: number, y:number) {

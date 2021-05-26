@@ -28,7 +28,10 @@ import { PlayAgainComponent } from './play-again/play-again.component';
     MatDialogModule,
     MatButtonModule
   ],
-  entryComponents: [ChoseNameComponent],
+  entryComponents: [
+    ChoseNameComponent,
+    PlayAgainComponent
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

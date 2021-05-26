@@ -1,13 +1,4 @@
-Liste des joueurs :
 <div class="container">
-  <div class="player-list">
-    <div *ngFor="let playerPerSocket of this.serverUpdate.getPlayerList()">
-      <div *ngFor="let player of playerPerSocket" (click)="this.changeName(player)">
-        <span *ngIf="this.serverUpdate.getPlayerName() === player.name">></span>
-        {{player.name}}
-      </div>
-    </div>
-  </div>
   <table class="styled-table">
     <tbody>
         <tr *ngFor="let i of this.xArray">
@@ -17,6 +8,14 @@ Liste des joueurs :
         </tr>
     </tbody>
   </table>
+  <div class="player-list">
+    <div *ngFor="let playerPerSocket of this.serverUpdate.getPlayerList()">
+      <div *ngFor="let player of playerPerSocket" (click)="this.changeName(player)">
+        <span *ngIf="this.serverUpdate.getPlayerName() === player.name">></span>
+        {{player.name}}
+      </div>
+    </div>
+  </div>
   <span>
     {{this.serverUpdate.isItMyTurn() ? "C'est à vous de jouer..." : "En attente de l'adversaire..."}}
   </span>

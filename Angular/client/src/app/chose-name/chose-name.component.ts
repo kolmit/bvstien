@@ -11,7 +11,7 @@ export class ChoseNameComponent {
   playerName: string;
 
   constructor(private serverUpdate: ServerUpdateService,
-    public dialogRef: MatDialogRef<ChoseNameComponent>,) { }
+    public dialogRef: MatDialogRef<ChoseNameComponent>) { }
 
   rename(){
     if (this.playerName && this.playerName.length < 16){

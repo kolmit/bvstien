@@ -29,8 +29,18 @@ export class BoardComponent implements OnInit {
 
     /** Si la partie est gagnée par un joueur */
     this.serverUpdate.gameFinished.subscribe(winner => {
-      this.dialog.open(PlayAgainComponent, {
+      console.log(winner);
+      let dialogReplay = this.dialog.open(PlayAgainComponent, {
         data: {winner}
+      });
+
+      /** On attend de savoir si le joueur a envie de rejouer */
+      dialogReplay.afterClosed().subscribe( (replay) => {
+        if (replay === true) {
+          this.serverUpdate.readyToPlayAgain();
+        } else {
+          this.serverUpdate.deco();
+        }
       });
     });
 
