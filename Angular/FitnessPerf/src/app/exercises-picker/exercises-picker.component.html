@@ -1,0 +1,72 @@
+<div class="application-title small-title">FitnessPerfs</div>
+  <hr class="separator">
+
+<div class="flex-row header">
+    <div class="back">
+        <button mat-raised-button [routerLink]="['/workout']">< Retour</button>
+    </div>
+    <div class="new-session" (click)="pickSessionDate()">
+        <button mat-raised-button>Nouvelle Séance</button>
+    </div>
+
+</div>
+
+<div class="flex-column workout-title">
+    <h1>{{this.myWorkout}}</h1>
+    <button mat-raised-button (click)="openSessionHistory()" *ngIf="this.allLastSessions.length > 0">Voir mes dernières séances</button>
+</div>
+
+<hr class="separator">
+
+<mat-accordion multi>
+    <!---->
+    
+        <div class="flex-row date-container">
+            <div (click)="switchSession(-1)" (disabled)="isSessionIndexExisting(-1)" [style.opacity]="!isSessionIndexExisting(-1) ? 0.2 : 1"> &#10094; </div>
+            <div class="session-date">
+                <div class="flex-column workout-date" *ngIf="this.mySession; else noSessionToday"> Séance du {{this.mySession?.timestamp | date:'dd-MM-yyyy'}} :</div>
+                <ng-template #noSessionToday>Pas de séance aujourd'hui</ng-template>
+            </div>
+            <div (click)="switchSession(1)" (disabled)="isSessionIndexExisting(1)" [style.opacity]="!isSessionIndexExisting(1) ? 0.2 : 1"> &#10095; </div>
+        </div>
+    <div *ngIf="this.mySession">
+        <form [formGroup]="workoutForm">
+
+            <div formArrayName="exercisesForms">
+                <!-- NgFor sur les exercices : -->
+                <div *ngFor="let exercice of getExerciseForms().controls; let exerciceIndex=index">
+                    <mat-expansion-panel [expanded]="getExerciseSeries(exerciceIndex).length > 1">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h3>{{this.mySession.workout.exercises[exerciceIndex].name}}</h3>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        
+                        <div [formGroupName]="exerciceIndex">
+                            <div formArrayName="serieForm">
+                                <!-- Les champs de la série -->
+                                <div *ngFor="let champsSerie of getExerciseSeries(exerciceIndex).controls; let serieIndex=index">
+                                    <div [formGroupName]="serieIndex"  class="flex-row exercise-set">
+
+                                        <mat-form-field [floatLabel]="floatLabelControl.value">
+                                            <mat-label>Répétitions</mat-label>
+                                            <input type="number" matInput placeholder="Nombre de répétitions" formControlName="repetitionCtrl">
+                                        </mat-form-field>
+                                        
+                                        <mat-form-field [floatLabel]="floatLabelControl.value">
+                                            <mat-label>Charge</mat-label>
+                                            <input type="number" matInput placeholder="Charge en kg" formControlName="weightCtrl">
+                                        </mat-form-field>
+                                        
+                                        <button mat-mini-fab class="submit-exercise-set" *ngIf="!isSerieEmpty(exerciceIndex, serieIndex)" (click)="submitSerie(exerciceIndex, serieIndex)" >✓</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </div>
+            </div>
+        </form>
+    </div>
+</mat-accordion>

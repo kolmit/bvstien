@@ -1,0 +1,19 @@
+.date-container {
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 1rem;
+
+    .session-date {
+        :nth-child(2) {
+            font-weight: 500;
+        }
+    }
+}
+
+.performances {
+    align-items: center;
+}
+
+.exercise-title {
+    font-weight: 500;
+}

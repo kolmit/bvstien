@@ -1,0 +1,32 @@
+.workouts {
+    flex-wrap: wrap;
+
+    .workout {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        min-width: 15vh;
+        min-height: 15vh;
+
+        margin: 1rem;
+        border-radius: 2vh;
+        background: linear-gradient(
+            to right bottom,
+            rgba(255, 243, 228, 0.7),
+            rgba(42, 158, 253, 0.555)
+        );
+        border: 2px solid rgba(53, 53, 53, 0.514);
+        font-weight: 600;
+    }
+
+    .workout:hover {
+        filter: brightness(120%);
+    }
+}
+
+.logout{
+    display: flex;
+    justify-content: flex-start;
+    margin: 1rem;
+}

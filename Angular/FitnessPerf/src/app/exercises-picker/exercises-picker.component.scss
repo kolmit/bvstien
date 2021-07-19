@@ -1,0 +1,39 @@
+.mat-expansion-panel, .mat-accordion>.mat-expansion-panel-spacing:last-child, 
+.mat-accordion>*:last-child:not(.mat-expansion-panel) 
+.mat-expansion-panel-spacing {
+    border: 1px solid rgba(0, 0, 0, 0.5);    
+    margin-bottom: 0.5rem;
+}
+
+.workout-title {
+    align-items: center;
+    font-weight: 300;
+    margin-bottom: 1rem;
+}
+
+.workout-date {
+    align-items: center;
+    font-weight: 500;
+}
+
+.date-container {
+    justify-content: space-evenly;
+    align-items: center;
+    font-weight: 100;
+    margin: 1rem;    
+}
+
+.exercise-set {
+    justify-content: flex-start;
+    
+    mat-form-field {
+        padding-right: 5%;
+        width: 35%;
+    }
+
+    .submit-exercise-set {
+        background-color: rgb(0, 102, 255);
+        font-weight: 600;
+        color: white;
+    }
+}
