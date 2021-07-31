@@ -33,7 +33,7 @@ export class LastSessionsComponent implements OnInit {
 
   
   getSessionHistory(myWorkout: string) {
-    this.storageService.getAllSessionByWorkout(myWorkout)
+    this.storageService.streamAllSessionByWorkout(myWorkout)
     .subscribe( (allLastSessions) => {
         this.allLastSessions = Utils.sortSessionsByDate(allLastSessions);
         this.currentSessionIndex = this.allLastSessions?.length - 1;

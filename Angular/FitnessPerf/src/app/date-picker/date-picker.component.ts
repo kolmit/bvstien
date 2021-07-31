@@ -15,7 +15,6 @@ export class DatePickerComponent {
   constructor(public dialogRef: MatDialogRef<DatePickerComponent>) { }
 
   submitDate() {
-    console.log(this.chosenDate);
     this.dialogRef.close(this.chosenDate);
   }
 

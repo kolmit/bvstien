@@ -13,33 +13,33 @@
 
 <div class="flex-column workout-title">
     <h1>{{this.myWorkout}}</h1>
-    <button mat-raised-button (click)="openSessionHistory()" *ngIf="this.allLastSessions.length > 0">Voir mes dernières séances</button>
+    <button mat-raised-button (click)="openSessionHistory()" *ngIf="this.allSessions.length > 0">Voir mes dernières séances</button>
 </div>
 
 <hr class="separator">
 
 <mat-accordion multi>
     <!---->
-    
         <div class="flex-row date-container">
-            <div (click)="switchSession(-1)" (disabled)="isSessionIndexExisting(-1)" [style.opacity]="!isSessionIndexExisting(-1) ? 0.2 : 1"> &#10094; </div>
+            <div (click)="switchSession(-1)" (disabled)="isSessionIndexExisting(-1)"> &#10094; </div>
             <div class="session-date">
-                <div class="flex-column workout-date" *ngIf="this.mySession; else noSessionToday"> Séance du {{this.mySession?.timestamp | date:'dd-MM-yyyy'}} :</div>
+                <div class="flex-column workout-date" *ngIf="this.allSessions[this.currentSessionIndex]; else noSessionToday"> Séance du {{this.allSessions[this.currentSessionIndex]?.timestamp | date:'dd-MM-yyyy'}} :</div>
                 <ng-template #noSessionToday>Pas de séance aujourd'hui</ng-template>
             </div>
-            <div (click)="switchSession(1)" (disabled)="isSessionIndexExisting(1)" [style.opacity]="!isSessionIndexExisting(1) ? 0.2 : 1"> &#10095; </div>
+            <div (click)="switchSession(1)" (disabled)="isSessionIndexExisting(1)"> &#10095; </div>
         </div>
-    <div *ngIf="this.mySession">
+    <div *ngIf="this.allSessions[this.currentSessionIndex]">
         <form [formGroup]="workoutForm">
 
             <div formArrayName="exercisesForms">
                 <!-- NgFor sur les exercices : -->
                 <div *ngFor="let exercice of getExerciseForms().controls; let exerciceIndex=index">
-                    <mat-expansion-panel [expanded]="getExerciseSeries(exerciceIndex).length > 1">
+                    <mat-expansion-panel [expanded]="getExerciseSeries(exerciceIndex).length > 1" hideToggle>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                <h3>{{this.mySession.workout.exercises[exerciceIndex].name}}</h3>
+                                {{this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex]?.name}}
                             </mat-panel-title>
+                            <div (click)="deleteExerciseForCurrentSession(this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].name, $event)"> <img class="delete-exo-button" width="10px" src="assets/close.svg"/> </div>
                         </mat-expansion-panel-header>
                         
                         <div [formGroupName]="exerciceIndex">
@@ -49,13 +49,11 @@
                                     <div [formGroupName]="serieIndex"  class="flex-row exercise-set">
 
                                         <mat-form-field [floatLabel]="floatLabelControl.value">
-                                            <mat-label>Répétitions</mat-label>
-                                            <input type="number" matInput placeholder="Nombre de répétitions" formControlName="repetitionCtrl">
+                                            <input type="number" matInput placeholder="Répétitions" formControlName="repetitionCtrl">
                                         </mat-form-field>
                                         
                                         <mat-form-field [floatLabel]="floatLabelControl.value">
-                                            <mat-label>Charge</mat-label>
-                                            <input type="number" matInput placeholder="Charge en kg" formControlName="weightCtrl">
+                                            <input type="number" matInput placeholder="Charge" formControlName="weightCtrl">
                                         </mat-form-field>
                                         
                                         <button mat-mini-fab class="submit-exercise-set" *ngIf="!isSerieEmpty(exerciceIndex, serieIndex)" (click)="submitSerie(exerciceIndex, serieIndex)" >✓</button>
@@ -70,3 +68,7 @@
         </form>
     </div>
 </mat-accordion>
+
+<div class="flex-row">
+    <button mat-mini-fab class="submit-exercise-add" (click)="addExerciseForCurrentSession()">+</button>
+</div>

@@ -1,0 +1,9 @@
+<div class="flex-column add-exercise-container">
+    <h3>Ajouter un exercice</h3>
+    <hr class="separator" style="margin-bottom: 2rem;">
+
+    <mat-form-field floatLabel="Nom de l'exercice">
+        <input matInput [(ngModel)]="newExoName" placeholder="Nom de l'exercice">
+    </mat-form-field>
+    <button mat-raised-button (click)="submitExercise()">Ajouter</button>
+</div>

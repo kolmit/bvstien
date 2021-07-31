@@ -31,6 +31,9 @@ import { AuthGuard } from './auth/auth.guard';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import { SnackbarService } from './services/snackbar.service';
 import { DatePickerComponent } from './date-picker/date-picker.component';
+import { ExercisePickerDialogComponent } from './exercise-picker-dialog/exercise-picker-dialog.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -42,6 +45,7 @@ import { DatePickerComponent } from './date-picker/date-picker.component';
     LoginComponent,
     ResetPasswordComponent,
     DatePickerComponent,
+    ExercisePickerDialogComponent,
   ],
   imports: [
     MatButtonModule,
@@ -61,7 +65,13 @@ import { DatePickerComponent } from './date-picker/date-picker.component';
     AppRoutingModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
 
   ],
   providers: [WorkoutService, AuthGuard, SnackbarService],

@@ -1,20 +1,53 @@
 import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import * as workouts from '../../assets/workouts.json';
+import { Constants } from '../utils/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WorkoutService {
 
-  workoutList: any[] = (workouts as any).default;
+  defaultWorkoutList: any[] = (workouts as any).default;
+  configuredWorkoutList: any[] = [];
 
-  constructor() { }
+  constructor(private firestore: AngularFirestore) {
+    this.fetchAllWorkouts();
+   }
 
-  getWorkoutList(): any[] {
-    return this.workoutList;
+   /** Charge tous les muscles avec les noms des exercices configurés. */
+  fetchAllWorkouts() {
+    this.firestore
+      .collection(Constants.USER_DATA)
+      .doc(localStorage.getItem('login'))
+      .collection(Constants.USER_EXERCISES)
+      .valueChanges()
+      .subscribe( (allWorkoutElement) => {
+        allWorkoutElement.forEach(element => {
+          let workoutName = Object.keys(element)[0];
+          const workoutIndex = this.configuredWorkoutList.findIndex(e => e.name === workoutName);
+          
+          if (workoutIndex === -1) {
+            this.configuredWorkoutList.push( {name: workoutName, exercises: element[workoutName]})
+          } else {
+            this.configuredWorkoutList[workoutIndex] = {name: workoutName, exercises: element[workoutName]};
+          }
+        });
+      });
   }
 
-  getExercises(workout: string) {
-    return this.workoutList.find(elt => elt.workout === workout)?.exercises;
+  getDefaultWorkoutList(): any[] {
+    return this.defaultWorkoutList;
+  }
+
+  getDefaultExercises(workout: string) {
+    return this.defaultWorkoutList.find(elt => elt.workout === workout)?.exercises;
+  }
+
+  getConfiguredExercises(workout: string): string[] {
+    const workoutIndex = this.configuredWorkoutList.findIndex(e => e.name === workout);
+    if (workoutIndex !== -1) {
+      return this.configuredWorkoutList[workoutIndex].exercises;
+    }
   }
 }

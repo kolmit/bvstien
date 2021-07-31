@@ -18,7 +18,7 @@ export class WorkoutPickerComponent implements OnInit {
     public authService: AuthService) {}
 
   ngOnInit(): void {
-    this.workoutList = this.workoutService.getWorkoutList();
+    this.workoutList = this.workoutService.getDefaultWorkoutList();
   }
 
 
