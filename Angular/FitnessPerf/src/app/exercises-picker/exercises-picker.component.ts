@@ -96,6 +96,9 @@ export class ExercisesComponent implements OnInit {
             this.firstHistoryInit = false;
           }
           this.populateForms(this.allSessions[this.currentSessionIndex]); 
+        } else {
+          this.allSessions = [];
+          this.currentSessionIndex = 0;
         }
       });
   }
