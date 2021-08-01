@@ -1,26 +1,26 @@
 [
     {
-        "workout": "Jambes",
+        "name": "Jambes",
         "exercises": ["Squat", "Presse linéaire", "Presse circulaire", "Fentes"]
     },
     {
-        "workout": "Biceps",
+        "name": "Biceps",
         "exercises": ["Curl Barre Pro","Curl Barre Supi", "Curl Pupitre", "Tractions", "Curl assis", "Curl incliné", "Curl Poulie"]
     },
     {
-        "workout": "Triceps",
+        "name": "Triceps",
         "exercises": ["Dips", "Ext. Buste penché", "Ext. Nuque", "Tirage corde", "Barre au front"]
     },
     {
-        "workout": "Dos",
+        "name": "Dos",
         "exercises": ["Soulevé de Terre", "Rowing Barre", "Rowing Haltère", "Tirage Poitrine", "Tractions Larges", "Pulldown", "Tirage Horizontal"]
     },
     {
-        "workout": "Epaules",
+        "name": "Epaules",
         "exercises": ["Dev. Haltère", "Rowing Menton", "Elev. Latérales", "Oiseau", "Shoulders Press", "Dév. Militaire"]
     },
     {
-        "workout": "Pectoraux",
+        "name": "Pectoraux",
         "exercises": ["Dev. Couché", "Dev. Incliné", "Dev. Décliné", "Dips", "Chest Press", "Poulies vis-à-vis"]
     }
 ]

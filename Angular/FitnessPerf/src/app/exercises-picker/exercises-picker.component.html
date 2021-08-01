@@ -69,6 +69,6 @@
     </div>
 </mat-accordion>
 
-<div class="flex-row">
+<div *ngIf="this.allSessions[this.currentSessionIndex]" class="flex-row">
     <button mat-mini-fab class="submit-exercise-add" (click)="addExerciseForCurrentSession()">+</button>
 </div>

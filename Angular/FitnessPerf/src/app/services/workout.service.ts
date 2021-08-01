@@ -12,8 +12,25 @@ export class WorkoutService {
   configuredWorkoutList: any[] = [];
 
   constructor(private firestore: AngularFirestore) {
-    this.fetchAllWorkouts();
-   }
+    if (localStorage.getItem('login') !== null) {
+      this.fetchAllWorkouts();
+    }
+  }
+
+
+  insertAllDefaultWorkout() {
+    for (let element of this.defaultWorkoutList) {
+      let e: any = {[element.name]: element.exercises};
+
+      this.firestore
+        .collection(Constants.USER_DATA)
+        .doc(localStorage.getItem('login'))
+        .collection(Constants.USER_EXERCISES)
+        .doc(element.name)
+        .set(e);
+    }
+    this.configuredWorkoutList = this.defaultWorkoutList;
+  }
 
    /** Charge tous les muscles avec les noms des exercices configurés. */
   fetchAllWorkouts() {

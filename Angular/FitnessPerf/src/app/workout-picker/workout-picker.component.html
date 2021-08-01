@@ -4,7 +4,7 @@
         <button mat-raised-button (click)="authService.logout()">&#10094; Se déconnecter</button>
     </div>
 <div class="flex-row workouts">
-    <div class="workout" *ngFor='let element of workoutList'  (click)="displayExercises(element.workout)">
-        <div>{{element.workout}}</div>
+    <div class="workout" *ngFor='let element of workoutList'  (click)="displayExercises(element.name)">
+        <div>{{element.name}}</div>
     </div>
 </div>

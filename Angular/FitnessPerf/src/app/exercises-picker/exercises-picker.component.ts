@@ -104,7 +104,7 @@ export class ExercisesComponent implements OnInit {
   newSession(chosenDate: Date) {
     if (!this.isSessionExisting(chosenDate)) {
         // On récupère un objet Workout mais qui ne contient que les noms d'exo (et pas de série...)
-        const myExercisesNames = this.workoutService.getConfiguredExercises(this.myWorkout);
+        const myExercisesNames: string[] = this.workoutService.getConfiguredExercises(this.myWorkout);
         let myWorkoutExercisesWithSets: Exercise[] = [];
         
         // Alors on initialise les objets Exercise avec un tableau de série (vide).

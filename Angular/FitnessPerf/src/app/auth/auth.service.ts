@@ -3,6 +3,7 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { SnackbarService } from '../services/snackbar.service';
+import { WorkoutService } from '../services/workout.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +13,19 @@ export class AuthService {
   constructor(
     private afAuth: AngularFireAuth, 
     private router: Router,
-    private snackbarService: SnackbarService) { }
+    private snackbarService: SnackbarService,
+    private workoutService: WorkoutService) { }
 
-  login(email: string, password: string) {
+  login(email: string, password: string, fromSignup?: boolean) {
     this.afAuth.signInWithEmailAndPassword(email, password)
     .then(value => {
       this.snackbarService.openSnackBar("Bienvenue " + email, "💪");
       this.afAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
       localStorage.setItem('login', email);
       localStorage.setItem('userid', value.user.uid);
+
+      this.initUserData(fromSignup);
+
       this.router.navigateByUrl('/workout');
     })
     .catch(error => {
@@ -49,8 +54,7 @@ export class AuthService {
     this.afAuth.createUserWithEmailAndPassword(email, password)
     .then(value => {
      console.log('Succes', value);
-     this.login(email, password);
-     this.router.navigateByUrl('/workout');
+     this.login(email, password, true);
     })
     .catch(error => {
       this.snackbarService.openSnackBar(error.message, '❌')
@@ -66,4 +70,17 @@ export class AuthService {
       this.router.navigate(['/']);
     });
   } 
+
+  /**
+   * @param fromSignup Si l'utilisateur vient de s'enregistrer, on charge les exercices de bases
+   * Sinon on charge ses exercices stockés dans "user_exercises"
+   */
+  initUserData(fromSignup?: boolean) {
+    if (fromSignup) {
+      this.workoutService.insertAllDefaultWorkout();
+    } 
+    else {
+      this.workoutService.fetchAllWorkouts();
+    }
+  }
 }
