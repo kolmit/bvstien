@@ -1,8 +1,9 @@
 <div class="application-title small-title">FitnessPerfs</div>
   <hr class="separator">
-    <div class="header logout">
-        <button mat-raised-button (click)="authService.logout()">&#10094; Se déconnecter</button>
-    </div>
+<div class="header logout">
+    <button mat-raised-button (click)="authService.logout()">&#10094; Se déconnecter</button>
+    <button mat-raised-button [routerLink]="['/configure']">Configurer &#10095;</button>
+</div>
 <div class="flex-row workouts">
     <div class="workout" *ngFor='let element of workoutList'  (click)="displayExercises(element.name)">
         <div>{{element.name}}</div>

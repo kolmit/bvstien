@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import * as workouts from '../../assets/workouts.json';
 import { Constants } from '../utils/constants';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +17,6 @@ export class WorkoutService {
       this.fetchAllWorkouts();
     }
   }
-
 
   insertAllDefaultWorkout() {
     for (let element of this.defaultWorkoutList) {

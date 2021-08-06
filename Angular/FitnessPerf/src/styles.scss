@@ -1,3 +1,9 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 html {
     font-family: "Poppins", sans-serif;
     
@@ -23,8 +29,15 @@ html {
 .separator {
     width: 75%;
     opacity: 0.5;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .header {
     margin-top: 1rem;
     margin-bottom: 1rem;

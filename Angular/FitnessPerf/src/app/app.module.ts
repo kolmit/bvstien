@@ -34,6 +34,7 @@ import { DatePickerComponent } from './date-picker/date-picker.component';
 import { ExercisePickerDialogComponent } from './exercise-picker-dialog/exercise-picker-dialog.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { ConfigurationComponent } from './configuration/configuration.component';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { environment } from '../environments/environment';
     ResetPasswordComponent,
     DatePickerComponent,
     ExercisePickerDialogComponent,
+    ConfigurationComponent,
   ],
   imports: [
     MatButtonModule,

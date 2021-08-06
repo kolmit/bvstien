@@ -1,0 +1,18 @@
+<div class="flex-column header-container">
+    <div class="application-title small-title">FitnessPerfs</div>
+    <hr class="separator">
+    <div class="header">
+        <button mat-raised-button [routerLink]="['/workout']">Retour</button>
+        <div></div>
+    </div>
+</div>
+
+
+<div class="flex-column configuration-actions">
+    <hr class="separator">
+    <button mat-raised-button (click)="exportSessions()">Exporter mes séances</button>
+    <hr class="separator">
+
+    <h3>Importer mes séances</h3>
+    <input type="file" (change)="importSessions($event.target.files)"/>
+</div>
