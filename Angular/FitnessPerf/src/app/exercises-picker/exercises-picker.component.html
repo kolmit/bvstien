@@ -49,14 +49,23 @@
                                     <div [formGroupName]="serieIndex"  class="flex-row exercise-set">
 
                                         <mat-form-field [floatLabel]="floatLabelControl.value">
-                                            <input type="number" matInput placeholder="Répétitions" formControlName="repetitionCtrl">
+                                            <input type="number" 
+                                                [ngStyle]="{'opacity': isPrefilled(exerciceIndex, serieIndex) ? '0.5' : '1' }" 
+                                                matInput placeholder="Répétitions" 
+                                                formControlName="repetitionCtrl"
+                                            >
                                         </mat-form-field>
                                         
                                         <mat-form-field [floatLabel]="floatLabelControl.value">
-                                            <input type="number" matInput placeholder="Charge" formControlName="weightCtrl">
+                                            <input type="number" 
+                                                [ngStyle]="{'opacity': isPrefilled(exerciceIndex, serieIndex) ? '0.5' : '1' }" 
+                                                matInput placeholder="Charge" 
+                                                formControlName="weightCtrl"
+                                            >
                                         </mat-form-field>
                                         
                                         <button mat-mini-fab class="submit-exercise-set" *ngIf="!isSerieEmpty(exerciceIndex, serieIndex)" (click)="submitSerie(exerciceIndex, serieIndex)" >✓</button>
+                                        <button mat-mini-fab class="delete-exercise-set" *ngIf="!isSerieEmpty(exerciceIndex, serieIndex) && !isPrefilled(exerciceIndex, serieIndex)" (click)="deleteSerie(exerciceIndex, serieIndex)" >&#10007;</button>
 
                                     </div>
                                 </div>

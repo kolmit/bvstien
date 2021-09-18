@@ -15,6 +15,9 @@ export class WorkoutService {
   constructor(private firestore: AngularFirestore) {
     if (localStorage.getItem('login') !== null) {
       this.fetchAllWorkouts();
+       // On est obligé de réinsérer les exercices, sinon "problème d'insufficient permissions"
+       // car impossible de faire une Rule sur une collection (ici : "user_exercises")
+      this.insertAllDefaultWorkout();
     }
   }
 
@@ -40,6 +43,7 @@ export class WorkoutService {
       .collection(Constants.USER_EXERCISES)
       .valueChanges()
       .subscribe( (allWorkoutElement) => {
+        console.log(allWorkoutElement);
         allWorkoutElement.forEach(element => {
           let workoutName = Object.keys(element)[0];
           const workoutIndex = this.configuredWorkoutList.findIndex(e => e.name === workoutName);
@@ -65,6 +69,8 @@ export class WorkoutService {
     const workoutIndex = this.configuredWorkoutList.findIndex(e => e.name === workout);
     if (workoutIndex !== -1) {
       return this.configuredWorkoutList[workoutIndex].exercises;
-    }
+    } /*else {
+      return this.getDefaultExercises(workout);
+    }*/
   }
 }

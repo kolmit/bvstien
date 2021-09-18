@@ -73,8 +73,16 @@ export class ExercisesComponent implements OnInit {
       this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets[serieIndex] = newSerie; // Modification d'une série
     } else { 
       this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets.push(newSerie); // Ajout d'une nouvelle 
-      this.addSerieExercise(exerciceIndex);
+      //this.addSerieExercise(exerciceIndex);
     }
+    this.storageService.save(this.allSessions[this.currentSessionIndex]);
+  }
+
+  deleteSerie(exerciceIndex, serieIndex) {
+    const theSerie = this.getExerciseSeries(exerciceIndex).at(serieIndex);
+
+    this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets.splice(serieIndex, 1);//.findIndex((e) => console.log(e));
+
     this.storageService.save(this.allSessions[this.currentSessionIndex]);
   }
 
@@ -221,9 +229,12 @@ export class ExercisesComponent implements OnInit {
         }
 
         // Après avoir peuplé les séries déjà saisies, 
-        // on ajoute un formulaire de série vide pour la saisie
+        // on ajoute un formulaire de série pré-remplie pour la saisie
         if (exo.sets?.length > 0) {
-          this.addSerieExercise(i);
+          const theSerie = this.getExerciseSeries(i).at( exo.sets?.length - 1 );
+          const reps = theSerie.get('repetitionCtrl');
+          const weight = theSerie.get('weightCtrl');
+          this.addSerieExercise(i, reps.value, weight.value, true);
         }
       }
     }
@@ -245,9 +256,18 @@ export class ExercisesComponent implements OnInit {
       .get('serieForm') as FormArray;
   }
 
-  addSerieExercise(exerciceIndex: number, repetitionValue?: number, weightValue?: number) {
+  addSerieExercise(exerciceIndex: number, repetitionValue?: number, weightValue?: number, preFilled?: boolean) {
     let serieToAdd = this.newSerie(repetitionValue, weightValue);
+    if (preFilled) {
+      serieToAdd.markAsDirty();
+    }
+    console.log(serieToAdd.dirty);
+
     this.getExerciseSeries(exerciceIndex).push(serieToAdd);
+  }
+
+  isPrefilled(exerciceIndex, serieIndex): boolean {
+    return this.getExerciseSeries(exerciceIndex).at(serieIndex).dirty;
   }
   
   newSerie(repetitionValue?: number, weightValue?: number): FormGroup {
