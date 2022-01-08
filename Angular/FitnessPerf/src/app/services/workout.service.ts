@@ -43,7 +43,6 @@ export class WorkoutService {
       .collection(Constants.USER_EXERCISES)
       .valueChanges()
       .subscribe( (allWorkoutElement) => {
-        console.log(allWorkoutElement);
         allWorkoutElement.forEach(element => {
           let workoutName = Object.keys(element)[0];
           const workoutIndex = this.configuredWorkoutList.findIndex(e => e.name === workoutName);

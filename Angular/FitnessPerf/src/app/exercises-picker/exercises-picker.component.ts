@@ -81,7 +81,7 @@ export class ExercisesComponent implements OnInit {
   deleteSerie(exerciceIndex, serieIndex) {
     const theSerie = this.getExerciseSeries(exerciceIndex).at(serieIndex);
 
-    this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets.splice(serieIndex, 1);//.findIndex((e) => console.log(e));
+    this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets.splice(serieIndex, 1);
 
     this.storageService.save(this.allSessions[this.currentSessionIndex]);
   }
@@ -261,7 +261,6 @@ export class ExercisesComponent implements OnInit {
     if (preFilled) {
       serieToAdd.markAsDirty();
     }
-    console.log(serieToAdd.dirty);
 
     this.getExerciseSeries(exerciceIndex).push(serieToAdd);
   }
@@ -273,7 +272,7 @@ export class ExercisesComponent implements OnInit {
   newSerie(repetitionValue?: number, weightValue?: number): FormGroup {
     return this.fb.group({
       repetitionCtrl: repetitionValue ? repetitionValue : '',
-      weightCtrl: weightValue ? weightValue : ''
+      weightCtrl: weightValue || weightValue === 0 ? weightValue : ''
     }, RequiredValidator);
   }
 

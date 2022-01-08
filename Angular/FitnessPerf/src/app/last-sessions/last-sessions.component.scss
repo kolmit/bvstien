@@ -3,17 +3,38 @@
     align-items: center;
     margin: 1rem 1rem;
 
-    .session-date {
-        :nth-child(2) {
-            font-weight: 500;
+    .history-title {
+        :nth-child(1) {
+            font-weight: 900;
         }
     }
 }
 
-.performances {
+.history-container {
     align-items: center;
 }
 
 .exercise-title {
-    font-weight: 500;
+    font-weight: 900;
+    padding-bottom: 0.5rem;
+}
+
+.set-date {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.75);
+}
+
+.history-exercise {
+    justify-content: space-around;
+}
+
+.history-set {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    
+    padding: 5px;
+    border: 1px solid rgba(128, 128, 128, 0.5);
+    border-radius: 0.5rem;
 }

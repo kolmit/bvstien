@@ -5,27 +5,28 @@
     <div class="flex-column container">
         <div class="flex-row date-container">
             <div (click)="switchSession(-1)" [style.opacity]="!isSessionIndexExisting(-1) ? 0.2 : 1"> < Avant </div>
-            <div class="session-date">
-                <span>Séance du<br></span>
-                <span>{{this.allLastSessions[currentSessionIndex].timestamp | date:'dd-MM-yyyy'}}</span>
+            <div class="history-title">
+                <span>Historique<br></span>
+                <span>Page {{this.getCurrentPageNumber()}}/{{this.getTotalPageNumber()}}</span>
+                <!--<span>{{this.allLastSessions[currentSessionIndex].timestamp | date:'dd-MM-yyyy'}}</span>-->
             </div>
             <div (click)="switchSession(1)" [style.opacity]="!isSessionIndexExisting(1) ? 0.2 : 1"> Après > </div>
         </div>
-        <button mat-raised-button color=primary (click)="deleteThisSession(currentSessionIndex)">Supprimer la séance</button>
+        <!--<button mat-raised-button color=primary (click)="deleteThisSession(currentSessionIndex)">Supprimer la séance</button>-->
 
         <hr style="width: 100%; margin-bottom: 1rem;">
 
-        <div *ngFor="let exercise of this.allLastSessions[currentSessionIndex].workout.exercises">
-            <span class="exercise-title">{{exercise.name}}</span>
-            
-            <div class="flex-column performances">
-                <div *ngIf="exercise.sets.length === 0">
-                    -
-                </div>
-                <div *ngFor="let set of exercise.sets">
-                    {{set.repetition}} reps - {{set.weight}} kg 
+        <div class="flex-column history-container" *ngFor="let exerciseHistory of this.currentHistory">
+            <span class="exercise-title">{{exerciseHistory.exerciseName}}</span>
+
+            <div class="flex-row history-exercise">
+                <div class="history-set" *ngFor="let history of exerciseHistory.setsHistory">
+                    <span class="set-date">{{history.date | date: 'dd-MM-yyyy'}}</span>
+                    <span *ngIf="!history.exercisesSets || history.exercisesSets.length === 0 ">-</span>
+                    <span *ngFor="let set of history.exercisesSets">{{set.repetition}} × {{set.weight}} kg</span>
                 </div>
             </div>
+
             <hr class="separator">
         </div>
     </div>    
