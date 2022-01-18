@@ -5,5 +5,9 @@
     <mat-form-field floatLabel="Nom de l'exercice">
         <input matInput [(ngModel)]="newExoName" placeholder="Nom de l'exercice">
     </mat-form-field>
-    <button mat-raised-button (click)="submitExercise()">Ajouter</button>
+</div>
+
+<div class="flex-column">
+    <button mat-raised-button (click)="submitExercise(false)">Ajouter à cette séance uniquement</button>
+    <button mat-raised-button (click)="submitExercise(true)">Ajouter à toutes les séances</button>
 </div>

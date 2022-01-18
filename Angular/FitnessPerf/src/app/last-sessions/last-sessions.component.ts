@@ -109,7 +109,7 @@ export class LastSessionsComponent implements OnInit {
   }
 
   getCurrentPageNumber() {
-    return (this.currentSessionIndex / this.maxParallelSessions) + 1;
+    return Math.round((this.currentSessionIndex / this.maxParallelSessions) + 1);
   }
 
   deleteThisSession(indexToDelete: number){

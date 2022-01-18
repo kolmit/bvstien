@@ -1,3 +1,23 @@
+/***************************
+**** Variables globales ****
+***************************/
+$text: #B7C7D4;
+
+$background: #0E1E2C;
+$background-panel: #314a60;
+$background-dialog: #141518;
+
+$button-valid: #2FAC69;
+$valid-darker: #20794a;
+$button: #416280;
+
+$pink: #ad6161;
+$pink-darker: #774141;
+
+$orange: #ff9900;
+$blue: #00b7ff;
+$blue-ligher: #67d4ff;
+
 * {
     padding: 0;
     margin: 0;
@@ -6,9 +26,9 @@
 
 html {
     font-family: "Poppins", sans-serif;
-    
-    background: linear-gradient(0.25turn, #3f87a6, white, white, #f77878);
-    
+
+    background: $background;
+    color: $text;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -27,8 +47,8 @@ html {
 }
 
 .separator {
-    width: 75%;
-    opacity: 0.5;
+    width: 100%;
+    opacity: 0.2;
     margin-top: 1rem;
     margin-bottom: 1rem;
 }
@@ -44,15 +64,15 @@ html {
     justify-content: space-around;
 }
 
-.application-title {
-    font-family: "Pacifico", cursive;
-}
-
-.small-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.mat-flat-button, .mat-raised-button, .mat-fab, .mat-mini-fab {
+    background-color: $button
+}
+
+.mat-dialog-container {
+    background-color: $background-dialog;
+    border: 1px solid white;
+}

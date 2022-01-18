@@ -1,0 +1,16 @@
+<div class="flex-row header-container">
+    <div (click)="doAction(0)">
+        <img *ngIf="this.getIcon(0)" src="{{this.getIcon(0)}}"/>
+    </div>
+    <div class="application-title" [ngClass]="this.titleClass(this.parentModel)">
+        <span>F</span>
+        <span>itness</span>
+        <span>P</span>
+        <span>erfs</span>
+    </div>        
+    <div (click)="doAction(1)">
+        <img *ngIf="this.getIcon(1)" src="{{this.getIcon(1)}}"/>
+    </div>
+</div>
+
+<hr class="separator">

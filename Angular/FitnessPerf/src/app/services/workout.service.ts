@@ -68,8 +68,13 @@ export class WorkoutService {
     const workoutIndex = this.configuredWorkoutList.findIndex(e => e.name === workout);
     if (workoutIndex !== -1) {
       return this.configuredWorkoutList[workoutIndex].exercises;
-    } /*else {
-      return this.getDefaultExercises(workout);
-    }*/
+    }
+  }
+
+  updateConfiguredExercises(workoutName: string, exerciseList: string[]) {
+    const workoutIndex = this.configuredWorkoutList.findIndex(e => e.name === workoutName);
+    if (workoutIndex !== -1) {
+      this.configuredWorkoutList[workoutIndex].exercises = exerciseList;
+    }
   }
 }

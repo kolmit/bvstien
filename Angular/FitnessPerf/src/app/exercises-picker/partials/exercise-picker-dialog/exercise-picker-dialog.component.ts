@@ -14,8 +14,13 @@ export class ExercisePickerDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  submitExercise() {
-    this.dialogRef.close(this.newExoName);
+  submitExercise(addExoToConfiguration: boolean) {
+    this.dialogRef.close(
+      {
+        exerciseName: this.newExoName,
+        addExoToConfiguration: addExoToConfiguration
+      }
+    );
   }
 
   closeDialog() {

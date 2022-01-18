@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WorkoutPickerComponent } from './workout-picker/workout-picker.component';
-import { ExercisesComponent } from './exercises-picker/exercises-picker.component';
+import { ExercisePickerComponent } from './exercises-picker/exercises-picker.component';
 import { WorkoutService } from './services/workout.service';
 
 import { AngularFireModule } from '@angular/fire';
@@ -30,24 +30,28 @@ import { LoginComponent } from './auth/login/login.component';
 import { AuthGuard } from './auth/auth.guard';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import { SnackbarService } from './services/snackbar.service';
-import { DatePickerComponent } from './date-picker/date-picker.component';
-import { ExercisePickerDialogComponent } from './exercise-picker-dialog/exercise-picker-dialog.component';
+import { DatePickerComponent } from './exercises-picker/partials/date-picker/date-picker.component';
+import { ExercisePickerDialogComponent } from './exercises-picker/partials/exercise-picker-dialog/exercise-picker-dialog.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ConfigurationComponent } from './configuration/configuration.component';
+import { MultiChoiceDialogComponent } from './multi-choice-dialog/multi-choice-dialog.component';
+import { HeaderComponent } from './header/header.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     WorkoutPickerComponent,
-    ExercisesComponent,
+    ExercisePickerComponent,
     LastSessionsComponent,
     LoginComponent,
     ResetPasswordComponent,
     DatePickerComponent,
     ExercisePickerDialogComponent,
     ConfigurationComponent,
+    MultiChoiceDialogComponent,
+    HeaderComponent,
   ],
   imports: [
     MatButtonModule,

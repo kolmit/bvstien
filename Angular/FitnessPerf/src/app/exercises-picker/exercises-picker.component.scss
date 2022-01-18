@@ -1,14 +1,30 @@
+@import '../../styles.scss';
+
 .mat-expansion-panel, .mat-accordion>.mat-expansion-panel-spacing:last-child, 
 .mat-accordion>*:last-child:not(.mat-expansion-panel) 
 .mat-expansion-panel-spacing {
-    border: 1px solid rgba(0, 0, 0, 0.5);    
+    border: 1px solid rgba($text, 0.3);    
+    background-color: $background-panel;
     margin: 2px 2px 5px 2px;
+}
+
+mat-panel-title {
+    color: white;
+}
+
+.mat-input-element {
+    color: white;
+}
+
+.mat-expansion-panel:not(.mat-expanded):not([aria-disabled=true]) .mat-expansion-panel-header:hover{
+    background: $background-panel;
 }
 
 .workout-title {
     align-items: center;
     font-weight: 300;
     margin-bottom: 1rem;
+    margin-top: 1.5rem;
 }
 
 .workout-date {
@@ -32,26 +48,51 @@
     }
 
     .submit-exercise-set {
-        background-color: rgb(0, 102, 255);
+        margin-left: 0.5rem;
+        background-color: $button-valid;
         font-weight: 600;
         color: white;
+        border: 1px solid $valid-darker;
+    }
+
+    .delete-exercise-set {
         margin-left: 0.5rem;
+        background-color: $pink;
+        color: white;
+        font-weight: 400;
+        border: 1px solid $pink-darker;
     }
 }
 
 .submit-exercise-add {
     align-items: center;
-    background-color: rgb(219, 124, 124);
+    margin: 1rem;
+    background-color: #ff8800;
     font-size: 1.5rem;
     color: white;
-    margin: 1rem;
 }
 
 .delete-exo-button {
     opacity: 0.7;
 }
 
-.delete-exercise-set {
-    background-color: #f79b9b;
-    margin-left: 0.5rem;
+.add-session {
+    width: 150px;
+    position: relative;
+    align-items: center;
+    padding: 0.75rem;
+    border: 1px solid rgba($text, 0.6);
+    border-radius: 1rem;
+}
+
+.add-symbol {
+    position: absolute;
+    font-size: 1.5rem;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    top: -15px;
+    left: 130px;
+    border: 1px solid $text;
+    background-color: $background;
+    border-radius: 100%;
 }

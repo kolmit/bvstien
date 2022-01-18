@@ -1,19 +1,14 @@
-<div class="application-title small-title">FitnessPerfs</div>
-  <hr class="separator">
-
-<div class="flex-row header">
-    <div class="back">
-        <button mat-raised-button [routerLink]="['/workout']">< Retour</button>
-    </div>
-    <div class="new-session" (click)="pickSessionDate()">
-        <button mat-raised-button>Nouvelle Séance</button>
-    </div>
-
-</div>
+<app-header [parentModel]="model"></app-header>
 
 <div class="flex-column workout-title">
-    <h1>{{this.myWorkout}}</h1>
-    <button mat-raised-button (click)="openSessionHistory()" *ngIf="this.allSessions.length > 0">Voir mes dernières séances</button>
+    <h1 (click)="pickSessionDate()" class="flex-column add-session">{{this.myWorkout}}
+        <div class="add-symbol">
+            +
+        </div>
+    </h1>
+    <div class="flex-row">
+        <button mat-raised-button (click)="openSessionHistory()" *ngIf="this.allSessions.length > 0">Mes dernières séances</button>
+    </div>
 </div>
 
 <hr class="separator">
@@ -21,12 +16,12 @@
 <mat-accordion multi>
     <!---->
         <div class="flex-row date-container">
-            <div (click)="switchSession(-1)" (disabled)="isSessionIndexExisting(-1)"> &#10094; </div>
+            <div (click)="switchSession(-1)" (disabled)="isSessionIndexExisting(-1)" [style.opacity]="isSessionIndexExisting(-1) ? 1 : 0.2"> &#10094; </div>
             <div class="session-date">
                 <div class="flex-column workout-date" *ngIf="this.allSessions[this.currentSessionIndex]; else noSessionToday"> Séance du {{this.allSessions[this.currentSessionIndex]?.timestamp | date:'dd-MM-yyyy'}} :</div>
                 <ng-template #noSessionToday>Pas de séance aujourd'hui</ng-template>
             </div>
-            <div (click)="switchSession(1)" (disabled)="isSessionIndexExisting(1)"> &#10095; </div>
+            <div (click)="switchSession(1)" (disabled)="isSessionIndexExisting(1)" [style.opacity]="isSessionIndexExisting(1) ? 1 : 0.2"> &#10095; </div>
         </div>
     <div *ngIf="this.allSessions[this.currentSessionIndex]">
         <form [formGroup]="workoutForm">
@@ -39,7 +34,7 @@
                             <mat-panel-title>
                                 {{this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex]?.name}}
                             </mat-panel-title>
-                            <div (click)="deleteExerciseForCurrentSession(this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].name, $event)"> <img class="delete-exo-button" width="10px" src="assets/close.svg"/> </div>
+                            <div (click)="deleteExercise(this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].name)"> <img class="delete-exo-button" width="10px" src="assets/svg/close.svg"/> </div>
                         </mat-expansion-panel-header>
                         
                         <div [formGroupName]="exerciceIndex">
@@ -79,5 +74,5 @@
 </mat-accordion>
 
 <div *ngIf="this.allSessions[this.currentSessionIndex]" class="flex-row">
-    <button mat-mini-fab class="submit-exercise-add" (click)="addExerciseForCurrentSession()">+</button>
+    <button mat-mini-fab class="submit-exercise-add" (click)="addExercise()">+</button>
 </div>

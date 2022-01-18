@@ -5,14 +5,12 @@
     <div class="flex-column container">
         <div class="flex-row date-container">
             <div (click)="switchSession(-1)" [style.opacity]="!isSessionIndexExisting(-1) ? 0.2 : 1"> < Avant </div>
-            <div class="history-title">
+            <div class="history-title flex-column">
                 <span>Historique<br></span>
                 <span>Page {{this.getCurrentPageNumber()}}/{{this.getTotalPageNumber()}}</span>
-                <!--<span>{{this.allLastSessions[currentSessionIndex].timestamp | date:'dd-MM-yyyy'}}</span>-->
             </div>
             <div (click)="switchSession(1)" [style.opacity]="!isSessionIndexExisting(1) ? 0.2 : 1"> Après > </div>
         </div>
-        <!--<button mat-raised-button color=primary (click)="deleteThisSession(currentSessionIndex)">Supprimer la séance</button>-->
 
         <hr style="width: 100%; margin-bottom: 1rem;">
 
@@ -21,7 +19,7 @@
 
             <div class="flex-row history-exercise">
                 <div class="history-set" *ngFor="let history of exerciseHistory.setsHistory">
-                    <span class="set-date">{{history.date | date: 'dd-MM-yyyy'}}</span>
+                    <span class="set-date">{{history.date | date: 'dd MMM. yy'}}</span>
                     <span *ngIf="!history.exercisesSets || history.exercisesSets.length === 0 ">-</span>
                     <span *ngFor="let set of history.exercisesSets">{{set.repetition}} × {{set.weight}} kg</span>
                 </div>

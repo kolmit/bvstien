@@ -13,6 +13,8 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, 
     public dialog: MatDialog) { }
 
+  model: string = 'LoginComponent';
+
   email;
   emailToCreate;
   password;

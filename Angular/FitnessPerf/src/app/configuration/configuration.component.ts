@@ -9,7 +9,8 @@ import { StorageService } from '../services/storage.service';
   styleUrls: ['./configuration.component.scss']
 })
 export class ConfigurationComponent {
-  fileSelected : File | null = null;
+  model: string = 'ConfigurationComponent';
+
   constructor(private storageService: StorageService,
     private snackbarService: SnackbarService) { }
 

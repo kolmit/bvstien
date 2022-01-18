@@ -1,0 +1,6 @@
+<div class="flex-column">
+    <span>{{this.question}}</span>
+    <div class="flex-column choice-buttons">
+        <button *ngFor="let choice of this.choices; let i = index" [ngStyle]="{'background-color': this.colors[i]}" mat-raised-button (click)="choiceSelected(choice)">{{choice}}</button>
+    </div>
+</div>

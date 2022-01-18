@@ -9,6 +9,7 @@ import { saveAs } from 'file-saver/src/FileSaver';
 
 import * as imported from '../../assets/exampleImportData.json';
 import { SnackbarService } from './snackbar.service';
+import { WorkoutService } from './workout.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class StorageService {
   importedWorkouts: any[] = (imported as any).default;
 
   constructor(private firestore: AngularFirestore,
-    private snackbarService: SnackbarService) { }
+    private snackbarService: SnackbarService,
+    private workoutService: WorkoutService) { }
 
 
    getFirestore() {
@@ -54,6 +56,55 @@ export class StorageService {
       .delete();
   }
 
+  /** Supprime un exercice dans la configuration de l'utilisateur */
+  deleteUserExercise(workoutName: string, exerciseName: string){
+    this.getFirestore()
+      .collection(Constants.USER_EXERCISES)
+      .doc(workoutName)
+      .valueChanges()
+      .subscribe( (res) => {
+        const exerciseList: string[] = res[workoutName];
+        const indexToDelete = exerciseList.findIndex(exo => exo === exerciseName);
+
+        if (indexToDelete < 0){
+          return; 
+        } else {
+          // On met à jour la liste des exercices en mémoire
+          exerciseList.splice(indexToDelete, 1);
+          this.updateUserExercises(workoutName, exerciseList);
+        }
+      });
+  }
+
+  
+  /** Ajoute un exercice dans la configuration de l'utilisateur */
+  addUserExercise(workoutName: string, exerciseName: string){
+    this.getFirestore()
+      .collection(Constants.USER_EXERCISES)
+      .doc(workoutName)
+      .valueChanges()
+      .subscribe( (res) => {
+        const exerciseList: string[] = res[workoutName];
+
+        if (!exerciseList || exerciseList.findIndex(exo => exo === exerciseName) > 0) {
+          return;
+        }
+        exerciseList.push(exerciseName);
+        this.updateUserExercises(workoutName, exerciseList);
+      });
+  }
+
+  updateUserExercises(workoutName: string, exerciseList) {
+    let e: any = {[workoutName]: exerciseList};
+
+    this.getFirestore()
+      .collection(Constants.USER_EXERCISES)
+      .doc(workoutName)
+      .set(e);
+
+    this.workoutService.updateConfiguredExercises(workoutName, exerciseList);
+  }
+
 
   /**
    * Renvoie les séances pour le muscle passé en paramètre.
@@ -78,7 +129,7 @@ export class StorageService {
 
   
   /** Pour voir un exemple de fichier JSON valide pour l'importation : exampleImportData.json */
-  importWorkout(importedJsonPath?: string) {
+  importWorkout(_importedJsonPath?: string) {
     console.log("Fichier lu ", this.importedWorkouts);
     for (let arrayIndex of this.importedWorkouts) {
       let session: Session = arrayIndex[Object.keys(arrayIndex)[0]];

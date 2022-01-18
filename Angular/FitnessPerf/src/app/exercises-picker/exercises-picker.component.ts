@@ -9,11 +9,12 @@ import { FormGroup, FormControl, FormBuilder, FormArray, RequiredValidator } fro
 import { ExerciseSet } from '../model/exercise-set.model';
 import { LastSessionsComponent } from '../last-sessions/last-sessions.component';
 import { MatDialog } from '@angular/material/dialog';
-import { DatePickerComponent } from '../date-picker/date-picker.component';
+import { DatePickerComponent } from './partials/date-picker/date-picker.component';
 import { Utils } from '../utils/utils';
 import { formatDate } from '@angular/common';
 import { SnackbarService } from '../services/snackbar.service';
-import { ExercisePickerDialogComponent } from '../exercise-picker-dialog/exercise-picker-dialog.component';
+import { ExercisePickerDialogComponent } from './partials/exercise-picker-dialog/exercise-picker-dialog.component';
+import { MultiChoiceDialogComponent } from '../multi-choice-dialog/multi-choice-dialog.component';
 
 
 @Component({
@@ -21,7 +22,8 @@ import { ExercisePickerDialogComponent } from '../exercise-picker-dialog/exercis
   templateUrl: './exercises-picker.component.html',
   styleUrls: ['./exercises-picker.component.scss']
 })
-export class ExercisesComponent implements OnInit {
+export class ExercisePickerComponent implements OnInit {
+  model: string = 'ExercisePickerComponent';
 
   myWorkout: string;
   allSessions: any[] = [];
@@ -152,7 +154,6 @@ export class ExercisesComponent implements OnInit {
     return (this.allSessions[this.currentSessionIndex + addToIndex] != undefined);
   }
 
-  
   pickSessionDate() {
     this.dialog.open(DatePickerComponent).afterClosed()
       .subscribe( chosenDate => {
@@ -162,28 +163,56 @@ export class ExercisesComponent implements OnInit {
       });
   }
 
-
-  addExerciseForCurrentSession() {
+  addExercise() {
     this.dialog.open(ExercisePickerDialogComponent).afterClosed()
-      .subscribe( exerciseName => {
-        if (exerciseName) {
-          let exo: Exercise = {name: exerciseName, sets: []}; 
-          this.allSessions[this.currentSessionIndex].workout.exercises.push(exo);
+      .subscribe(
+        ({
+          exerciseName: exerciseName, 
+          addExoToConfiguration: addExoToConfiguration
+        }) => {
+          if (exerciseName) {
+            let exo: Exercise = {name: exerciseName, sets: []}; 
+            this.allSessions[this.currentSessionIndex].workout.exercises.push(exo);
+            this.storageService.save(this.allSessions[this.currentSessionIndex]);
 
-          this.storageService.save(this.allSessions[this.currentSessionIndex]);
-        }
+            if (addExoToConfiguration) {
+              this.storageService.addUserExercise(this.myWorkout, exerciseName);
+            }
+          }
       });
   }
 
-  deleteExerciseForCurrentSession(exerciseName: string, event: Event) {
-    if (confirm("Voulez-vous supprimer cet exercice ?")) {
-      let deleteIndex = this.allSessions[this.currentSessionIndex].workout.exercises.findIndex(exo => exo.name === exerciseName);
-      this.allSessions[this.currentSessionIndex].workout.exercises.splice(deleteIndex, 1);
+  deleteExercise(exerciseName: string) {
+    const dialogConfig = {
+      data: {
+        question: "Supprimer l\'exercice\n \'" + exerciseName +"\'\npour :",
+        choices: [
+          'Cette séance uniquement',
+          'Toutes les séances à venir'
+        ]
+      }
+    };
 
-      this.storageService.save(this.allSessions[this.currentSessionIndex]);
-    } else {
-      event.stopPropagation();
-    }
+    this.dialog.open(MultiChoiceDialogComponent, dialogConfig).afterClosed()
+      .subscribe( (choiceSelected) => {
+        let deleteIndex = this.allSessions[this.currentSessionIndex].workout.exercises.findIndex(exo => exo.name === exerciseName);
+
+        switch(choiceSelected) {
+          case dialogConfig.data.choices[0]:
+            this.allSessions[this.currentSessionIndex].workout.exercises.splice(deleteIndex, 1);
+            this.storageService.save(this.allSessions[this.currentSessionIndex]);
+            break;
+
+          case dialogConfig.data.choices[1]:
+            this.allSessions[this.currentSessionIndex].workout.exercises.splice(deleteIndex, 1);
+            this.storageService.save(this.allSessions[this.currentSessionIndex]);
+            this.storageService.deleteUserExercise(this.myWorkout, exerciseName)
+            break;
+
+          default: 
+            break;
+        }
+      });
   }
 
 
@@ -197,7 +226,6 @@ export class ExercisesComponent implements OnInit {
     this.fillFormControls(seance.workout);
   }
   
-
   /** 
    * Initialise les formulaires à partir du workout (= la liste des exercices du muscle sélectionné) */
   initAllForms(myWorkout: Workout){
