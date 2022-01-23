@@ -1,11 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ExerciseHistoryTuple } from '../model/exercise-history-tuple.model';
-import { ExerciseHistory } from '../model/exercise-history.model';
-import { Session } from '../model/session.model';
-import { SnackbarService } from '../services/snackbar.service';
-import { StorageService } from '../services/storage.service';
-import { Utils } from '../utils/utils';
+import { ExerciseHistoryTuple } from 'src/app/model/exercise-history-tuple.model';
+import { ExerciseHistory } from 'src/app/model/exercise-history.model';
+import { Session } from 'src/app/model/session.model';
+import { SnackbarService } from 'src/app/services/snackbar.service';
+import { StorageService } from 'src/app/services/storage.service';
+import { Utils } from 'src/app/utils/utils';
+
 
 @Component({
   selector: 'app-last-sessions',
@@ -105,11 +106,11 @@ export class LastSessionsComponent implements OnInit {
   }
 
   getTotalPageNumber() {
-    return Math.round(this.allLastSessions.length / this.maxParallelSessions) + 1;
+    return Math.ceil(this.allLastSessions.length / this.maxParallelSessions);
   }
 
   getCurrentPageNumber() {
-    return Math.round((this.currentSessionIndex / this.maxParallelSessions) + 1);
+    return Math.floor(this.currentSessionIndex / this.maxParallelSessions) + 1 ;
   }
 
   deleteThisSession(indexToDelete: number){

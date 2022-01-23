@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import * as workouts from '../../assets/workouts.json';
+import { Workout } from '../model/workout.model';
 import { Constants } from '../utils/constants';
+import { SnackbarService } from './snackbar.service';
 
 
 @Injectable({
@@ -9,20 +13,29 @@ import { Constants } from '../utils/constants';
 })
 export class WorkoutService {
 
-  defaultWorkoutList: any[] = (workouts as any).default;
+  static defaultWorkoutList: any[] = (workouts as any).default;
   configuredWorkoutList: any[] = [];
+  allWorkoutsSubscription: Subscription;
 
-  constructor(private firestore: AngularFirestore) {
-    if (localStorage.getItem('login') !== null) {
-      this.fetchAllWorkouts();
-       // On est obligé de réinsérer les exercices, sinon "problème d'insufficient permissions"
-       // car impossible de faire une Rule sur une collection (ici : "user_exercises")
-      this.insertAllDefaultWorkout();
-    }
+  constructor(private firestore: AngularFirestore,
+    private snackbarService: SnackbarService) {
+    
+      if (localStorage.getItem('login') !== null) {
+        this.fetchAllWorkouts();
+      }
   }
 
-  insertAllDefaultWorkout() {
-    for (let element of this.defaultWorkoutList) {
+  onDestroy() {
+    this.configuredWorkoutList = [];
+    this.allWorkoutsSubscription.unsubscribe();
+  }
+
+  insertDefaultWorkoutList(): void {
+    this.insertWorkout(WorkoutService.defaultWorkoutList)
+  }
+
+  insertWorkout(workouts: Workout[]) {
+    for (let element of workouts) {
       let e: any = {[element.name]: element.exercises};
 
       this.firestore
@@ -30,14 +43,16 @@ export class WorkoutService {
         .doc(localStorage.getItem('login'))
         .collection(Constants.USER_EXERCISES)
         .doc(element.name)
-        .set(e);
+        .set(e)        
+        .catch( () => {
+          this.snackbarService.openSnackBar('Erreur technique', 'Problème lors de l\'enregistrement du workout');
+        });
     }
-    this.configuredWorkoutList = this.defaultWorkoutList;
   }
 
    /** Charge tous les muscles avec les noms des exercices configurés. */
   fetchAllWorkouts() {
-    this.firestore
+    this.allWorkoutsSubscription = this.firestore
       .collection(Constants.USER_DATA)
       .doc(localStorage.getItem('login'))
       .collection(Constants.USER_EXERCISES)
@@ -56,12 +71,8 @@ export class WorkoutService {
       });
   }
 
-  getDefaultWorkoutList(): any[] {
-    return this.defaultWorkoutList;
-  }
-
-  getDefaultExercises(workout: string) {
-    return this.defaultWorkoutList.find(elt => elt.workout === workout)?.exercises;
+  get getConfiguredWorkoutList(): any[] {
+    return this.configuredWorkoutList;
   }
 
   getConfiguredExercises(workout: string): string[] {
@@ -76,5 +87,10 @@ export class WorkoutService {
     if (workoutIndex !== -1) {
       this.configuredWorkoutList[workoutIndex].exercises = exerciseList;
     }
+  }
+
+  addWorkout(newWorkoutName: string) {
+    let newWorkout: Workout = {name: newWorkoutName, exercises: []};
+    this.insertWorkout([newWorkout])
   }
 }

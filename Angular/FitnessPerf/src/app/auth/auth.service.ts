@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
@@ -8,19 +8,37 @@ import { WorkoutService } from '../services/workout.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnInit {
 
   constructor(
     private afAuth: AngularFireAuth, 
     private router: Router,
     private snackbarService: SnackbarService,
-    private workoutService: WorkoutService) { }
+    private workoutService: WorkoutService) {
+      
+  }
+
+  ngOnInit(): void {
+    this.listenToAuthState();
+  }
+
+  /** Méthode permettant de gérer l'authentification */
+  listenToAuthState() {
+    this.afAuth.onAuthStateChanged( (user) => {
+      console.log('onAuthStateChanged', user);
+      if (user) {
+        //this.router.navigateByUrl('/workout');
+      } else {
+        this.router.navigateByUrl('/');
+      } 
+    });
+  }
 
   login(email: string, password: string, fromSignup?: boolean) {
     this.afAuth.signInWithEmailAndPassword(email, password)
     .then(value => {
       this.snackbarService.openSnackBar("Bienvenue " + email, "💪");
-      this.afAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+      this.afAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then;
       localStorage.setItem('login', email);
       localStorage.setItem('userid', value.user.uid);
 
@@ -67,6 +85,8 @@ export class AuthService {
     this.afAuth.signOut().then(() => {
       localStorage.removeItem('login');
       localStorage.removeItem('userid');
+      this.workoutService.onDestroy();
+
       this.router.navigate(['/']);
     });
   } 
@@ -77,7 +97,7 @@ export class AuthService {
    */
   initUserData(fromSignup?: boolean) {
     if (fromSignup) {
-      this.workoutService.insertAllDefaultWorkout();
+      this.workoutService.insertDefaultWorkoutList();
     } 
     else {
       this.workoutService.fetchAllWorkouts();

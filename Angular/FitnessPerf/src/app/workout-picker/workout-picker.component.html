@@ -1,9 +1,13 @@
 <app-header [parentModel]="model"></app-header>
 
-<div class="flex-row workouts">
-    <div class="workout" *ngFor='let element of workoutList'  (click)="displayExercises(element.name)">
-        <div>{{element.name}}</div>
+<div class="flex-column workout-container">
+    <div class="flex-row workouts">
+        <div class="workout" *ngFor='let element of workoutList'  (click)="displayExercises(element.name)">
+            <div>{{element.name}}</div>
+        </div>
     </div>
+
+    <button mat-mini-fab class="add-button" (click)="addWorkout()">+</button>
 </div>
 
 <div class="square">

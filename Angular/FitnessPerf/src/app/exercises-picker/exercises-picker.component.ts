@@ -7,7 +7,7 @@ import { StorageService } from '../services/storage.service';
 import { WorkoutService } from '../services/workout.service';
 import { FormGroup, FormControl, FormBuilder, FormArray, RequiredValidator } from '@angular/forms';
 import { ExerciseSet } from '../model/exercise-set.model';
-import { LastSessionsComponent } from '../last-sessions/last-sessions.component';
+import { LastSessionsComponent } from './partials/last-sessions/last-sessions.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePickerComponent } from './partials/date-picker/date-picker.component';
 import { Utils } from '../utils/utils';
@@ -75,16 +75,12 @@ export class ExercisePickerComponent implements OnInit {
       this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets[serieIndex] = newSerie; // Modification d'une série
     } else { 
       this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets.push(newSerie); // Ajout d'une nouvelle 
-      //this.addSerieExercise(exerciceIndex);
     }
     this.storageService.save(this.allSessions[this.currentSessionIndex]);
   }
 
   deleteSerie(exerciceIndex, serieIndex) {
-    const theSerie = this.getExerciseSeries(exerciceIndex).at(serieIndex);
-
     this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets.splice(serieIndex, 1);
-
     this.storageService.save(this.allSessions[this.currentSessionIndex]);
   }
 

@@ -24,7 +24,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LastSessionsComponent } from './last-sessions/last-sessions.component';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { LoginComponent } from './auth/login/login.component';
 import { AuthGuard } from './auth/auth.guard';
@@ -37,6 +36,7 @@ import { environment } from '../environments/environment';
 import { ConfigurationComponent } from './configuration/configuration.component';
 import { MultiChoiceDialogComponent } from './multi-choice-dialog/multi-choice-dialog.component';
 import { HeaderComponent } from './header/header.component';
+import { LastSessionsComponent } from './exercises-picker/partials/last-sessions/last-sessions.component';
 
 
 @NgModule({

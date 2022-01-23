@@ -58,17 +58,26 @@ html {
     align-items: center;
     justify-content: center;
 }
+
 .header {
     margin-top: 1rem;
     margin-bottom: 1rem;
     justify-content: space-around;
 }
 
+.add-button {
+    align-items: center;
+    margin: 1rem;
+    background-color: #ff8800;
+    font-size: 1.5rem;
+    color: white;
+}
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
-.mat-flat-button, .mat-raised-button, .mat-fab, .mat-mini-fab {
+.mat-flat-button, .mat-raised-button, .mat-fab {
     background-color: $button
 }
 

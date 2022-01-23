@@ -7,7 +7,7 @@
         </div>
     </h1>
     <div class="flex-row">
-        <button mat-raised-button (click)="openSessionHistory()" *ngIf="this.allSessions.length > 0">Mes dernières séances</button>
+        <button mat-raised-button style="padding: 0 1rem;" (click)="openSessionHistory()" *ngIf="this.allSessions.length > 0">Mes dernières séances</button>
     </div>
 </div>
 
@@ -74,5 +74,5 @@
 </mat-accordion>
 
 <div *ngIf="this.allSessions[this.currentSessionIndex]" class="flex-row">
-    <button mat-mini-fab class="submit-exercise-add" (click)="addExercise()">+</button>
+    <button mat-mini-fab class="add-button" (click)="addExercise()">+</button>
 </div>

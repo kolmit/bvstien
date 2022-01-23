@@ -86,7 +86,7 @@ export class StorageService {
       .subscribe( (res) => {
         const exerciseList: string[] = res[workoutName];
 
-        if (!exerciseList || exerciseList.findIndex(exo => exo === exerciseName) > 0) {
+        if (!exerciseList || exerciseList.findIndex(exo => exo === exerciseName) >= 0) {
           return;
         }
         exerciseList.push(exerciseName);

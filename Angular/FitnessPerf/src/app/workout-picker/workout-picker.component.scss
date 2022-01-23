@@ -1,3 +1,5 @@
+@import '../../styles.scss';
+
 .workouts {
     flex-wrap: wrap;
 
@@ -54,7 +56,15 @@
     transform: rotate(-45deg);
   }
   
+
+  .workout-container {
+    align-items: center;
+  }
   
+
+///////////////////////////////////////////
+
+
   .inner-square {
     position: absolute;
   }
