@@ -20,67 +20,16 @@ export class StorageService extends BaseService {
   importedWorkouts: any[] = (imported as any).default;
 
   constructor(firestore: AngularFirestore,
-    private snackbarService: SnackbarService,
-    private workoutService: WorkoutService) {
+    private snackbarService: SnackbarService) {
       super(firestore); 
     }
-
-  
-  /** Ajoute un exercice dans la configuration de l'utilisateur */
-  addUserExercise(workoutName: string, exerciseName: string){
-    this.getUserDataDocuments()
-      .collection(Constants.USER_EXERCISES)
-      .doc(workoutName)
-      .valueChanges()
-      .subscribe( (res) => {
-        const exerciseList: string[] = res[workoutName];
-
-        if (!exerciseList || exerciseList.findIndex(exo => exo === exerciseName) >= 0) {
-          return;
-        }
-        exerciseList.push(exerciseName);
-        this.updateUserExercises(workoutName, exerciseList);
-      });
-  }
-
-  updateUserExercises(workoutName: string, exerciseList) {
-    let e: any = {[workoutName]: exerciseList};
-
-    this.getUserDataDocuments()
-      .collection(Constants.USER_EXERCISES)
-      .doc(workoutName)
-      .set(e);
-
-    this.workoutService.updateConfiguredExercises(workoutName, exerciseList);
-  }
-
-  /** Supprime un exercice dans la configuration de l'utilisateur */
-  deleteUserExercise(workoutName: string, exerciseName: string){
-    this.getUserDataDocuments()
-      .collection(Constants.USER_EXERCISES)
-      .doc(workoutName)
-      .valueChanges()
-      .subscribe( (res) => {
-        const exerciseList: string[] = res[workoutName];
-        const indexToDelete = exerciseList.findIndex(exo => exo === exerciseName);
-
-        if (indexToDelete < 0){
-          return; 
-        } else {
-          // On met à jour la liste des exercices en mémoire
-          exerciseList.splice(indexToDelete, 1);
-          this.updateUserExercises(workoutName, exerciseList);
-        }
-      });
-  }
-
 
   /** Méthode doublon de save(Session).
    * Permet de sauvegarder une session dans la collection "Import"
    * 
    * Exemple de fichier JSON valide pour l'importation : exampleImportData.json 
    **/
-   saveImportedSession(session: Session) {
+   saveImportedSession(session: Session): Promise<void> {
     return this.firestore
       .collection('Import')
       .doc(localStorage.getItem('login'))
@@ -90,7 +39,7 @@ export class StorageService extends BaseService {
   }
 
   /** Récupère toutes les sessions de tous les muscles de l'utilisateur et les exporte en JSON. */
-  fetchUserDataAndExport() {
+  fetchUserDataAndExport(): void {
     // On récupère les exercices configurés :
     this.getUserDataDocuments()
       .collection(Constants.USER_EXERCISES)

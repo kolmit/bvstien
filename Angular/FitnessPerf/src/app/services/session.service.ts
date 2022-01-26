@@ -19,7 +19,7 @@ export class SessionService extends BaseService {
     super(firestore); 
   }
 
-  save(session: Session) {
+  save(session: Session): Promise<void> {
     session.totalLifted = this.calculateTonnage(session);
     
     return this.getUserDataDocuments()
@@ -28,7 +28,7 @@ export class SessionService extends BaseService {
       .set(session);
   }
 
-  delete(session: Session){
+  delete(session: Session): Promise<void> {
     return this.getUserDataDocuments()
       .collection(session.workout.name)
       .doc(this.buildSessionDocumentName(session.timestamp))
@@ -58,7 +58,7 @@ export class SessionService extends BaseService {
       );
   }
 
-  getSessionsInMemory(workoutName: string) {
+  getSessionsInMemory(workoutName: string): Session[] {
     return this.sessionMap.get(workoutName);
   }
 
@@ -73,9 +73,6 @@ export class SessionService extends BaseService {
         }
         totalSession = totalSession + totalPerExercise;
       }
-
-      console.log("Total pour la séance du " + session.timestamp + " : " + totalSession + " kg")
       return totalSession;
     }
-  
 }

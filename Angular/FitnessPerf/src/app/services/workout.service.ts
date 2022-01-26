@@ -86,6 +86,54 @@ export class WorkoutService extends BaseService{
     }
   }
 
+    /** Ajoute un exercice dans la configuration de l'utilisateur */
+    addUserExercise(workoutName: string, exerciseName: string): void{
+      this.getUserDataDocuments()
+        .collection(Constants.USER_EXERCISES)
+        .doc(workoutName)
+        .valueChanges()
+        .subscribe( (res) => {
+          const exerciseList: string[] = res[workoutName];
+  
+          if (!exerciseList || exerciseList.findIndex(exo => exo === exerciseName) >= 0) {
+            return;
+          }
+          exerciseList.push(exerciseName);
+          this.updateUserExercises(workoutName, exerciseList);
+        });
+    }
+  
+    /** Supprime un exercice dans la configuration de l'utilisateur */
+    deleteUserExercise(workoutName: string, exerciseName: string): void{
+      this.getUserDataDocuments()
+        .collection(Constants.USER_EXERCISES)
+        .doc(workoutName)
+        .valueChanges()
+        .subscribe( (res) => {
+          const exerciseList: string[] = res[workoutName];
+          const indexToDelete = exerciseList.findIndex(exo => exo === exerciseName);
+  
+          if (indexToDelete < 0){
+            return; 
+          } else {
+            // On met à jour la liste des exercices en mémoire
+            exerciseList.splice(indexToDelete, 1);
+            this.updateUserExercises(workoutName, exerciseList);
+          }
+        });
+    }
+  
+    updateUserExercises(workoutName: string, exerciseList): void {
+      let e: any = {[workoutName]: exerciseList};
+  
+      this.getUserDataDocuments()
+        .collection(Constants.USER_EXERCISES)
+        .doc(workoutName)
+        .set(e);
+  
+      this.updateConfiguredExercises(workoutName, exerciseList);
+    }
+
   addWorkout(newWorkoutName: string) {
     let newWorkout: Workout = {name: newWorkoutName, exercises: []};
     this.insertWorkout([newWorkout])

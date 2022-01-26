@@ -191,7 +191,7 @@ export class ExercisePickerComponent implements OnInit {
             this.sessionService.save(this.allSessions[this.currentSessionIndex]);
 
             if (addExoToConfiguration) {
-              this.storageService.addUserExercise(this.myWorkout, exerciseName);
+              this.workoutService.addUserExercise(this.myWorkout, exerciseName);
             }
           }
       });
@@ -221,7 +221,7 @@ export class ExercisePickerComponent implements OnInit {
           case dialogConfig.data.choices[1]:
             this.allSessions[this.currentSessionIndex].workout.exercises.splice(deleteIndex, 1);
             this.sessionService.save(this.allSessions[this.currentSessionIndex]);
-            this.storageService.deleteUserExercise(this.myWorkout, exerciseName)
+            this.workoutService.deleteUserExercise(this.myWorkout, exerciseName)
             break;
 
           default: 
