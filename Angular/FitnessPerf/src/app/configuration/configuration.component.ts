@@ -10,6 +10,7 @@ import { StorageService } from '../services/storage.service';
 })
 export class ConfigurationComponent {
   model: string = 'ConfigurationComponent';
+  profilEmail: string = localStorage.getItem('login');
 
   constructor(private storageService: StorageService,
     private snackbarService: SnackbarService) { }
@@ -18,6 +19,7 @@ export class ConfigurationComponent {
     this.storageService.fetchUserDataAndExport();
   }
 
+  
   importSessions(files: FileList) {
     if (!files) return;
     
@@ -34,13 +36,14 @@ export class ConfigurationComponent {
         let lineData = line[ Object.keys(line)[0] ];
 
         if (this.isMyJsonCorrect(lineData)) {
-          let session: Session = { timestamp: lineData.timestamp, workout: lineData.workout};
+          let session: Session = { timestamp: lineData.timestamp, workout: lineData.workout, totalLifted: lineData.totalLifted };
           this.storageService.saveImportedSession(session)
           .then(() => {
             successfulImport++;
            })
-          .catch(() => {
+          .catch((res) => {
             this.snackbarService.openSnackBar("Erreur lors de l'importation de la séance n° " + lineIndex);
+            console.error(res);
           })
           .finally(() => {
             this.snackbarService.openSnackBar("Import réussi : " + successfulImport + "/" + lineIndex + ".\n");
@@ -55,7 +58,7 @@ export class ConfigurationComponent {
 
   isMyJsonCorrect(oneJsonSession: any) {
     let correct: boolean;
-    let tmpSession: Session = {timestamp: oneJsonSession.timestamp, workout: oneJsonSession.workout };
+    let tmpSession: Session = {timestamp: oneJsonSession.timestamp, workout: oneJsonSession.workout, totalLifted: oneJsonSession.totalLifted };
     
     correct = (tmpSession.timestamp != undefined && tmpSession.workout != undefined);
     for (let exo of tmpSession.workout.exercises) {

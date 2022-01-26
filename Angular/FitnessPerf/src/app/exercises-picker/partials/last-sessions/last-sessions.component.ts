@@ -3,8 +3,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ExerciseHistoryTuple } from 'src/app/model/exercise-history-tuple.model';
 import { ExerciseHistory } from 'src/app/model/exercise-history.model';
 import { Session } from 'src/app/model/session.model';
+import { SessionService } from 'src/app/services/session.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { StorageService } from 'src/app/services/storage.service';
 import { Utils } from 'src/app/utils/utils';
 
 
@@ -24,7 +24,7 @@ export class LastSessionsComponent implements OnInit {
   ngOnInit(): void { }
 
   constructor(
-    private storageService: StorageService,
+    private sessionService: SessionService,
     private snackbarService: SnackbarService,
     public dialogRef: MatDialogRef<LastSessionsComponent>, 
     @Inject(MAT_DIALOG_DATA) public data: { myWorkout: string }
@@ -39,7 +39,7 @@ export class LastSessionsComponent implements OnInit {
 
   
   getSessionHistory(myWorkout: string) {
-    this.storageService.streamAllSessionByWorkout(myWorkout)
+    this.sessionService.fetchAllSessionByWorkout(myWorkout)
     .subscribe( (allLastSessions) => {
         this.allLastSessions = Utils.sortSessionsByDate(allLastSessions);
         this.currentSessionIndex = this.allLastSessions?.length - 1;
@@ -114,7 +114,7 @@ export class LastSessionsComponent implements OnInit {
   }
 
   deleteThisSession(indexToDelete: number){
-    this.storageService.delete(this.allLastSessions[indexToDelete])
+    this.sessionService.delete(this.allLastSessions[indexToDelete])
       .then(() => {
         this.snackbarService.openSnackBar("Séance supprimée.", "✔");
         this.closeDialog();

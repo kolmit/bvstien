@@ -1,10 +1,19 @@
 <app-header [parentModel]="model"></app-header>
 
 <div class="flex-column configuration-actions">
+    <span>
+        <h1>CONFIGURATION</h1>
+    </span>
+    <span>
+        Login : {{this.profilEmail}}
+    </span>
+
     <hr class="separator">
     <button mat-raised-button (click)="exportSessions()">Exporter mes séances</button>
     <hr class="separator">
 
     <h3>Importer mes séances</h3>
     <input type="file" (change)="importSessions($event.target.files)"/>
+    <hr class="separator">
+
 </div>

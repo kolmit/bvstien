@@ -39,6 +39,10 @@ mat-panel-title {
     margin: 1rem;    
 }
 
+.session-date {
+    align-items: center;
+}
+
 .exercise-set {
     justify-content: flex-start;
     
@@ -75,6 +79,11 @@ mat-panel-title {
     padding: 0.75rem;
     border: 1px solid rgba($text, 0.6);
     border-radius: 1rem;
+    background: rgba($text, 0.15);
+}
+
+.add-session:active {
+    background: rgba($text, 0.3);
 }
 
 .add-symbol {

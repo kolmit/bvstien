@@ -1,25 +1,26 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
 import * as workouts from '../../assets/workouts.json';
 import { Workout } from '../model/workout.model';
 import { Constants } from '../utils/constants';
+import { BaseService } from './base.service';
 import { SnackbarService } from './snackbar.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class WorkoutService {
+export class WorkoutService extends BaseService{
 
   static defaultWorkoutList: any[] = (workouts as any).default;
   configuredWorkoutList: any[] = [];
   allWorkoutsSubscription: Subscription;
 
-  constructor(private firestore: AngularFirestore,
+  constructor(firestore: AngularFirestore,
     private snackbarService: SnackbarService) {
-    
+      super(firestore);
+
       if (localStorage.getItem('login') !== null) {
         this.fetchAllWorkouts();
       }
@@ -38,9 +39,7 @@ export class WorkoutService {
     for (let element of workouts) {
       let e: any = {[element.name]: element.exercises};
 
-      this.firestore
-        .collection(Constants.USER_DATA)
-        .doc(localStorage.getItem('login'))
+      this.getUserDataDocuments()
         .collection(Constants.USER_EXERCISES)
         .doc(element.name)
         .set(e)        
@@ -52,9 +51,7 @@ export class WorkoutService {
 
    /** Charge tous les muscles avec les noms des exercices configurés. */
   fetchAllWorkouts() {
-    this.allWorkoutsSubscription = this.firestore
-      .collection(Constants.USER_DATA)
-      .doc(localStorage.getItem('login'))
+    this.allWorkoutsSubscription = this.getUserDataDocuments()
       .collection(Constants.USER_EXERCISES)
       .valueChanges()
       .subscribe( (allWorkoutElement) => {

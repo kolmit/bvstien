@@ -17,9 +17,10 @@
     <!---->
         <div class="flex-row date-container">
             <div (click)="switchSession(-1)" (disabled)="isSessionIndexExisting(-1)" [style.opacity]="isSessionIndexExisting(-1) ? 1 : 0.2"> &#10094; </div>
-            <div class="session-date">
-                <div class="flex-column workout-date" *ngIf="this.allSessions[this.currentSessionIndex]; else noSessionToday"> Séance du {{this.allSessions[this.currentSessionIndex]?.timestamp | date:'dd-MM-yyyy'}} :</div>
-                <ng-template #noSessionToday>Pas de séance aujourd'hui</ng-template>
+            <div class="flex-column session-date">
+                <div class="flex-column workout-date" *ngIf="this.allSessions[this.currentSessionIndex]; else noSessionToday"> Séance du {{this.allSessions[this.currentSessionIndex]?.timestamp | date:'dd MMM. yyyy'}}</div>
+                <div>Tonnage : {{this.allSessions[this.currentSessionIndex]?.totalLifted}} kg</div>
+                <ng-template #noSessionToday>Pas de séance</ng-template>
             </div>
             <div (click)="switchSession(1)" (disabled)="isSessionIndexExisting(1)" [style.opacity]="isSessionIndexExisting(1) ? 1 : 0.2"> &#10095; </div>
         </div>

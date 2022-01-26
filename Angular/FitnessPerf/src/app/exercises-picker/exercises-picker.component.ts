@@ -15,6 +15,8 @@ import { formatDate } from '@angular/common';
 import { SnackbarService } from '../services/snackbar.service';
 import { ExercisePickerDialogComponent } from './partials/exercise-picker-dialog/exercise-picker-dialog.component';
 import { MultiChoiceDialogComponent } from '../multi-choice-dialog/multi-choice-dialog.component';
+import { Constants } from '../utils/constants';
+import { SessionService } from '../services/session.service';
 
 
 @Component({
@@ -29,7 +31,6 @@ export class ExercisePickerComponent implements OnInit {
   allSessions: any[] = [];
   
   currentSessionIndex: number;
-  firstHistoryInit: boolean = true;
 
   floatLabelControl = new FormControl('auto');
   workoutForm: FormGroup;
@@ -37,6 +38,7 @@ export class ExercisePickerComponent implements OnInit {
   constructor(private route: ActivatedRoute, 
     private workoutService: WorkoutService,
     private storageService: StorageService,
+    private sessionService: SessionService,
     private snackbarService: SnackbarService,
     private fb: FormBuilder,
     public dialog: MatDialog) { }
@@ -46,7 +48,7 @@ export class ExercisePickerComponent implements OnInit {
     // On récupère les noms d'exercices à partir du groupe musculaire sélectionné
     this.route.queryParams.subscribe( param => {
       this.myWorkout = param.workout;
-      this.subscribeToSessionHistory(this.myWorkout);
+      this.getSessionHistory(this.myWorkout);
     });
   }
 
@@ -76,12 +78,12 @@ export class ExercisePickerComponent implements OnInit {
     } else { 
       this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets.push(newSerie); // Ajout d'une nouvelle 
     }
-    this.storageService.save(this.allSessions[this.currentSessionIndex]);
+    this.sessionService.save(this.allSessions[this.currentSessionIndex]);
   }
 
   deleteSerie(exerciceIndex, serieIndex) {
     this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets.splice(serieIndex, 1);
-    this.storageService.save(this.allSessions[this.currentSessionIndex]);
+    this.sessionService.save(this.allSessions[this.currentSessionIndex]);
   }
 
 
@@ -90,23 +92,40 @@ export class ExercisePickerComponent implements OnInit {
   }
 
 
-  subscribeToSessionHistory(myWorkout: string) {
-    this.storageService.streamAllSessionByWorkout(myWorkout)
-      .subscribe((allSessions: Session[]) => {
+  getSessionHistory(myWorkout: string) {
+    let sessionsFromService = this.sessionService.getSessionsInMemory(myWorkout);
 
-        if (allSessions.length > 0) {
-          this.allSessions = Utils.sortSessionsByDate(allSessions);
+    // Si les séances ont déjà été récupérées par le service
+    if (sessionsFromService !== undefined) { 
+      this.sortSessionsAndInitIndex(sessionsFromService);
+    } 
+    else {
+      // Sinon on requête en base
+      setTimeout(() => {
+        this.sessionService.fetchAllSessionByWorkout(myWorkout)
+        .subscribe((allSessionsForMyWorkout: Session[]) => {
+          this.sortSessionsAndInitIndex(allSessionsForMyWorkout);
+        });
+      }, Constants.FIREBASE_DELAY);
+    }
+  }
+    
+  /**
+   * Sauvegarde les séances en mémoire (this.allSessions)
+   * @param fetchedSessions 
+   */
+  sortSessionsAndInitIndex(fetchedSessions: Session[]) {
+    if (fetchedSessions.length > 0) {
+      this.allSessions = Utils.sortSessionsByDate(fetchedSessions);
 
-          if (this.firstHistoryInit) {
-            this.currentSessionIndex = this.allSessions?.length - 1;
-            this.firstHistoryInit = false;
-          }
-          this.populateForms(this.allSessions[this.currentSessionIndex]); 
-        } else {
-          this.allSessions = [];
-          this.currentSessionIndex = 0;
-        }
-      });
+      if (this.currentSessionIndex === undefined) {
+        this.currentSessionIndex = this.allSessions?.length - 1;
+      }
+      this.populateForms(this.allSessions[this.currentSessionIndex]); 
+    } else {
+      this.allSessions = [];
+      this.currentSessionIndex = 0;
+    }
   }
 
 
@@ -122,9 +141,9 @@ export class ExercisePickerComponent implements OnInit {
         }
         
         let workout: Workout = {name: this.myWorkout, exercises: myWorkoutExercisesWithSets};
-        let session: Session = {timestamp: chosenDate, workout: workout};
+        let session: Session = {timestamp: chosenDate, workout: workout, totalLifted: 0};
 
-        this.storageService.save(session)
+        this.sessionService.save(session)
           .then(() => {
             this.currentSessionIndex = this.allSessions.findIndex(s => formatDate(s.timestamp, "dd-MM-yyyy", "en") === formatDate(chosenDate, "dd-MM-yyyy", "en"));
             this.populateForms(this.allSessions[this.currentSessionIndex])
@@ -169,7 +188,7 @@ export class ExercisePickerComponent implements OnInit {
           if (exerciseName) {
             let exo: Exercise = {name: exerciseName, sets: []}; 
             this.allSessions[this.currentSessionIndex].workout.exercises.push(exo);
-            this.storageService.save(this.allSessions[this.currentSessionIndex]);
+            this.sessionService.save(this.allSessions[this.currentSessionIndex]);
 
             if (addExoToConfiguration) {
               this.storageService.addUserExercise(this.myWorkout, exerciseName);
@@ -196,12 +215,12 @@ export class ExercisePickerComponent implements OnInit {
         switch(choiceSelected) {
           case dialogConfig.data.choices[0]:
             this.allSessions[this.currentSessionIndex].workout.exercises.splice(deleteIndex, 1);
-            this.storageService.save(this.allSessions[this.currentSessionIndex]);
+            this.sessionService.save(this.allSessions[this.currentSessionIndex]);
             break;
 
           case dialogConfig.data.choices[1]:
             this.allSessions[this.currentSessionIndex].workout.exercises.splice(deleteIndex, 1);
-            this.storageService.save(this.allSessions[this.currentSessionIndex]);
+            this.sessionService.save(this.allSessions[this.currentSessionIndex]);
             this.storageService.deleteUserExercise(this.myWorkout, exerciseName)
             break;
 

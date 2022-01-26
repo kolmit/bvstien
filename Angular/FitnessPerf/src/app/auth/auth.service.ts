@@ -26,11 +26,9 @@ export class AuthService implements OnInit {
   listenToAuthState() {
     this.afAuth.onAuthStateChanged( (user) => {
       console.log('onAuthStateChanged', user);
-      if (user) {
-        //this.router.navigateByUrl('/workout');
-      } else {
+      if (!user) {
         this.router.navigateByUrl('/');
-      } 
+      }
     });
   }
 

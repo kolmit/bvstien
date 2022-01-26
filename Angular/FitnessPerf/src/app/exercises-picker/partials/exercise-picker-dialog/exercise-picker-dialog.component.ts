@@ -22,8 +22,4 @@ export class ExercisePickerDialogComponent implements OnInit {
       }
     );
   }
-
-  closeDialog() {
-    this.dialogRef.close();
-  }
 }

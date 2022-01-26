@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MultiChoiceDialogComponent } from '../multi-choice-dialog/multi-choice-dialog.component';
 import { WorkoutService } from '../services/workout.service';
+import { Constants } from '../utils/constants';
 
 @Component({
   selector: 'app-workout-picker',
@@ -20,8 +21,13 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.workoutService.fetchAllWorkouts();
     this.workoutList = this.workoutService.getConfiguredWorkoutList;
+
+    if (this.workoutList?.length === 0) {
+      setTimeout(() => {
+        this.workoutService.fetchAllWorkouts();
+      }, Constants.FIREBASE_DELAY);
+    }
   }
 
   ngOnDestroy(): void {

@@ -10,76 +10,25 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import * as imported from '../../assets/exampleImportData.json';
 import { SnackbarService } from './snackbar.service';
 import { WorkoutService } from './workout.service';
+import { BaseService } from './base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class StorageService {
+export class StorageService extends BaseService {
 
   importedWorkouts: any[] = (imported as any).default;
 
-  constructor(private firestore: AngularFirestore,
+  constructor(firestore: AngularFirestore,
     private snackbarService: SnackbarService,
-    private workoutService: WorkoutService) { }
-
-
-   getFirestore() {
-    return this.firestore
-      .collection(Constants.USER_DATA)
-      .doc(localStorage.getItem('login'))
-   }
-
-
-  /** Save une séance de sport */
-  save(session: Session) {
-    return this.getFirestore()
-      .collection(session.workout.name)
-      .doc(this.buildDocumentName(session.timestamp))
-      .set(session);
-  }
-
-
-  saveImportedSession(session: Session) {
-    return this.firestore
-      .collection('Import')
-      .doc(localStorage.getItem('login'))
-      .collection(session.workout.name)
-      .doc(this.buildDocumentName(session.timestamp))
-      .set(session);
-  }
-
-
-  delete(session: Session){
-    return this.getFirestore()
-      .collection(session.workout.name)
-      .doc(this.buildDocumentName(session.timestamp))
-      .delete();
-  }
-
-  /** Supprime un exercice dans la configuration de l'utilisateur */
-  deleteUserExercise(workoutName: string, exerciseName: string){
-    this.getFirestore()
-      .collection(Constants.USER_EXERCISES)
-      .doc(workoutName)
-      .valueChanges()
-      .subscribe( (res) => {
-        const exerciseList: string[] = res[workoutName];
-        const indexToDelete = exerciseList.findIndex(exo => exo === exerciseName);
-
-        if (indexToDelete < 0){
-          return; 
-        } else {
-          // On met à jour la liste des exercices en mémoire
-          exerciseList.splice(indexToDelete, 1);
-          this.updateUserExercises(workoutName, exerciseList);
-        }
-      });
-  }
+    private workoutService: WorkoutService) {
+      super(firestore); 
+    }
 
   
   /** Ajoute un exercice dans la configuration de l'utilisateur */
   addUserExercise(workoutName: string, exerciseName: string){
-    this.getFirestore()
+    this.getUserDataDocuments()
       .collection(Constants.USER_EXERCISES)
       .doc(workoutName)
       .valueChanges()
@@ -97,7 +46,7 @@ export class StorageService {
   updateUserExercises(workoutName: string, exerciseList) {
     let e: any = {[workoutName]: exerciseList};
 
-    this.getFirestore()
+    this.getUserDataDocuments()
       .collection(Constants.USER_EXERCISES)
       .doc(workoutName)
       .set(e);
@@ -105,47 +54,45 @@ export class StorageService {
     this.workoutService.updateConfiguredExercises(workoutName, exerciseList);
   }
 
-
-  /**
-   * Renvoie les séances pour le muscle passé en paramètre.
-   * @param workoutName : Le muscle pour lequel on veut les séances.
-   * @returns Il suffit de s'abonner à cette méthode pour recevoir les Session[].
-   */
-  streamAllSessionByWorkout(workoutName: string): Observable<Session[]> {
-    return this.getFirestore()
-      .collection(workoutName)
+  /** Supprime un exercice dans la configuration de l'utilisateur */
+  deleteUserExercise(workoutName: string, exerciseName: string){
+    this.getUserDataDocuments()
+      .collection(Constants.USER_EXERCISES)
+      .doc(workoutName)
       .valueChanges()
-      .pipe(
-        map((firebaseDocuments: any[]) => {
-          let sessions: Session[] = [];
-          if (firebaseDocuments) {
-            firebaseDocuments.forEach(doc => sessions.push(doc));
-            sessions.forEach((session: any) => session.timestamp = session.timestamp.seconds ? Session.convertTimestampToDate(session.timestamp.seconds) : session.timestamp);
-          }
-          return sessions;
-        })
-      );
+      .subscribe( (res) => {
+        const exerciseList: string[] = res[workoutName];
+        const indexToDelete = exerciseList.findIndex(exo => exo === exerciseName);
+
+        if (indexToDelete < 0){
+          return; 
+        } else {
+          // On met à jour la liste des exercices en mémoire
+          exerciseList.splice(indexToDelete, 1);
+          this.updateUserExercises(workoutName, exerciseList);
+        }
+      });
   }
 
-  
-  /** Pour voir un exemple de fichier JSON valide pour l'importation : exampleImportData.json */
-  importWorkout(_importedJsonPath?: string) {
-    console.log("Fichier lu ", this.importedWorkouts);
-    for (let arrayIndex of this.importedWorkouts) {
-      let session: Session = arrayIndex[Object.keys(arrayIndex)[0]];
-      console.log(session);
 
-      this.saveImportedSession(session);
-    }
+  /** Méthode doublon de save(Session).
+   * Permet de sauvegarder une session dans la collection "Import"
+   * 
+   * Exemple de fichier JSON valide pour l'importation : exampleImportData.json 
+   **/
+   saveImportedSession(session: Session) {
+    return this.firestore
+      .collection('Import')
+      .doc(localStorage.getItem('login'))
+      .collection(session.workout.name)
+      .doc(this.buildSessionDocumentName(session.timestamp))
+      .set(session);
   }
-
 
   /** Récupère toutes les sessions de tous les muscles de l'utilisateur et les exporte en JSON. */
   fetchUserDataAndExport() {
     // On récupère les exercices configurés :
-    this.firestore
-      .collection(Constants.USER_DATA)
-      .doc(localStorage.getItem('login'))
+    this.getUserDataDocuments()
       .collection(Constants.USER_EXERCISES)
       .get()
       .subscribe( (allExercises) => {
@@ -156,8 +103,7 @@ export class StorageService {
           let muscle: string = Object.keys(exo.data())[0];
 
           forkJoinArray.push(
-            this.firestore.collection(Constants.USER_DATA)
-            .doc(localStorage.getItem('login'))
+            this.getUserDataDocuments()
             .collection(muscle)
             .get()
           );
@@ -174,7 +120,8 @@ export class StorageService {
                 
                 let session: Session = {
                   timestamp: Session.convertTimestampToDate(doc.data().timestamp.seconds),
-                  workout: doc.data().workout
+                  workout: doc.data().workout,
+                  totalLifted: doc.data().totalLifted
                 };
 
                 dataToExport.push(
@@ -192,17 +139,5 @@ export class StorageService {
             this.snackbarService.openSnackBar("Export réussi.")
           });
       });
-  }
-
-
-
-
-  /** Format du nom d'une séance : DD-MM-YYYY_NomDuMuscle */
-  buildDocumentName(ddmmyyyy: Date | any): string {
-    if (ddmmyyyy.seconds) { 
-      ddmmyyyy = Session.convertTimestampToDate(ddmmyyyy.seconds);
-    }
-
-    return formatDate(ddmmyyyy, "yyyy-MM-dd", "en");
   }
 }
