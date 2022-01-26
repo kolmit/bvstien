@@ -19,7 +19,7 @@ export class SessionService extends BaseService {
     super(firestore); 
   }
 
-  save(session: Session): Promise<void> {
+  save(session: Session) {
     session.totalLifted = this.calculateTonnage(session);
     
     return this.getUserDataDocuments()
@@ -28,7 +28,7 @@ export class SessionService extends BaseService {
       .set(session);
   }
 
-  delete(session: Session): Promise<void> {
+  delete(session: Session) {
     return this.getUserDataDocuments()
       .collection(session.workout.name)
       .doc(this.buildSessionDocumentName(session.timestamp))
