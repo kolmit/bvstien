@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Session } from '../model/session.model';
+import { Constants } from '../utils/constants';
 import { BaseService } from './base.service';
 
 
@@ -35,6 +36,12 @@ export class SessionService extends BaseService {
       .delete();
   }
 
+  prefetchSessions(configuredWorkouts: any[]) {
+    for (let workout of configuredWorkouts.map(w => w.name).slice(0, Constants.MAX_PREFETCH)) {
+    this.fetchAllSessionByWorkout(workout).subscribe( () => { /* On ne fait rien */ });
+    }
+  }
+
   /**
    * Renvoie les séances pour le muscle passé en paramètre.
    * @param workoutName : Le muscle pour lequel on veut les séances.
@@ -49,7 +56,7 @@ export class SessionService extends BaseService {
           let sessions: Session[] = [];
 
           if (fetchedSessions) {
-            fetchedSessions.forEach(doc => sessions.push(doc));
+            fetchedSessions.forEach(session => sessions.push(session));
             sessions.forEach((session: any) => session.timestamp = session.timestamp.seconds ? Session.convertTimestampToDate(session.timestamp.seconds) : session.timestamp);
           }
           this.sessionMap.set(workoutName, sessions);

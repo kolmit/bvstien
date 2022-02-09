@@ -1,12 +1,14 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import packageJson from '../../package.json';
 
 export const environment = {
   production: false,
   USER_DATA: 'performances_dev',
   // @delayFirebase : https://stackoverflow.com/questions/70829329/angular-firebase-missing-or-insufficient-permissions-on-page-refresh
-  delayFirebase: 500
+  delayFirebase: 500,
+  version: packageJson.version
 };
 
 export const firebaseConfig = {

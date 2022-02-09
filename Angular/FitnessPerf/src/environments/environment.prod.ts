@@ -1,7 +1,10 @@
+import packageJson from '../../package.json';
+
 export const environment = {
   production: true,
   USER_DATA: 'performances',
-  delayFirebase: 500
+  delayFirebase: 500,
+  version: packageJson.version
 };
 
 

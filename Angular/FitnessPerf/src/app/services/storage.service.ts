@@ -24,12 +24,24 @@ export class StorageService extends BaseService {
       super(firestore); 
     }
 
+  createUserRootDocument() {
+    try {
+      return this.firestore
+      .collection(Constants.USER_DATA)
+      .doc(localStorage.getItem('login'))
+      .set({});
+    } catch(err) {
+      this.snackbarService.openSnackBar('Création du répertoire racine', err);
+    }
+    
+  }
+
   /** Méthode doublon de save(Session).
    * Permet de sauvegarder une session dans la collection "Import"
    * 
    * Exemple de fichier JSON valide pour l'importation : exampleImportData.json 
    **/
-   saveImportedSession(session: Session): Promise<void> {
+  saveImportedSession(session: Session): Promise<void> {
     return this.firestore
       .collection('Import')
       .doc(localStorage.getItem('login'))

@@ -13,38 +13,28 @@ import { Utils } from 'src/app/utils/utils';
   templateUrl: './last-sessions.component.html',
   styleUrls: ['./last-sessions.component.scss']
 })
-export class LastSessionsComponent implements OnInit {
+export class LastSessionsComponent {
   currentSessionIndex: number;
   myWorkout: string;
-  allLastSessions: Session[] = [];
+  workoutSessions: Session[] = [];
 
   maxParallelSessions: number = 3; // Nombre de séance à afficher côte à côte
   currentHistory: ExerciseHistory[] = [];
-
-  ngOnInit(): void { }
 
   constructor(
     private sessionService: SessionService,
     private snackbarService: SnackbarService,
     public dialogRef: MatDialogRef<LastSessionsComponent>, 
-    @Inject(MAT_DIALOG_DATA) public data: { myWorkout: string }
+    @Inject(MAT_DIALOG_DATA) public data: { myWorkout: string, allSessions: Session[] }
   ) {
       this.myWorkout = data.myWorkout;
-      this.getSessionHistory(this.myWorkout);
+      this.workoutSessions = Utils.sortSessionsByDate(data.allSessions);
+      this.currentSessionIndex = this.workoutSessions?.length - 1;
+      this.buildCurrentSessionsHistory();
     }
 
   closeDialog() {
     this.dialogRef.close();
-  }
-
-  
-  getSessionHistory(myWorkout: string) {
-    this.sessionService.fetchAllSessionByWorkout(myWorkout)
-    .subscribe( (allLastSessions) => {
-        this.allLastSessions = Utils.sortSessionsByDate(allLastSessions);
-        this.currentSessionIndex = this.allLastSessions?.length - 1;
-        this.buildCurrentSessionsHistory();
-      });
   }
 
   /** Méthode récupérant les N dernières séances, pour afficher leurs exercices (et leurs reps et charges) */
@@ -52,13 +42,13 @@ export class LastSessionsComponent implements OnInit {
     this.currentHistory = [];
     let parallelSessionExercisesName: string[] = [];
     const startIndex: number = this.currentSessionIndex - this.maxParallelSessions + 1;
-    let parralelSessions = this.allLastSessions.slice(startIndex > 0 ? startIndex : 0, this.currentSessionIndex + 1);
+    let parralelSessions = this.workoutSessions.slice(startIndex > 0 ? startIndex : 0, this.currentSessionIndex + 1);
     
     // On veut la liste des exo des n (= maxParallelSessions) dernières séances
     for (let i = 0 ; i < this.maxParallelSessions ; i++) {
 
-      if (this.allLastSessions[this.currentSessionIndex - i]) {
-        for (let exoToAdd of this.allLastSessions[this.currentSessionIndex - i].workout.exercises) {
+      if (this.workoutSessions[this.currentSessionIndex - i]) {
+        for (let exoToAdd of this.workoutSessions[this.currentSessionIndex - i].workout.exercises) {
           if (parallelSessionExercisesName.findIndex(exoName => exoName === exoToAdd.name) < 0) {
             parallelSessionExercisesName.push(exoToAdd.name);
           }
@@ -91,7 +81,7 @@ export class LastSessionsComponent implements OnInit {
   /* Change de session et renvoie si la session existe ou non */
   switchSession(addToIndex: number): boolean {
     const index = this.currentSessionIndex + (addToIndex*this.maxParallelSessions);
-    const sessionExist: boolean = (this.allLastSessions[index] != undefined);
+    const sessionExist: boolean = (this.workoutSessions[index] != undefined);
 
     if (sessionExist) {
       this.currentSessionIndex = index;
@@ -102,11 +92,11 @@ export class LastSessionsComponent implements OnInit {
 
   /** Pour faire disparaitre les "Avant" / "Après" */
   isSessionIndexExisting(addToIndex: number): boolean {
-    return (this.allLastSessions[this.currentSessionIndex + (addToIndex*this.maxParallelSessions)] != undefined);
+    return (this.workoutSessions[this.currentSessionIndex + (addToIndex*this.maxParallelSessions)] != undefined);
   }
 
   getTotalPageNumber() {
-    return Math.ceil(this.allLastSessions.length / this.maxParallelSessions);
+    return Math.ceil(this.workoutSessions.length / this.maxParallelSessions);
   }
 
   getCurrentPageNumber() {
@@ -114,7 +104,7 @@ export class LastSessionsComponent implements OnInit {
   }
 
   deleteThisSession(indexToDelete: number){
-    this.sessionService.delete(this.allLastSessions[indexToDelete])
+    this.sessionService.delete(this.workoutSessions[indexToDelete])
       .then(() => {
         this.snackbarService.openSnackBar("Séance supprimée.", "✔");
         this.closeDialog();

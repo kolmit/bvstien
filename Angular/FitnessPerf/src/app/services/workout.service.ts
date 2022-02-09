@@ -5,6 +5,7 @@ import * as workouts from '../../assets/workouts.json';
 import { Workout } from '../model/workout.model';
 import { Constants } from '../utils/constants';
 import { BaseService } from './base.service';
+import { SessionService } from './session.service';
 import { SnackbarService } from './snackbar.service';
 
 
@@ -18,7 +19,8 @@ export class WorkoutService extends BaseService{
   allWorkoutsSubscription: Subscription;
 
   constructor(firestore: AngularFirestore,
-    private snackbarService: SnackbarService) {
+    private snackbarService: SnackbarService,
+    private sessionService: SessionService) {
       super(firestore);
 
       if (localStorage.getItem('login') !== null) {
@@ -35,6 +37,7 @@ export class WorkoutService extends BaseService{
     this.insertWorkout(WorkoutService.defaultWorkoutList)
   }
 
+  // TODO : Ne faire qu'une seule écriture avec une liste.
   insertWorkout(workouts: Workout[]) {
     for (let element of workouts) {
       let e: any = {[element.name]: element.exercises};
@@ -43,8 +46,8 @@ export class WorkoutService extends BaseService{
         .collection(Constants.USER_EXERCISES)
         .doc(element.name)
         .set(e)        
-        .catch( () => {
-          this.snackbarService.openSnackBar('Erreur technique', 'Problème lors de l\'enregistrement du workout');
+        .catch( (err) => {
+          this.snackbarService.openSnackBar('Erreur technique', err);
         });
     }
   }
@@ -65,6 +68,9 @@ export class WorkoutService extends BaseService{
             this.configuredWorkoutList[workoutIndex] = {name: workoutName, exercises: element[workoutName]};
           }
         });
+
+        // On charge d'avance les séances pour + de fluidité.
+        this.sessionService.prefetchSessions(this.configuredWorkoutList);
       });
   }
 
@@ -86,53 +92,53 @@ export class WorkoutService extends BaseService{
     }
   }
 
-    /** Ajoute un exercice dans la configuration de l'utilisateur */
-    addUserExercise(workoutName: string, exerciseName: string): void{
-      this.getUserDataDocuments()
-        .collection(Constants.USER_EXERCISES)
-        .doc(workoutName)
-        .valueChanges()
-        .subscribe( (res) => {
-          const exerciseList: string[] = res[workoutName];
-  
-          if (!exerciseList || exerciseList.findIndex(exo => exo === exerciseName) >= 0) {
-            return;
-          }
-          exerciseList.push(exerciseName);
+  /** Ajoute un exercice dans la configuration de l'utilisateur */
+  addUserExercise(workoutName: string, exerciseName: string): void{
+    this.getUserDataDocuments()
+      .collection(Constants.USER_EXERCISES)
+      .doc(workoutName)
+      .valueChanges()
+      .subscribe( (res) => {
+        const exerciseList: string[] = res[workoutName];
+
+        if (!exerciseList || exerciseList.findIndex(exo => exo === exerciseName) >= 0) {
+          return;
+        }
+        exerciseList.push(exerciseName);
+        this.updateUserExercises(workoutName, exerciseList);
+      });
+  }
+
+  /** Supprime un exercice dans la configuration de l'utilisateur */
+  deleteUserExercise(workoutName: string, exerciseName: string): void{
+    this.getUserDataDocuments()
+      .collection(Constants.USER_EXERCISES)
+      .doc(workoutName)
+      .valueChanges()
+      .subscribe( (res) => {
+        const exerciseList: string[] = res[workoutName];
+        const indexToDelete = exerciseList.findIndex(exo => exo === exerciseName);
+
+        if (indexToDelete < 0){
+          return; 
+        } else {
+          // On met à jour la liste des exercices en mémoire
+          exerciseList.splice(indexToDelete, 1);
           this.updateUserExercises(workoutName, exerciseList);
-        });
-    }
+        }
+      });
+  }
   
-    /** Supprime un exercice dans la configuration de l'utilisateur */
-    deleteUserExercise(workoutName: string, exerciseName: string): void{
-      this.getUserDataDocuments()
-        .collection(Constants.USER_EXERCISES)
-        .doc(workoutName)
-        .valueChanges()
-        .subscribe( (res) => {
-          const exerciseList: string[] = res[workoutName];
-          const indexToDelete = exerciseList.findIndex(exo => exo === exerciseName);
-  
-          if (indexToDelete < 0){
-            return; 
-          } else {
-            // On met à jour la liste des exercices en mémoire
-            exerciseList.splice(indexToDelete, 1);
-            this.updateUserExercises(workoutName, exerciseList);
-          }
-        });
-    }
-  
-    updateUserExercises(workoutName: string, exerciseList): void {
-      let e: any = {[workoutName]: exerciseList};
-  
-      this.getUserDataDocuments()
-        .collection(Constants.USER_EXERCISES)
-        .doc(workoutName)
-        .set(e);
-  
-      this.updateConfiguredExercises(workoutName, exerciseList);
-    }
+  updateUserExercises(workoutName: string, exerciseList): void {
+    let e: any = {[workoutName]: exerciseList};
+
+    this.getUserDataDocuments()
+      .collection(Constants.USER_EXERCISES)
+      .doc(workoutName)
+      .set(e);
+
+    this.updateConfiguredExercises(workoutName, exerciseList);
+  }
 
   addWorkout(newWorkoutName: string) {
     let newWorkout: Workout = {name: newWorkoutName, exercises: []};

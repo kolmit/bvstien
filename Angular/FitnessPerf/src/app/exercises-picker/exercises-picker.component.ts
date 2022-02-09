@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Exercise } from '../model/exercise.model';
 import { Workout } from '../model/workout.model';
 import { Session } from '../model/session.model';
-import { StorageService } from '../services/storage.service';
 import { WorkoutService } from '../services/workout.service';
 import { FormGroup, FormControl, FormBuilder, FormArray, RequiredValidator } from '@angular/forms';
 import { ExerciseSet } from '../model/exercise-set.model';
@@ -17,6 +16,7 @@ import { ExercisePickerDialogComponent } from './partials/exercise-picker-dialog
 import { MultiChoiceDialogComponent } from '../multi-choice-dialog/multi-choice-dialog.component';
 import { Constants } from '../utils/constants';
 import { SessionService } from '../services/session.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -24,7 +24,7 @@ import { SessionService } from '../services/session.service';
   templateUrl: './exercises-picker.component.html',
   styleUrls: ['./exercises-picker.component.scss']
 })
-export class ExercisePickerComponent implements OnInit {
+export class ExercisePickerComponent implements OnInit, OnDestroy {
   model: string = 'ExercisePickerComponent';
 
   myWorkout: string;
@@ -34,10 +34,10 @@ export class ExercisePickerComponent implements OnInit {
 
   floatLabelControl = new FormControl('auto');
   workoutForm: FormGroup;
+  sessionSubscription: Subscription;
 
   constructor(private route: ActivatedRoute, 
     private workoutService: WorkoutService,
-    private storageService: StorageService,
     private sessionService: SessionService,
     private snackbarService: SnackbarService,
     private fb: FormBuilder,
@@ -52,12 +52,19 @@ export class ExercisePickerComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+      this.sessionSubscription.unsubscribe();
+  }
+
 
   openSessionHistory() {
     this.dialog.open(LastSessionsComponent, {
       width: '70vh',
       height: '75vh',
-      data: { myWorkout : this.myWorkout }
+      data: { 
+        myWorkout : this.myWorkout,
+        allSessions: this.allSessions
+       }
     });    
   }
 
@@ -98,16 +105,12 @@ export class ExercisePickerComponent implements OnInit {
     // Si les séances ont déjà été récupérées par le service
     if (sessionsFromService !== undefined) { 
       this.sortSessionsAndInitIndex(sessionsFromService);
-    } 
-    else {
-      // Sinon on requête en base
-      setTimeout(() => {
-        this.sessionService.fetchAllSessionByWorkout(myWorkout)
-        .subscribe((allSessionsForMyWorkout: Session[]) => {
-          this.sortSessionsAndInitIndex(allSessionsForMyWorkout);
-        });
-      }, Constants.FIREBASE_DELAY);
     }
+    // On s'abonne aux changement de valeurs sur les Sessions (pour se màj à chaque submit de série, d'exo, etc...)
+    this.sessionSubscription = this.sessionService.fetchAllSessionByWorkout(myWorkout)
+    .subscribe((allSessionsForMyWorkout: Session[]) => {
+      this.sortSessionsAndInitIndex(allSessionsForMyWorkout);
+    });
   }
     
   /**

@@ -3,6 +3,7 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { SnackbarService } from '../services/snackbar.service';
+import { StorageService } from '../services/storage.service';
 import { WorkoutService } from '../services/workout.service';
 
 @Injectable({
@@ -13,6 +14,7 @@ export class AuthService implements OnInit {
   constructor(
     private afAuth: AngularFireAuth, 
     private router: Router,
+    private storageService: StorageService,
     private snackbarService: SnackbarService,
     private workoutService: WorkoutService) {
       
@@ -36,7 +38,7 @@ export class AuthService implements OnInit {
     this.afAuth.signInWithEmailAndPassword(email, password)
     .then(value => {
       this.snackbarService.openSnackBar("Bienvenue " + email, "💪");
-      this.afAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then;
+      this.afAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
       localStorage.setItem('login', email);
       localStorage.setItem('userid', value.user.uid);
 
@@ -69,8 +71,8 @@ export class AuthService implements OnInit {
   emailSignup(email: string, password: string) {
     this.afAuth.createUserWithEmailAndPassword(email, password)
     .then(value => {
-     console.log('Succes', value);
-     this.login(email, password, true);
+      console.log('Succes', value);
+      this.login(email, password, true);
     })
     .catch(error => {
       this.snackbarService.openSnackBar(error.message, '❌')
@@ -95,7 +97,9 @@ export class AuthService implements OnInit {
    */
   initUserData(fromSignup?: boolean) {
     if (fromSignup) {
-      this.workoutService.insertDefaultWorkoutList();
+      this.storageService.createUserRootDocument().then( () => {
+        this.workoutService.insertDefaultWorkoutList();
+      });
     } 
     else {
       this.workoutService.fetchAllWorkouts();
