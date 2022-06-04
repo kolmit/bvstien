@@ -1,0 +1,30 @@
+<div class="flex-row" style="align-items: center;" *ngIf="this.workoutSessions.length === 0; else history">
+    Aucune séance historisée.
+</div>
+<ng-template #history>
+    <div class="flex-column container">
+        <div class="flex-row date-container">
+            <div (click)="switchSession(-1)" [style.opacity]="!isSessionIndexExisting(-1) ? 0.2 : 1"> < Avant </div>
+            <div class="history-title flex-column">
+                <span>Historique<br></span>
+                <span>Page {{this.getCurrentPageNumber()}}/{{this.getTotalPageNumber()}}</span>
+            </div>
+            <div (click)="switchSession(1)" [style.opacity]="!isSessionIndexExisting(1) ? 0.2 : 1"> Après > </div>
+        </div>
+
+        <hr style="width: 100%; margin-bottom: 1rem;">
+        
+        <div class="flex-column history-container" *ngFor="let exerciseHistory of this.currentHistory">
+            <span class="exercise-title">{{exerciseHistory.exerciseName}}</span>
+            <div class="flex-row history-exercise">
+                <div class="history-set" *ngFor="let history of exerciseHistory.setsHistory">
+                    <span class="set-date">{{history.date | date: 'dd MMM. yy'}}</span>
+                    <span *ngIf="!history.exercisesSets || history.exercisesSets.length === 0 ">-</span>
+                    <span *ngFor="let set of history.exercisesSets">{{set.repetition}} × {{set.weight}} kg</span>
+                </div>
+            </div>
+
+            <hr class="separator">
+        </div>
+    </div>    
+</ng-template>

@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "performance-1c306": {
+      "hosting": {
+        "FitnessPerf": [
+          "performance-1c306"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "perfProject": "performance-1c306"
+  }
+}

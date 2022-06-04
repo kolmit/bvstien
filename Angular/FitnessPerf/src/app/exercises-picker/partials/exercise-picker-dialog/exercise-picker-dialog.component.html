@@ -1,0 +1,13 @@
+<div class="flex-column add-exercise-container">
+    <h3>Ajouter un exercice</h3>
+    <hr class="separator" style="margin-bottom: 2rem;">
+
+    <mat-form-field floatLabel="Nom de l'exercice">
+        <input matInput [(ngModel)]="newExoName" placeholder="Nom de l'exercice">
+    </mat-form-field>
+</div>
+
+<div class="flex-column choice-buttons">
+    <button mat-raised-button style="background-color: #376c9f" (click)="submitExercise(false)">Ajouter à cette séance uniquement</button>
+    <button mat-raised-button style="background-color: #9f3737" (click)="submitExercise(true)">Ajouter à toutes les séances</button>
+</div>

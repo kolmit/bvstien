@@ -1,0 +1,48 @@
+@import '../../../../styles.scss';
+
+.date-container {
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 1rem;
+
+    .history-title {
+        align-items: center;
+
+        :nth-child(1) {
+            font-weight: 300;
+            font-size: 1.2rem;
+        }
+    }
+}
+
+.history-container {
+    align-items: center;
+}
+
+.exercise-title {
+    padding-bottom: 0.25rem;
+    color: $blue-ligher
+}
+
+.set-date {
+    border-bottom: 1px solid rgb(103, 212, 255, 0.25);
+    border-width: 150%;
+    color: $orange;
+    margin-bottom: 0.1rem;
+}
+
+.history-exercise {
+    justify-content: space-around;
+}
+
+.history-set {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    
+    padding: 5px;
+    margin: 0 1px 0 1px;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    border-radius: 0.5rem;
+}

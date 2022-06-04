@@ -1,0 +1,88 @@
+/***************************
+**** Variables globales ****
+***************************/
+$text: #B7C7D4;
+
+$background: #0E1E2C;
+$background-panel: #314a60;
+$background-dialog: #141518;
+
+$button-valid: #2FAC69;
+$valid-darker: #20794a;
+$button: #416280;
+
+$pink: #ad6161;
+$pink-darker: #774141;
+
+$orange: #ff9900;
+$blue: #00b7ff;
+$blue-ligher: #67d4ff;
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: "Poppins", sans-serif;
+
+    background: $background;
+    color: $text;
+    min-height: calc(100% + env(safe-area-inset-top));
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.separator {
+    width: 100%;
+    opacity: 0.2;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    justify-content: space-around;
+}
+
+.add-button {
+    align-items: center;
+    margin: 1rem;
+    background-color: #ff8800;
+    font-size: 1.5rem;
+    color: white;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.mat-flat-button, .mat-raised-button, .mat-fab {
+    background-color: $button
+}
+
+.mat-dialog-container {
+    background-color: $background-dialog;
+    border: 1px solid white;
+}

@@ -1,0 +1,40 @@
+@import '../../styles.scss';
+
+.header-container {
+    justify-content: space-around;
+    text-align: center;
+}
+
+.application-title {
+    font-family: "Pacifico", cursive;
+}
+
+.separator {
+    margin-top: 0rem;
+}
+
+.small-title, .big-title {
+    margin: 1rem 0 1rem 0;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    :nth-child(2n + 1) {
+        color: $orange;
+    }
+    :nth-child(2n) {
+        color: $blue;
+    }
+}
+
+.big-title {
+    text-shadow:
+    0 0 20px rgba(255, 255, 255, 0.4),
+    0 0 50px rgba(255, 255, 255, 0.4),
+    0 0 70px rgba(255, 255, 255, 0.3);
+
+    margin: 2rem 0 3rem 0;
+    font-size: 3.5rem;
+}

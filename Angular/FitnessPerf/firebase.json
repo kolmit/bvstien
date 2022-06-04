@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "FitnessPerf",
+      "public": "dist/FitnessPerf",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}

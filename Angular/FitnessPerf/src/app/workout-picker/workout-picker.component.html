@@ -1,0 +1,33 @@
+<app-header [parentModel]="model"></app-header>
+
+<mat-tab-group mat-align-tabs="center" [selectedIndex]="selectedProgramIndex" (selectedTabChange)="selectedProgramChanged($event)" #tabGroup>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <img src="../assets/svg/gear.svg" (click)="managePrograms(tabGroup)"/>
+        </ng-template>
+        Gérer mes programmes 
+    </mat-tab>
+    <mat-tab *ngFor='let program of programList; let i = index;' label="{{program.programName}}">
+        <div class="flex-column workout-container">
+            <div class="flex-row workouts">
+                <div class="workout" *ngFor='let element of program.workoutNames'  (click)="displayExercises(element)">
+                    <div>{{element}}</div>
+                </div>
+            </div>
+        
+            <button mat-mini-fab class="add-button" (click)="addWorkout(i, program.programName)">+</button>
+        </div>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="add-program" (click)='addProgram()'>+</div>
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>
+  
+<hr class="separator">
+
+<div class="square">
+	<div id="inner1" class="inner-square"></div>
+    <div id="inner2" class="inner-square"></div>
+</div>
