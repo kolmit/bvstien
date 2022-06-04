@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { environment } from 'src/environments/environment';
 import { AuthService } from '../auth.service';
 import { ResetPasswordComponent } from '../reset-password/reset-password.component';
 
@@ -11,10 +12,11 @@ import { ResetPasswordComponent } from '../reset-password/reset-password.compone
 export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService, 
-    public dialog: MatDialog) { }
+    public dialog: MatDialog) {}
 
+  version: string = environment.version;
   model: string = 'LoginComponent';
-
+  
   email;
   emailToCreate;
   password;

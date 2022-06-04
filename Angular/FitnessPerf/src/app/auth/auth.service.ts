@@ -2,9 +2,11 @@ import { Injectable, OnInit } from '@angular/core';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
+import { ProgramService } from '../services/program.service';
 import { SnackbarService } from '../services/snackbar.service';
 import { StorageService } from '../services/storage.service';
 import { WorkoutService } from '../services/workout.service';
+import { Constants } from '../utils/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,8 @@ export class AuthService implements OnInit {
     private router: Router,
     private storageService: StorageService,
     private snackbarService: SnackbarService,
-    private workoutService: WorkoutService) {
+    private workoutService: WorkoutService,
+    private programService: ProgramService) {
       
   }
 
@@ -99,10 +102,23 @@ export class AuthService implements OnInit {
     if (fromSignup) {
       this.storageService.createUserRootDocument().then( () => {
         this.workoutService.insertDefaultWorkoutList();
+        this.programService.saveProgram(WorkoutService.defaultWorkoutList.map(w => w.name), 0, Constants.PROGRAM_PREFIX);
       });
     } 
     else {
-      this.workoutService.fetchAllWorkouts();
+      this.workoutService.fetchAllWorkouts()
+        .subscribe((configuredWorkoutList: any[]) => {
+          this.programService.fetchAllPrograms()
+          .subscribe((programs: any[]) => {
+
+          // Suite à l'introduction de la notion de Programme :
+          // Si l'utilisateur était enregistré AVANT la feature des Programmes, 
+          // on lui crée un programme comme s'il venait de s'enregistrer, qui va contenir tous ses groupes musculaires.
+          if (programs.length === 0) {
+            this.programService.saveProgram(configuredWorkoutList.map(w => w.name), 0, Constants.PROGRAM_PREFIX);
+          }
+        });
+      });
     }
   }
 }

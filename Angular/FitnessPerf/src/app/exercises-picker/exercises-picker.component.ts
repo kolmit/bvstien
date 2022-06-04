@@ -53,7 +53,7 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this.sessionSubscription.unsubscribe();
+    this.sessionSubscription ? this.sessionSubscription.unsubscribe() : null;
   }
 
 
@@ -139,9 +139,12 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
         let myWorkoutExercisesWithSets: Exercise[] = [];
         
         // Alors on initialise les objets Exercise avec un tableau de série (vide).
-        for (let exo of myExercisesNames) {
-          myWorkoutExercisesWithSets.push( {name: exo, sets: []} )
+        if (myExercisesNames) {
+          for (let exo of myExercisesNames) {
+            myWorkoutExercisesWithSets.push( {name: exo, sets: []} )
+          }
         }
+        
         
         let workout: Workout = {name: this.myWorkout, exercises: myWorkoutExercisesWithSets};
         let session: Session = {timestamp: chosenDate, workout: workout, totalLifted: 0};

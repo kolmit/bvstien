@@ -4,9 +4,9 @@
         
     <div *ngIf="this.inputRequested" class="flex-column">
         <mat-form-field floatLabel="Séance">
-            <input matInput [(ngModel)]="inputValue" placeholder="Nom de la séance / groupe musculaire">
+            <input matInput [(ngModel)]="inputValue" placeholder="{{this.question}}">
         </mat-form-field>
-        <button mat-raised-button (click)="inputSelected(inputValue)">Ajouter</button>
+        <button mat-raised-button [disabled]="!inputValue" (click)="inputSelected(inputValue)">Ajouter</button>
     </div>
 
     <div *ngIf="this.choices" class="flex-column choice-buttons">

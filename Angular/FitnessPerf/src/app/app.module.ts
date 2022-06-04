@@ -16,10 +16,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule  } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatListModule} from '@angular/material/list';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatListModule } from '@angular/material/list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatTabsModule, MAT_TABS_CONFIG } from '@angular/material/tabs';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -38,7 +39,6 @@ import { MultiChoiceDialogComponent } from './multi-choice-dialog/multi-choice-d
 import { HeaderComponent } from './header/header.component';
 import { LastSessionsComponent } from './exercises-picker/partials/last-sessions/last-sessions.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,9 +51,10 @@ import { LastSessionsComponent } from './exercises-picker/partials/last-sessions
     ExercisePickerDialogComponent,
     ConfigurationComponent,
     MultiChoiceDialogComponent,
-    HeaderComponent,
+    HeaderComponent
   ],
   imports: [
+    MatTabsModule,
     MatButtonModule,
     MatExpansionModule,
     MatFormFieldModule,
@@ -80,7 +81,12 @@ import { LastSessionsComponent } from './exercises-picker/partials/last-sessions
     })
 
   ],
-  providers: [WorkoutService, AuthGuard, SnackbarService],
+  providers: [
+    WorkoutService, 
+    AuthGuard, 
+    SnackbarService,
+    { provide: MAT_TABS_CONFIG, useValue: { animationDuration: 250 }}
+  ],
   entryComponents: [LastSessionsComponent, DatePickerComponent],
   bootstrap: [AppComponent]
 })

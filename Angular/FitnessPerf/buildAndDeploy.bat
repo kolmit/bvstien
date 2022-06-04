@@ -1,1 +1,1 @@
-ng build --configuration production && firebase deploy
+npm version patch && ng build --configuration production && firebase deploy

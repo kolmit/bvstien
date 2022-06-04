@@ -38,7 +38,9 @@ export class SessionService extends BaseService {
 
   prefetchSessions(configuredWorkouts: any[]) {
     for (let workout of configuredWorkouts.map(w => w.name).slice(0, Constants.MAX_PREFETCH)) {
-    this.fetchAllSessionByWorkout(workout).subscribe( () => { /* On ne fait rien */ });
+      this.fetchAllSessionByWorkout(workout)
+        .subscribe( () => { /* Les séances sont récupérées en mémoire */ })
+        .unsubscribe();
     }
   }
 

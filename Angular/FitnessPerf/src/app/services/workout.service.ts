@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import * as workouts from '../../assets/workouts.json';
+import { Program } from '../model/program.model';
 import { Workout } from '../model/workout.model';
 import { Constants } from '../utils/constants';
 import { BaseService } from './base.service';
@@ -16,7 +18,6 @@ export class WorkoutService extends BaseService{
 
   static defaultWorkoutList: any[] = (workouts as any).default;
   configuredWorkoutList: any[] = [];
-  allWorkoutsSubscription: Subscription;
 
   constructor(firestore: AngularFirestore,
     private snackbarService: SnackbarService,
@@ -30,11 +31,10 @@ export class WorkoutService extends BaseService{
 
   onDestroy() {
     this.configuredWorkoutList = [];
-    this.allWorkoutsSubscription.unsubscribe();
   }
 
   insertDefaultWorkoutList(): void {
-    this.insertWorkout(WorkoutService.defaultWorkoutList)
+    this.insertWorkout(WorkoutService.defaultWorkoutList);
   }
 
   // TODO : Ne faire qu'une seule écriture avec une liste.
@@ -53,30 +53,35 @@ export class WorkoutService extends BaseService{
   }
 
    /** Charge tous les muscles avec les noms des exercices configurés. */
-  fetchAllWorkouts() {
-    this.allWorkoutsSubscription = this.getUserDataDocuments()
+  fetchAllWorkouts(): Observable<any> {
+    return this.getUserDataDocuments()
       .collection(Constants.USER_EXERCISES)
       .valueChanges()
-      .subscribe( (allWorkoutElement) => {
-        allWorkoutElement.forEach(element => {
-          let workoutName = Object.keys(element)[0];
-          const workoutIndex = this.configuredWorkoutList.findIndex(e => e.name === workoutName);
-          
-          if (workoutIndex === -1) {
-            this.configuredWorkoutList.push( {name: workoutName, exercises: element[workoutName]})
-          } else {
-            this.configuredWorkoutList[workoutIndex] = {name: workoutName, exercises: element[workoutName]};
-          }
-        });
+      .pipe( 
+        map((allWorkoutElement) => {
+          allWorkoutElement.forEach(element => {
+            let workoutName = Object.keys(element)[0];
+            const workoutIndex = this.configuredWorkoutList.findIndex(e => e.name === workoutName);
+            
+            if (workoutIndex === -1) {
+              this.configuredWorkoutList.push( {name: workoutName, exercises: element[workoutName]})
+            } else {
+              this.configuredWorkoutList[workoutIndex] = {name: workoutName, exercises: element[workoutName]};
+            }
+          });
 
-        // On charge d'avance les séances pour + de fluidité.
-        this.sessionService.prefetchSessions(this.configuredWorkoutList);
-      });
+          // On charge d'avance les séances pour + de fluidité.
+          this.sessionService.prefetchSessions(this.configuredWorkoutList);
+
+          return this.configuredWorkoutList;
+        })
+      );
   }
 
   get getConfiguredWorkoutList(): any[] {
     return this.configuredWorkoutList;
   }
+
 
   getConfiguredExercises(workout: string): string[] {
     const workoutIndex = this.configuredWorkoutList.findIndex(e => e.name === workout);
