@@ -39,13 +39,20 @@ export class ProgramService extends BaseService {
         .set(programToSave);
   }
 
+  updateProgram(programToUpdate: Partial<Program>) {
+    this.getUserDataDocuments()
+        .collection(Constants.USER_PROGRAMS)
+        .doc(programToUpdate.programName)
+        .update(programToUpdate);
+  }
+
   fetchAllPrograms(): Observable<any> {
     return this.getUserDataDocuments()
       .collection(Constants.USER_PROGRAMS)
       .valueChanges()
       .pipe(
         map((allPrograms) => {
-          this.configuredPrograms = allPrograms as Program[];
+          this.configuredPrograms = (allPrograms as Program[]).sort((pa, pb) => pa.programIndex - pb.programIndex);
           return this.configuredPrograms;
         })
       );
@@ -54,6 +61,16 @@ export class ProgramService extends BaseService {
   addWorkoutToProgram(workoutName: string, programIndex: number, programName: string) {
     if (this.configuredPrograms[programIndex]) {
       this.saveProgram([...this.configuredPrograms[programIndex].workoutNames, workoutName], programIndex, programName);
+    }
+  }
+
+  deleteWorkoutFromProgram(workoutName: string, programIndex: number) {
+    const programToUpdate = this.configuredPrograms[programIndex];
+    const workoutIndexToDeleteFromProgram = programToUpdate.workoutNames.findIndex(w => w.toUpperCase() === workoutName.toUpperCase());
+
+    if (workoutIndexToDeleteFromProgram >= 0) {
+      programToUpdate.workoutNames.splice(workoutIndexToDeleteFromProgram, 1);
+      this.updateProgram(programToUpdate);
     }
   }
 

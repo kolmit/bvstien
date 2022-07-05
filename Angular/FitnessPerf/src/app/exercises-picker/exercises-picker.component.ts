@@ -186,20 +186,17 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
 
   addExercise() {
     this.dialog.open(ExercisePickerDialogComponent).afterClosed()
-      .subscribe(
-        ({
-          exerciseName: exerciseName, 
-          addExoToConfiguration: addExoToConfiguration
-        }) => {
-          if (exerciseName) {
-            let exo: Exercise = {name: exerciseName, sets: []}; 
-            this.allSessions[this.currentSessionIndex].workout.exercises.push(exo);
-            this.sessionService.save(this.allSessions[this.currentSessionIndex]);
+      .subscribe((res :{exerciseName: string, addExoToConfiguration: boolean}) => 
+      {
+        if (res?.exerciseName) {
+          let exo: Exercise = {name: res.exerciseName, sets: []}; 
+          this.allSessions[this.currentSessionIndex].workout.exercises.push(exo);
+          this.sessionService.save(this.allSessions[this.currentSessionIndex]);
 
-            if (addExoToConfiguration) {
-              this.workoutService.addUserExercise(this.myWorkout, exerciseName);
-            }
+          if (res.addExoToConfiguration) {
+            this.workoutService.addUserExercise(this.myWorkout, res.exerciseName);
           }
+        }
       });
   }
 

@@ -36,7 +36,7 @@ export class ConfigurationComponent {
         let lineData = line[ Object.keys(line)[0] ];
 
         if (this.isMyJsonCorrect(lineData)) {
-          let session: Session = { timestamp: lineData.timestamp, workout: lineData.workout, totalLifted: lineData.totalLifted };
+          let session: Session = { timestamp: lineData.timestamp, workout: lineData.workout, totalLifted: lineData.totalLifted ? lineData.totalLifted : 0 };
           this.storageService.saveImportedSession(session)
           .then(() => {
             successfulImport++;

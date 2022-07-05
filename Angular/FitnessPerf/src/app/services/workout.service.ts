@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as workouts from '../../assets/workouts.json';
+import { Exercise } from '../model/exercise.model';
 import { Program } from '../model/program.model';
 import { Workout } from '../model/workout.model';
 import { Constants } from '../utils/constants';
@@ -45,7 +46,7 @@ export class WorkoutService extends BaseService{
       this.getUserDataDocuments()
         .collection(Constants.USER_EXERCISES)
         .doc(element.name)
-        .set(e)        
+        .set(e)
         .catch( (err) => {
           this.snackbarService.openSnackBar('Erreur technique', err);
         });
@@ -145,8 +146,8 @@ export class WorkoutService extends BaseService{
     this.updateConfiguredExercises(workoutName, exerciseList);
   }
 
-  addWorkout(newWorkoutName: string) {
-    let newWorkout: Workout = {name: newWorkoutName, exercises: []};
+  addWorkout(newWorkoutName: string, exerciseList?: string[]) {
+    let newWorkout: Workout = {name: newWorkoutName, exercises: (exerciseList ? exerciseList : []) as any[]};
     this.insertWorkout([newWorkout])
   }
 }

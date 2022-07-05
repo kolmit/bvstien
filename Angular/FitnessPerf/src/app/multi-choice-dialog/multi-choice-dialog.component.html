@@ -6,7 +6,7 @@
         <mat-form-field floatLabel="Séance">
             <input matInput [(ngModel)]="inputValue" placeholder="{{this.question}}">
         </mat-form-field>
-        <button mat-raised-button [disabled]="!inputValue" (click)="inputSelected(inputValue)">Ajouter</button>
+        <button mat-raised-button [disabled]="!inputValue" (click)="inputSelected()">Ajouter</button>
     </div>
 
     <div *ngIf="this.choices" class="flex-column choice-buttons">

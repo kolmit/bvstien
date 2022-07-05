@@ -38,6 +38,7 @@ import { ConfigurationComponent } from './configuration/configuration.component'
 import { MultiChoiceDialogComponent } from './multi-choice-dialog/multi-choice-dialog.component';
 import { HeaderComponent } from './header/header.component';
 import { LastSessionsComponent } from './exercises-picker/partials/last-sessions/last-sessions.component';
+import { ManageWorkoutToProgramDialogComponent } from './workout-picker/partials/manage-workout-to-program-dialog/manage-workout-to-program-dialog.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { LastSessionsComponent } from './exercises-picker/partials/last-sessions
     ExercisePickerDialogComponent,
     ConfigurationComponent,
     MultiChoiceDialogComponent,
-    HeaderComponent
+    HeaderComponent,
+    ManageWorkoutToProgramDialogComponent
   ],
   imports: [
     MatTabsModule,

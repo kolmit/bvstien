@@ -23,11 +23,11 @@ export class MultiChoiceDialogComponent {
       this.inputRequested = data.inputRequested;
   }
 
-  choiceSelected(choice: string): void {
+  choiceSelected(choice: any): void {
     this.dialogRef.close(choice);
   }
 
-  inputSelected(value: string): void {
-    this.dialogRef.close(value);
+  inputSelected(): void {
+    this.dialogRef.close(this.inputValue);
   }
 }
