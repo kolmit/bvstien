@@ -1,0 +1,14 @@
+<div class="header-container" [style.height]="this.getMapProperty(2, 'cssHeaderHeight')">
+    <div class="flex-row top-container">
+        <div (click)="doAction(0)" class="header-action">
+            <img *ngIf="this.getIcon(0)" src="{{this.getIcon(0)}}"/>
+        </div>
+        <div class="application-title" [ngClass]="this.titleClass(this.parentModel)">
+            <span>Ma BibliAudèque</span>
+        </div>  
+            
+        <div (click)="doAction(1)" class="header-action">
+            <img *ngIf="this.getIcon(1)" src="{{this.getIcon(1)}}"/>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="flex-column">
+<app-header [parentModel]="model"></app-header>
+    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+        <label>
+            <input formControlName="searchInput" type="text" class="search-input" placeholder="Rechercher un livre, auteur..."/>
+        </label>
+    </form>
+ <!--[@openClose]="this.searchInProgress ? 'open' : 'closed'"-->
+    <div *ngIf="this.searchInProgress">
+        <div class="section-title">
+            <div class="section-title-mark"></div>
+            <span class="section-title-value">Recherche 
+                <span *ngIf="this.mySearchResult.totalItems >= 0">({{this.mySearchResult.totalItems}})</span>
+            </span>
+        </div>
+            <div  class="search-result">
+                <div *ngFor="let book of this.mySearchResult.searchResult">
+                    <app-book-tile [book]="book" [verticalTile]="true"></app-book-tile>
+                </div>
+            </div>    
+        <hr class="separator">
+    </div>
+
+    <ng-container>
+        <div class="section-title">
+            <div class="section-title-mark"></div>
+            <span class="section-title-value">Collection 
+                <span *ngIf="this.myCollection">({{this.myCollection.length}})</span>
+            </span>
+        </div>
+        <div class="flex-column" *ngFor="let book of this.myCollection">
+            <app-book-tile [book]="book" [verticalTile]="false"></app-book-tile>
+        </div>
+    </ng-container>
+    
+</div>

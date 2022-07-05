@@ -1,0 +1,51 @@
+<app-header [parentModel]="model"></app-header>
+
+<div *ngIf="this.book" class="flex-column details">
+    <div class="flex-column book-thumb-action">
+        <div *ngIf="this.book.thumbnail; else noThumbnail" class="flex-row thumbnail">
+            <img src="{{this.book.thumbnail}}"/>
+        </div>
+        <ng-template #noThumbnail>
+            <div class="thumbnail no-thumbnail">
+            </div>
+        </ng-template>
+
+        <div class="flex-column book-header">
+            <span class="book-title">{{this.book.title}}</span>
+            <span class="author" *ngFor='let author of this.book.authors'>{{author}}</span>
+        </div>
+
+        
+        <div *ngIf="!this.isThisBookInMyCollection(this.book.isbn); else bookAlreadyAdded" class="flex-row action-collection action-add">
+            <img src="../../assets/svg/add.svg"/>
+            <div (click)="addToCollection()">
+                Ajouter à ma collection
+            </div>
+        </div>
+        <ng-template #bookAlreadyAdded>
+            <div class="flex-row action-collection action-delete">
+                <img src="../../assets/svg/delete.svg"/>
+                <div (click)="deleteFromCollection()">
+                    Retirer de ma collection
+                </div>
+            </div>
+        </ng-template>
+        
+    </div>
+    
+    <div *ngIf="this.book.description" class="description">
+        {{this.book.description}}
+    </div>
+    <hr>
+    <div class="flex-column main-info" *ngIf="this.book.publishedDate">
+        <span class="info-title">
+            Publication
+        </span> 
+        <span class="info-value">
+            {{this.book.publishedDate | date:'longDate'}}
+        </span>
+    </div>
+    <a class="more-info" href="{{this.book.infoLink}}">Plus d'information</a>
+
+
+</div>

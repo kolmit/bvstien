@@ -1,0 +1,13 @@
+<app-header [parentModel]="model"></app-header>
+
+<div class="flex-column list-container">
+    <form (ngSubmit)="submitSearch()">
+        <mat-form-field appearance="fill">
+            <mat-label>Chercher un livre, un auteur...</mat-label>
+            <input matInput type="text" [(ngModel)]="searchValue" name="searchField">
+        </mat-form-field>
+    </form>
+    <div class="flex-column" *ngFor="let book of searchResult; trackBy: identifyBook">
+        <app-book-tile [book]="book"></app-book-tile>
+    </div>
+</div>

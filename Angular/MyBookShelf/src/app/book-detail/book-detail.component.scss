@@ -1,0 +1,80 @@
+@import '../../styles.scss'; 
+
+.details {
+    align-items: center;
+    margin-top: -19vh;
+}
+
+.book-header {
+    align-items: center;
+
+    .book-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        padding-top: 0.5rem;
+        padding-bottom: 0.25rem;
+    }
+
+    .author {
+        
+    }
+}
+
+.book-thumb-action {
+    align-items: center;
+    width: 100%;
+}
+
+.thumbnail, .no-thumbnail {
+    width: 100%;
+}
+.thumbnail {
+    padding: 1rem;
+    
+    img {
+        border: 1px solid grey;
+        box-shadow: 0px 5px 50px rgba(0, 0, 0, 0.5);
+    }
+}
+.no-thumbnail {
+    margin: 1rem;
+    height: 20vh;
+    width: 15vh;
+    border: 1px solid grey;
+    border-radius: 1vh;
+    background-color: lightgrey;
+}
+
+.action-collection {
+    margin: 1rem;
+    align-items: center;
+    padding: 1rem;
+
+    img {
+        height: 2rem;
+        margin-right: 1rem;
+    }
+}
+
+.action-delete {
+    border-radius: 3vh;
+    background-color: #ffc9c9;
+}
+
+.action-add {
+    border-radius: 3vh;
+    background-color: #bde566;
+}
+
+.main-info {
+    padding: 0.5rem;
+    border: 1px solid lightgrey;
+    border-radius: 1px;
+}
+
+.description {
+    margin: 1rem;
+    padding: 0.5rem;
+    border: 1px solid lightcoral;
+    text-align: justify;
+}

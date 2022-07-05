@@ -1,0 +1,28 @@
+<ng-container *ngIf="!verticalTile; else verticalTemplate">
+    <div *ngIf="book.id" class="flex-row horizontal-tile" (click)="goToDetails()">
+        <div class="panel-left">
+            <img *ngIf="book.thumbnail; else noThumbnail" src="{{book.thumbnail}}"/>
+        </div>
+        <div class="flex-column panel-right">
+            <span class="book-title"><h3>{{book.title}}</h3></span>
+            <span class="author">{{book.authors ? book.authors[0] : ''}}</span>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #verticalTemplate>
+    <div *ngIf="book.id" class="flex-column vertical-tile" (click)="goToDetails()">
+        <div class="flex-column top-panel">
+            <img *ngIf="book.thumbnail; else noThumbnail" src="{{book.thumbnail}}"/>
+        </div>
+        <div class="flex-column bottom-panel">
+            <span class="book-title">{{book.title}}</span>
+            <span class="author">{{book.authors ? book.authors[0] : ''}}</span>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #noThumbnail>
+    <div class="no-thumbnail"></div>
+</ng-template>

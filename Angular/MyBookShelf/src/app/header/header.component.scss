@@ -1,0 +1,27 @@
+@import '../../styles.scss'; 
+
+.top-container {
+    padding: 1rem;    
+    align-items: center;
+    justify-content: space-between;
+
+    .header-action {
+        height: 1rem;
+        width: 1rem;
+    }
+}
+
+.header-container {
+    color: white;
+    vertical-align: top;
+    flex-direction: column;
+    justify-content: center;
+    background-color: $header-color;
+}
+
+.application-title {
+    font-family: 'Abril Fatface';
+    font-size: 1.2rem;
+}
+
+  
