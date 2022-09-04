@@ -39,7 +39,6 @@ import { MultiChoiceDialogComponent } from './multi-choice-dialog/multi-choice-d
 import { HeaderComponent } from './header/header.component';
 import { LastSessionsComponent } from './exercises-picker/partials/last-sessions/last-sessions.component';
 import { ManageWorkoutToProgramDialogComponent } from './workout-picker/partials/manage-workout-to-program-dialog/manage-workout-to-program-dialog.component';
-import { FlipComponent } from './flip/flip.component';
 import { CollapseMenuComponent } from './collapse-menu/collapse-menu.component';
 import { TextFieldModule } from '@angular/cdk/text-field';
 
@@ -57,7 +56,6 @@ import { TextFieldModule } from '@angular/cdk/text-field';
     MultiChoiceDialogComponent,
     HeaderComponent,
     ManageWorkoutToProgramDialogComponent,
-    FlipComponent,
     CollapseMenuComponent,
   ],
   imports: [

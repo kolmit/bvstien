@@ -5,7 +5,6 @@ import { LoginComponent } from './auth/login/login.component';
 import { WorkoutPickerComponent } from './workout-picker/workout-picker.component';
 import { AuthGuard } from './auth/auth.guard';
 import { ConfigurationComponent } from './configuration/configuration.component';
-import { FlipComponent } from './flip/flip.component';
 
 
 const routes: Routes = [
@@ -13,7 +12,6 @@ const routes: Routes = [
   { path: 'exercises', component: ExercisePickerComponent, canActivate: [AuthGuard]  },
   { path: 'configure', component: ConfigurationComponent, canActivate: [AuthGuard]  },
   { path: 'login', component: LoginComponent },
-  { path: 'flip', component: FlipComponent },
   { path: '**', redirectTo: 'login' }
 ];
 
