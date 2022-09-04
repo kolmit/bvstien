@@ -85,4 +85,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-dialog-container {
     background-color: $background-dialog;
     border: 1px solid white;
+    background: radial-gradient(circle at center, black, #0e1e2c);
+}
+
+main {
+    height: 100%;
+    background: radial-gradient(#97d6ff70, transparent);
 }

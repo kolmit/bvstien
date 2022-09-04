@@ -7,9 +7,6 @@
 
     <!-- Onglet d'ajout -->
     <ng-container *ngIf="this.addWorkoutTabActive">
-        <span>{{this.question}}</span>
-        <hr class="separator" style="margin-bottom: 1rem;">
-            
         <div *ngIf="this.inputRequested" class="flex-column">
             <mat-form-field floatLabel="Séance">
                 <input matInput [(ngModel)]="inputValue" placeholder="{{this.question}}">
@@ -26,7 +23,7 @@
                     </div>
                 </div>                
             </div>
-            <button mat-raised-button [disabled]="!inputValue" (click)="submitChoice(true)">Ajouter</button>
+            <button mat-raised-button [disabled]="!inputValue" (click)="submitChoice(true)">Ajouter au programme</button>
         </div>
     
         <div *ngIf="this.choices" class="flex-column choice-buttons">
@@ -35,7 +32,7 @@
     </ng-container>
 
     <!-- Onglet de suppression -->
-    <ng-container *ngIf="!this.addWorkoutTabActive && this.programIndex >= 0">            
+    <ng-container *ngIf="!this.addWorkoutTabActive && this.programId">            
         <div *ngIf="this.inputRequested" class="flex-column">
             <div class="manageable-workouts">
                 <div class="flex-row workouts">

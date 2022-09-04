@@ -1,6 +1,7 @@
 import { Component, Inject, Input, OnInit, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Subscription, BehaviorSubject, forkJoin } from 'rxjs';
+import { Subscription, BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { first, take } from 'rxjs/operators';
 import { Program } from 'src/app/model/program.model';
 import { Workout } from 'src/app/model/workout.model';
 import { ProgramService } from 'src/app/services/program.service';
@@ -14,7 +15,8 @@ import { MultiChoiceDialogComponent } from '../../../multi-choice-dialog/multi-c
 })
 export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComponent implements OnInit {
   addWorkoutTabActive: boolean = true;
-  programIndex: number;
+  programId: string;
+  currentProgram: Program;
 
   allWorkoutsList: Workout[] = [];
   allProgramList: Program[] = [];
@@ -24,59 +26,53 @@ export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComp
   @Output() selectedWorkoutName: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   @Input() inputWorkoutNameValue: string;
 
-  @Input() programIndexForDeleteAction: number;
-
   addableWorkoutsName: string[] = [];
   deletableWorkoutsName: string[] = [];
 
   constructor(private workoutService: WorkoutService,
     private programService: ProgramService, 
     public dialogRef: MatDialogRef<ManageWorkoutToProgramDialogComponent>, 
-    @Inject(MAT_DIALOG_DATA) public data: {question: string, choices?: string[], inputRequested?: boolean, programIndex: number}) 
+    @Inject(MAT_DIALOG_DATA) public data: {question: string, choices?: string[], inputRequested?: boolean, programId: string}) 
   {
     super(dialogRef, data);
 
     this.allWorkoutsList = this.workoutService.getConfiguredWorkoutList;
     this.allProgramList = this.programService.getConfiguredPrograms;
-    this.programIndex = data.programIndex;
+    this.programId = data.programId;
   }
 
   ngOnInit(): void {
-    this.workoutService.fetchAllWorkouts().subscribe(wkts => {
-      this.allWorkoutsList = wkts;
+    let obs: Observable<any>[] = [this.workoutService.fetchAllWorkouts().pipe(first()), this.programService.fetchAllPrograms().pipe(first())];
+
+    forkJoin(obs)
+    .subscribe( ([w, p])  => {
+      this.allWorkoutsList = w;
+      this.allProgramList = p;
+      this.currentProgram = this.allProgramList.find(p => p.id === this.programId);
       this.getAddabledWorkouts();
       this.getDeletabledWorkouts();
-    });
-    this.programService.fetchAllPrograms().subscribe(pgrms => {
-      this.allProgramList = pgrms;
-      
-      this.getDeletabledWorkouts();
-      this.getAddabledWorkouts();
     });
   }
 
   addWorkoutTab(b: boolean) {
     this.addWorkoutTabActive = b;
   }
-
   
   getAddabledWorkouts() {
-    let workoutAlreadyInProgram: string[] = [];
-    workoutAlreadyInProgram = this.allProgramList[this.programIndex].workoutNames
+    let workoutAlreadyInProgram: string[] = this.currentProgram.workoutNames;
     this.addableWorkoutsName = this.allWorkoutsList.filter(w => !workoutAlreadyInProgram.some(workoutNameInProgram => w.name?.toUpperCase() === workoutNameInProgram.toUpperCase()))
                                                 .map(w => w.name);
     return this.addableWorkoutsName;
   }
 
-  
   getDeletabledWorkouts() {
-    this.deletableWorkoutsName = this.allProgramList[this.programIndex].workoutNames;
+    this.deletableWorkoutsName = this.currentProgram.workoutNames;
     return this.deletableWorkoutsName;
   }
 
   selectWorkout(workoutName: string) {
     // Si on clique sur un muscle sur lequel on a déjà cliqué, c'est qu'on le désélectionne.
-    if (this.selectedWorkoutName.getValue() === workoutName) { 
+    if (this.isWorkoutStillSelected(workoutName)) { 
       this.selectedWorkoutName.next(null);
     } else {
       this.selectedWorkoutName.next(workoutName);
@@ -90,16 +86,23 @@ export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComp
    * on vérifie que le nom du muscle sélectionné ET la valeur de l'input soit égales.
    */
   isWorkoutStillSelected(workoutName: string) {
-    return this.selectedWorkoutName.getValue() 
-        && this.inputValue 
+    const stillSelected = this.selectedWorkoutName.getValue() 
+        && this.inputValue
+        && this.inputValue === this.selectedWorkoutName.getValue()
         && this.selectedWorkoutName.getValue() === workoutName;
+
+    return stillSelected;
   }
 
   submitChoice(actionAdd: boolean) {
     const data = {
       actionAdd: actionAdd,
-      workoutName: this.selectedWorkoutName.getValue()
+      workoutName: this.inputValue
     };
     super.choiceSelected(data);
+  }
+
+  getProgramName() {
+    return this.currentProgram.programName;
   }
 }

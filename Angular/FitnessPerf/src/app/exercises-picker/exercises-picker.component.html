@@ -25,7 +25,7 @@
             <div (click)="switchSession(1)" (disabled)="isSessionIndexExisting(1)" [style.opacity]="isSessionIndexExisting(1) ? 1 : 0.2"> &#10095; </div>
         </div>
     <div *ngIf="this.allSessions[this.currentSessionIndex]">
-        <form [formGroup]="workoutForm">
+        <form [formGroup]="workoutForm" class="exercises-container flex-column">
 
             <div formArrayName="exercisesForms">
                 <!-- NgFor sur les exercices : -->
@@ -71,8 +71,16 @@
                 </div>
             </div>
         </form>
+        <textarea
+            class="session-commentary" 
+            placeholder="Commentaire sur la séance" 
+            cols="30" rows="3" 
+            [(ngModel)]="sessionCommentary" 
+            (ngModelChange)="textaeraChanged($event)">
+        </textarea>
     </div>
 </mat-accordion>
+
 
 <div *ngIf="this.allSessions[this.currentSessionIndex]" class="flex-row">
     <button mat-mini-fab class="add-button" (click)="addExercise()">+</button>

@@ -1,90 +1,87 @@
 @import '../../styles.scss';
 
 .workouts {
-    flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin: 1rem 0 0 0;
 
-    .workout {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        min-width: 15vh;
-        min-height: 15vh;
-
-        color: whitesmoke;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-
-        margin: 1rem;
-        border-radius: 5px;
-        background: linear-gradient(
-            to right bottom,
-            rgba(46, 30, 88, 0.7),
-            rgba(100, 62, 204, 0.6),
-            rgba(165, 133, 252, 0.4)
-        );
-        border: 1px solid rgb(255 255 255 / 50%)
-    }
-
-    .workout:hover {
-        filter: brightness(120%);
-    }
-}
-
-.logout{
+  .workout {
     display: flex;
-    justify-content: space-around;
-    margin: 1rem;
-}
-
-.square {
-    position: relative;
-    left: 135px;
-    top: 75px;
-    width: 120px;
-    height: 120px;
-    background: #ff9900;
-    transform: rotate(45deg);
-  }
-
-  .square p {
     align-items: center;
     justify-content: center;
-
-    z-index: 1;
-    transform: rotate(-45deg);
+    width: 19vh;
+    height: 19vh;
+    color: whitesmoke;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 1px;
+    background: radial-gradient(#97d6ff70, transparent);
+    border: 1px solid rgb(255 255 255);
+    transition: transform 1s;
   }
-  
 
-  .workout-container {
+  .workout:active {
+    transform: rotateY(360deg);
+  }
+
+  .workout:hover {
+    filter: brightness(120%);
+  }
+}
+
+#tabGroup {
+  height: 100%;
+}
+
+.logout {
+  display: flex;
+  justify-content: space-around;
+  margin: 1rem;
+}
+
+.program-actions {
+
+  .delete-program {
+    color: $pink;
+    font-weight: 700;
+    margin: 0.5rem;
+
+    ::after ::content {
+      content: ' Suppr.';
+    }
+  }
+}
+
+
+.actions-deployed {
+  height: 100%;
+  background: red;
+}
+
+.actions-minimized {
+  height: 100%;
+  //animation: fadeInMenu 1s;
+  transition: heigth 0.5s;
+  background: blue;
+}
+
+.workout-container {
+  align-items: center;
+}
+
+.program-actions {
+  margin-top: 1vh;
+  justify-content: space-around;
+  align-items: unset;
+
+  .program-action {
+    display: flex;
+    justify-content: center;
     align-items: center;
+    height: 5vh;
+    width: 15vh;
+    margin: 0 0.5vh;
+    background-color: rgba(255, 255, 255, 0.25);
   }
+}
 
-  .add-program {
-  }
-  
-
-///////////////////////////////////////////
-
-
-  .inner-square {
-    position: absolute;
-  }
-  
-  #inner1 {
-   	left: 20px;
-    top: 20px;
-    width: 80px;
-    height: 80px;
-    background: #0e1e2c;
-  }
-  
-  #inner2 {
-    left: 45px;
-    top: 45px;
-    width: 30px;
-    height: 30px;
-    background: #01F7ff;
-	box-shadow: 0px 0px 50px 10px #00b7ff;
-  }

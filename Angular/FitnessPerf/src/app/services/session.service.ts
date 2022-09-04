@@ -36,6 +36,13 @@ export class SessionService extends BaseService {
       .delete();
   }
 
+  update(session: Session) {
+    this.getUserDataDocuments()
+      .collection(session.workout.name)
+      .doc(this.buildSessionDocumentName(session.timestamp))
+      .update(session);
+  }
+
   prefetchSessions(configuredWorkouts: any[]) {
     for (let workout of configuredWorkouts.map(w => w.name).slice(0, Constants.MAX_PREFETCH)) {
       this.fetchAllSessionByWorkout(workout)

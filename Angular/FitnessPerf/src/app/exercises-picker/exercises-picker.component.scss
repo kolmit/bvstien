@@ -43,6 +43,15 @@ mat-panel-title {
     align-items: center;
 }
 
+.exercises-container, .session-commentary {
+    padding: 0 5% 0 5%;
+    align-items: center;
+}
+
+div[formarrayname="exercisesForms"] {
+    width: 100%;
+}
+
 .exercise-set {
     justify-content: flex-start;
     
@@ -70,6 +79,14 @@ mat-panel-title {
 
 .delete-exo-button {
     opacity: 0.7;
+}
+
+.session-commentary {
+    width: 90%;
+    margin: 5% 5% 0% 5%;
+    color: white;
+    background: repeating-linear-gradient(45deg, #00000080, transparent 10px);
+    border-radius: 4px;
 }
 
 .add-session {
