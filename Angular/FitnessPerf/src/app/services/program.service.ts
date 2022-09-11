@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Program } from '../model/program.model';
 import { Constants } from '../utils/constants';
@@ -14,6 +14,7 @@ export class ProgramService extends BaseService {
   configuredPrograms: Program[] = [];
   allProgramsSubscription: Subscription;
   selectedProgramTab: any;
+  selectedProgramTabChanged: Subject<number> = new Subject();
 
   constructor(firestore: AngularFirestore, private snackbarService: SnackbarService) {
     super(firestore);
@@ -70,7 +71,8 @@ export class ProgramService extends BaseService {
             this.configuredPrograms = programsList.sort((pa, pb) => pa.programIndex - pb.programIndex);
 
             if (this.configuredPrograms.find(p => p.selectedProgram)?.programIndex >= 0) {
-              this.selectedProgramTab = this.configuredPrograms.find(p => p.selectedProgram)?.programIndex;
+              // programIndex+1 car l'onglet "+" est à index=0
+              this.setProgramSelected(this.configuredPrograms.find(p => p.selectedProgram)?.programIndex + 1);
             }
             return this.configuredPrograms;
           })
@@ -101,6 +103,7 @@ export class ProgramService extends BaseService {
 
   setProgramSelected(tabIndex: number) {
     this.selectedProgramTab = tabIndex;
+    this.selectedProgramTabChanged.next(this.selectedProgramTab);
   }
 
   /**

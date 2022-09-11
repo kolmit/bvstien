@@ -1,0 +1,48 @@
+.con {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 300vh;
+}
+
+.card {
+    width: 15vh;
+    height: 15vh;
+    border: 1px solid white;
+    animation: flipInX 3s ease both;
+    animation-delay: 0.4s;
+}
+
+@keyframes flipInX {
+    0% {
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        opacity: 0;
+        -webkit-transform:   rotateY(90deg);
+        transform:   rotateY(90deg);
+    }
+    40% {
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        -webkit-transform:   rotateY(-20deg);
+        transform:   rotateY(-20deg);
+    }
+    60% {
+        opacity: 1;
+        -webkit-transform:   rotateY(10deg);
+        transform:   rotateY(10deg);
+    }
+    80% {
+        -webkit-transform:   rotateY(-5deg);
+        transform:   rotateY(5deg);
+    }
+    100% {
+        opacity: 1;
+
+    }
+}
+
+.flip {
+    background-color: red;
+}

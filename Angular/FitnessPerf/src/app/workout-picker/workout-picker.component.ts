@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Program } from '../model/program.model';
@@ -41,10 +41,11 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
      });
     this.programsSubscription = this.programService.fetchAllPrograms().subscribe( (programs) => {
       this.programList = programs;
-      this.selectedProgramIndex = this.programService.selectedProgramTab >= 0 ? this.programService.selectedProgramTab : 0;
+      //this.selectedProgramIndex = this.programService.selectedProgramTab >= 0 ? this.programService.selectedProgramTab : 0;
     });
-  }
 
+    this.programService.selectedProgramTabChanged.subscribe(newProgramSelected => this.selectedProgramIndex = newProgramSelected);
+  }
 
   ngOnDestroy(): void {
     this.workoutList = [];

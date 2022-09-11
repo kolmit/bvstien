@@ -54,23 +54,30 @@ export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComp
     });
   }
 
-  addWorkoutTab(b: boolean) {
+  addWorkoutTab(b: boolean): void {
     this.addWorkoutTabActive = b;
+    this.resetSelection();
   }
   
-  getAddabledWorkouts() {
+  /** Liste les noms des workouts ajoutables */
+  getAddabledWorkouts(): string[] {
     let workoutAlreadyInProgram: string[] = this.currentProgram.workoutNames;
-    this.addableWorkoutsName = this.allWorkoutsList.filter(w => !workoutAlreadyInProgram.some(workoutNameInProgram => w.name?.toUpperCase() === workoutNameInProgram.toUpperCase()))
-                                                .map(w => w.name);
+    this.addableWorkoutsName = this.allWorkoutsList
+      .filter(w => 
+        !workoutAlreadyInProgram.some(workoutNameInProgram => w.name?.toUpperCase() === workoutNameInProgram.toUpperCase()
+        )
+      )
+      .map(w => w.name);
     return this.addableWorkoutsName;
   }
 
-  getDeletabledWorkouts() {
+  /** Liste les noms des workouts supprimables */
+  getDeletabledWorkouts(): string[] {
     this.deletableWorkoutsName = this.currentProgram.workoutNames;
     return this.deletableWorkoutsName;
   }
 
-  selectWorkout(workoutName: string) {
+  selectWorkout(workoutName: string): void {
     // Si on clique sur un muscle sur lequel on a déjà cliqué, c'est qu'on le désélectionne.
     if (this.isWorkoutStillSelected(workoutName)) { 
       this.selectedWorkoutName.next(null);
@@ -80,12 +87,17 @@ export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComp
     this.inputValue = this.selectedWorkoutName.getValue();
   }
 
+  resetSelection(): void {
+    this.selectedWorkoutName.next(null);
+    this.inputValue = this.selectedWorkoutName.getValue();
+  }
+
   /** 
    * Cas d'un ajout : L'utilisateur clique sur un muscle affiché -----> Le nom du muscle s'affiche dans l'<input/>
    * Si l'utilisateur modifie l'<input> (en tapant au clavier), pour faire en sorte que la classe change, 
    * on vérifie que le nom du muscle sélectionné ET la valeur de l'input soit égales.
    */
-  isWorkoutStillSelected(workoutName: string) {
+  isWorkoutStillSelected(workoutName: string): boolean {
     const stillSelected = this.selectedWorkoutName.getValue() 
         && this.inputValue
         && this.inputValue === this.selectedWorkoutName.getValue()
@@ -94,7 +106,7 @@ export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComp
     return stillSelected;
   }
 
-  submitChoice(actionAdd: boolean) {
+  submitChoice(actionAdd: boolean): void {
     const data = {
       actionAdd: actionAdd,
       workoutName: this.inputValue
@@ -102,7 +114,7 @@ export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComp
     super.choiceSelected(data);
   }
 
-  getProgramName() {
+  getProgramName(): string {
     return this.currentProgram.programName;
   }
 }

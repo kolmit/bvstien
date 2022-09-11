@@ -41,6 +41,7 @@ import { LastSessionsComponent } from './exercises-picker/partials/last-sessions
 import { ManageWorkoutToProgramDialogComponent } from './workout-picker/partials/manage-workout-to-program-dialog/manage-workout-to-program-dialog.component';
 import { CollapseMenuComponent } from './collapse-menu/collapse-menu.component';
 import { TextFieldModule } from '@angular/cdk/text-field';
+import { InputComponent } from './input-component/input-component.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { TextFieldModule } from '@angular/cdk/text-field';
     HeaderComponent,
     ManageWorkoutToProgramDialogComponent,
     CollapseMenuComponent,
+    InputComponent,
   ],
   imports: [
     MatTabsModule,

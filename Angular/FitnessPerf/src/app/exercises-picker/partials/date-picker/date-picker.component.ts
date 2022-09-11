@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
