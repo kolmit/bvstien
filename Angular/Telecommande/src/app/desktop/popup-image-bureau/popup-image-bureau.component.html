@@ -1,14 +1,19 @@
-<mat-dialog-content>
-     <div (click)="getClickPosition($event)" >
-          <img [src]="getDesktopBlobUrl()"
-          class="screenshot-bureau"
-          alt="Screenshot du bureau récupérée temps-réel">
-     </div>
-</mat-dialog-content>
+<div style="margin-bottom: 5em"> 
+     <mat-dialog-content>
+          <div (click)="getClickPosition($event)" >
+               <img [src]="getDesktopBlobUrl()"
+               class="screenshot-bureau"
+               alt="Screenshot du bureau récupérée temps-réel">
+          </div>
+     </mat-dialog-content>
+</div>
+<div class="menu-bar">
+     <button mat-mini-fab color="primary" class="menu-bar menu-input" (click)="toggleKeyboard()"></button>
 
-<mat-form-field class="keyboard-input" style="padding-top: 50px;">
-     <input matInput [(ngModel)]="keyboardInputValue">
-     <button mat-button *ngIf="keyboardInputValue" matSuffix mat-icon-button aria-label="Clear" (click)="keyboardInputValue=''">
-          x
-     </button>
-</mat-form-field>
+     <mat-form-field *ngIf="this.displayKeyboard" class="menu-bar keyboard-input" style="background-color: hsla(0, 0%, 100%, 0.384); border: black 1px solid;">
+          <input matInput [(ngModel)]="keyboardInputValue">
+          <button mat-button *ngIf="keyboardInputValue" matSuffix mat-icon-button aria-label="Clear" (click)="keyboardInputValue=''">
+               x
+          </button>
+     </mat-form-field>
+</div>

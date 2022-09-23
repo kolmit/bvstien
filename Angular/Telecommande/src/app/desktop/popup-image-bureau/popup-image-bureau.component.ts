@@ -14,7 +14,7 @@ export class PopupImageBureauComponent implements OnInit {
     private javaService: PopupToJavaService) { }
 
   blobData: any;
-  private imageObservableTimer: any;
+  displayKeyboard: boolean = false;
   keyboardInputValue: string = '';
   private myCaptureDevice: string = 'imageBureau'
 
@@ -25,6 +25,10 @@ export class PopupImageBureauComponent implements OnInit {
       this.javaService.typeKeyboardKey(event.key).subscribe((res) => {
       });
     }
+  }
+
+  toggleKeyboard() {
+    this.displayKeyboard = !this.displayKeyboard;
   }
 
   getDesktopBlobUrl() {

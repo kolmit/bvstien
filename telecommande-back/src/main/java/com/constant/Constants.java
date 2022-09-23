@@ -1,5 +1,9 @@
 package com.constant;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Constants {
 
     public static final String CMD_SHUTDOWN = "shutdown -s -f -t";
@@ -14,6 +18,10 @@ public class Constants {
     public static final String CMD_VOLUME_SET_DEVICE = "nircmd setdefaultsounddevice";
     public static final String CMD_VOLUME_MUTE = "nircmd mutesysvolume";
     public static final String CMD_VOLUME_CHANGE = "nircmd changesysvolume";
+
+    /* VOCAL */
+    public static final String SHUTDOWN_REGEX = "(.)*tein(.)*";
+    public static final List<String> REGEX_COMMANDS = new ArrayList<>(Arrays.asList(SHUTDOWN_REGEX));
 
 
     public static String getCommand(String... commandConstantAndParameter) {

@@ -29,7 +29,7 @@ public class CommandeController {
    	@GetMapping("/shutdown")
 	public Duration getCount() {
 		Duration dur = null;
-   		if (this.shutdownRequestHour != null) {
+   		if (this.shutdownRequestHour != null && this.shutdownIn != null) {
 			dur = Duration.between(LocalDateTime.now().withNano(0), this.shutdownRequestHour.plusSeconds(this.shutdownIn).withNano(0));
 		}
 		return dur;
@@ -37,8 +37,9 @@ public class CommandeController {
 
 	@PostMapping("/shutdown")
 	public Integer sendShutdown(@RequestBody ShutdownCommand shutdownCommand) {
+
    		String commandType = shutdownCommand.isShutdown() ? Constants.CMD_SHUTDOWN : Constants.CMD_STANDBY;
-		String commandToParse = Constants.getCommand(commandType, shutdownCommand.getTime().toString());
+		String commandToParse = Constants.getCommand(commandType, shutdownCommand.getTime() != null ? shutdownCommand.getTime().toString() : null);
 		List<String> commandToExecute = this.parser.parseString(commandToParse);
 
 		if (commandRunner.executeV2(commandToExecute)) {

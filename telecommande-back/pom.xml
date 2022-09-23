@@ -61,6 +61,25 @@
 
     <build>
         <plugins>
+            <!-- Pour faire en sorte que les ressources statiques du Front soient prises en compte. -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals><goal>copy-resources</goal></goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/classes/resources/</outputDirectory >
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/ressource/dist</directory >
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -77,6 +96,36 @@
 		        </archive>
 		      </configuration>
 		    </plugin>
+
+            <!-- Pour créer un exécutable -->
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>1.7.21</version>
+                <executions>
+                    <execution>
+                        <id>l4j-pampass</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>console</headerType>
+                            <jar>${project.build.directory}/${project.build.finalName}.${project.packaging}</jar>
+                            <outfile>${project.build.directory}/${project.build.finalName}.exe</outfile>
+                            <downloadUrl>http://java.com/download</downloadUrl>
+                            <classPath>
+                                <mainClass>org.springframework.boot.loader.JarLauncher</mainClass>
+                            </classPath>
+                            <jre>
+                                <path>${java.home}</path>
+                                <bundledJre64Bit>true</bundledJre64Bit>
+                                <runtimeBits>64</runtimeBits>
+                            </jre>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

@@ -1,4 +1,5 @@
 *.class
+node_modules/
 Angular/FitnessPerf/package-lock.json
 
 Angular/BookShelf/.angular/cache/14.0.0/angular-webpack/1f69d7ff3360fc8b9a4855b50fbd0a6df3f0d57c/0.pack

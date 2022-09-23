@@ -1,0 +1,23 @@
+.vocal-input {
+    height: 1; 
+    width: 1; 
+    opacity: 0;
+}
+
+.animation-valid-response {
+    animation-name: valid-response-from-back;
+    animation-duration: 2s;
+}
+@keyframes valid-response-from-back {
+    from {background-color: lawngreen;}
+    to {background-color: lightcyan;}
+}
+
+.animation-invalid-response {
+    animation-name: invalid-response-from-back;
+    animation-duration: 2s;
+}
+@keyframes invalid-response-from-back {
+    from {background-color: red;}
+    to {background-color: lightcyan;}
+}

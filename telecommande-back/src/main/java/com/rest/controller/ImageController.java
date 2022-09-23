@@ -61,9 +61,8 @@ public class ImageController {
 
 	
 	@PostMapping(value="/leftclick", consumes = "application/json")
-	public boolean sendLeftClick(@RequestBody Position body) {
+	public void sendLeftClick(@RequestBody Position body) {
 		commandRunner.doLeftClick(body.getxPosition(), body.getyPosition());
-		return false;
 	}
 
 	@GetMapping(value = "/imageWebcam", produces = MediaType.IMAGE_JPEG_VALUE)

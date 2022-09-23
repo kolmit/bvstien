@@ -10,7 +10,6 @@ import { environment } from 'src/environments/environment';
 export class PopupToJavaService {
 
   private shutdownUrl: string;
-  private shutdownUrl2: string;
   private shutdownCancelUrl: string;
   private volumeUrl: string;
   private muteUrl: string;
@@ -26,6 +25,7 @@ export class PopupToJavaService {
   private leftClick: string;
   private pressKeyboardKey: string;
   private switchSoundDeviceUrl: string;
+  private vocalCommandUrl: string;
 
   constructor(private http: HttpClient, private configService: ConfigService) {
     this.shutdownUrl = environment.BACKEND_URL + '/shutdown';
@@ -44,6 +44,7 @@ export class PopupToJavaService {
     this.switchMonitor = environment.BACKEND_URL + '/switchMonitor';
     this.leftClick = environment.BACKEND_URL + '/leftclick';
     this.pressKeyboardKey = environment.BACKEND_URL + '/pressKeyboardKey';
+    this.vocalCommandUrl = environment.BACKEND_URL + '/vocalCommand';
   }
 
   public manageShutdown(time: number, isShutdown: boolean): Observable<number> {
@@ -133,5 +134,9 @@ export class PopupToJavaService {
 
   typeKeyboardKey(key: string): Observable<string>  {
     return this.http.post<any>(this.pressKeyboardKey, key);
+  }
+
+  sendVocalCommand(cmd: string): Observable<boolean> {
+    return this.http.post<any>(this.vocalCommandUrl, cmd);
   }
 }
