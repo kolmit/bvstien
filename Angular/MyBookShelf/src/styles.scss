@@ -1,0 +1,30 @@
+$header-color: #5a61aa;
+//background: linear-gradient(#5a61aa 60%, #52589b);
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.disabled {
+    opacity: 0.5;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+html {
+    font-family: "Poppins", sans-serif;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

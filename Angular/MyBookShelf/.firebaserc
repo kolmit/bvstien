@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "bookproject-fa45d": {
+      "hosting": {
+        "MyBookShelf": [
+          "bookproject-fa45d"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "bookproject-fa45d"
+  }
+}
