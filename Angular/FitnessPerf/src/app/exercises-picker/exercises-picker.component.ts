@@ -16,7 +16,8 @@ import { ExercisePickerDialogComponent } from './partials/exercise-picker-dialog
 import { MultiChoiceDialogComponent } from '../multi-choice-dialog/multi-choice-dialog.component';
 import { Constants } from '../utils/constants';
 import { SessionService } from '../services/session.service';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 
 @Component({
@@ -36,6 +37,10 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
   workoutForm: FormGroup;
   sessionSubscription: Subscription;
 
+  textAeraSubscription: Subscription;
+  textaeraSubject: Subject<string> = new Subject<string>();
+  sessionCommentary: string;
+
   constructor(private route: ActivatedRoute, 
     private workoutService: WorkoutService,
     private sessionService: SessionService,
@@ -50,6 +55,20 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
       this.myWorkout = param.workout;
       this.getSessionHistory(this.myWorkout);
     });
+
+    this.textAeraSubscription = this.textaeraSubject
+      .pipe(
+        debounceTime(3000),
+      )
+      .subscribe(() => {
+        const currentSession: Session = this.allSessions[this.currentSessionIndex];
+        currentSession.commentary = this.sessionCommentary;
+        this.sessionService.update(currentSession);
+      });
+  }
+
+  textaeraChanged(e) {
+    this.textaeraSubject.next(e);
   }
 
   ngOnDestroy(): void {
@@ -113,6 +132,7 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
     });
   }
     
+
   /**
    * Sauvegarde les séances en mémoire (this.allSessions)
    * @param fetchedSessions 
@@ -186,20 +206,17 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
 
   addExercise() {
     this.dialog.open(ExercisePickerDialogComponent).afterClosed()
-      .subscribe(
-        ({
-          exerciseName: exerciseName, 
-          addExoToConfiguration: addExoToConfiguration
-        }) => {
-          if (exerciseName) {
-            let exo: Exercise = {name: exerciseName, sets: []}; 
-            this.allSessions[this.currentSessionIndex].workout.exercises.push(exo);
-            this.sessionService.save(this.allSessions[this.currentSessionIndex]);
+      .subscribe((res :{exerciseName: string, addExoToConfiguration: boolean}) => 
+      {
+        if (res?.exerciseName) {
+          let exo: Exercise = {name: res.exerciseName, sets: []}; 
+          this.allSessions[this.currentSessionIndex].workout.exercises.push(exo);
+          this.sessionService.save(this.allSessions[this.currentSessionIndex]);
 
-            if (addExoToConfiguration) {
-              this.workoutService.addUserExercise(this.myWorkout, exerciseName);
-            }
+          if (res.addExoToConfiguration) {
+            this.workoutService.addUserExercise(this.myWorkout, res.exerciseName);
           }
+        }
       });
   }
 
@@ -245,6 +262,7 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
   populateForms(seance: Session | any){
     this.initAllForms(seance.workout);
     this.fillFormControls(seance.workout);
+    this.sessionCommentary = seance.commentary;
   }
   
   /** 

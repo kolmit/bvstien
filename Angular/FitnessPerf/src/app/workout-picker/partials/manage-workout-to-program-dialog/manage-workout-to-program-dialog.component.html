@@ -1,0 +1,57 @@
+<div class="flex-column">
+    <div class="tabs-action flex-row">
+        <span class="action" [ngClass]="{'tab-not-active': !this.addWorkoutTabActive}" (click)="addWorkoutTab(true)">Ajouter</span>
+        <hr>
+        <span class="action" [ngClass]="{'tab-not-active': this.addWorkoutTabActive}" (click)="addWorkoutTab(false)">Supprimer</span>
+    </div>
+
+    <!-- Onglet d'ajout -->
+    <ng-container *ngIf="this.addWorkoutTabActive">
+        <div *ngIf="this.inputRequested" class="flex-column">
+            <mat-form-field floatLabel="Séance">
+                <input matInput [(ngModel)]="inputValue" placeholder="{{this.question}}">
+            </mat-form-field>
+            <div class="manageable-workouts">
+                <div class="flex-row workouts">
+                    <div class="workout" 
+                        *ngFor="let workoutName of this.addableWorkoutsName; let i = index" 
+                        [ngClass]="{'workout-selected': isWorkoutStillSelected(workoutName)}" 
+                        (click)="selectWorkout(workoutName)">
+                        <span>
+                            {{workoutName}}
+                        </span>
+                    </div>
+                </div>                
+            </div>
+            <button mat-raised-button [disabled]="!inputValue" (click)="submitChoice(true)">Ajouter au programme</button>
+        </div>
+    
+        <div *ngIf="this.choices" class="flex-column choice-buttons">
+            <button *ngFor="let choice of this.choices; let i = index" [ngStyle]="{'background-color': this.colors[i]}" mat-raised-button (click)="choiceSelected(choice)">{{choice}}</button>
+        </div>
+    </ng-container>
+
+    <!-- Onglet de suppression -->
+    <ng-container *ngIf="!this.addWorkoutTabActive && this.programId">            
+        <div *ngIf="this.inputRequested" class="flex-column">
+            <div class="manageable-workouts">
+                <div class="flex-row workouts">
+                    <div class="workout" 
+                        *ngFor="let workoutName of this.deletableWorkoutsName; let i = index" 
+                        [ngClass]="{'workout-selected': isWorkoutStillSelected(workoutName)}" 
+                        (click)="selectWorkout(workoutName)">
+                        <span>
+                            {{workoutName}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <button mat-raised-button [disabled]="!inputValue" (click)="submitChoice(false)">Supprimer du programme</button>
+        </div>
+    
+        <div *ngIf="this.choices" class="flex-column choice-buttons">
+            <button *ngFor="let choice of this.choices; let i = index" [ngStyle]="{'background-color': this.colors[i]}" mat-raised-button (click)="choiceSelected(choice)">{{choice}}</button>
+        </div>
+    </ng-container>
+
+</div>

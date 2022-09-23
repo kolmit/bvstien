@@ -38,6 +38,10 @@ import { ConfigurationComponent } from './configuration/configuration.component'
 import { MultiChoiceDialogComponent } from './multi-choice-dialog/multi-choice-dialog.component';
 import { HeaderComponent } from './header/header.component';
 import { LastSessionsComponent } from './exercises-picker/partials/last-sessions/last-sessions.component';
+import { ManageWorkoutToProgramDialogComponent } from './workout-picker/partials/manage-workout-to-program-dialog/manage-workout-to-program-dialog.component';
+import { CollapseMenuComponent } from './collapse-menu/collapse-menu.component';
+import { TextFieldModule } from '@angular/cdk/text-field';
+import { InputComponent } from './input-component/input-component.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +55,10 @@ import { LastSessionsComponent } from './exercises-picker/partials/last-sessions
     ExercisePickerDialogComponent,
     ConfigurationComponent,
     MultiChoiceDialogComponent,
-    HeaderComponent
+    HeaderComponent,
+    ManageWorkoutToProgramDialogComponent,
+    CollapseMenuComponent,
+    InputComponent,
   ],
   imports: [
     MatTabsModule,
@@ -64,6 +71,7 @@ import { LastSessionsComponent } from './exercises-picker/partials/last-sessions
     MatSnackBarModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    TextFieldModule,
     BrowserModule,
     FormsModule, 
     ReactiveFormsModule,

@@ -1,0 +1,57 @@
+$primary: #67d4ff;
+$secondary: #ff9900;
+$white: #fff;
+$gray: #9b9b9b;
+.input-container {
+  position: relative;
+  padding: 15px 0 0;
+}
+
+.input {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid $gray;
+  outline: 0;
+  color: $white;
+  padding: 0.5vh 0.5vh;
+  margin: 0.5vh 0 1vh 0;
+  background: transparent;
+  transition: border-color 0.2s;
+  border-radius: 2px;
+
+  &::placeholder {
+    color: transparent;
+  }
+
+  &:placeholder-shown ~ .custominput-label {
+    cursor: text;
+    top: 0px;
+  }
+}
+
+.custominput-label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  color: $gray;
+}
+
+.input:focus {
+  ~ .custominput-label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    color: $secondary;
+  }
+  border-width: 2px;
+  border-color: $secondary;
+  border-image-slice: 1;
+}
+
+/* reset input */
+.input{
+  &:required,&:invalid { box-shadow:none; }
+}

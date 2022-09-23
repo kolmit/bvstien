@@ -2,15 +2,14 @@ import { formatDate } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentData, QuerySnapshot } from '@angular/fire/firestore';
 import { forkJoin, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Session } from '../model/session.model';
 import { Constants } from '../utils/constants';
 import { saveAs } from 'file-saver/src/FileSaver'; 
 
 import * as imported from '../../assets/exampleImportData.json';
 import { SnackbarService } from './snackbar.service';
-import { WorkoutService } from './workout.service';
 import { BaseService } from './base.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +17,7 @@ import { BaseService } from './base.service';
 export class StorageService extends BaseService {
 
   importedWorkouts: any[] = (imported as any).default;
+  IMPORT_DESTINATION_COLLECTION = environment.USER_DATA;
 
   constructor(firestore: AngularFirestore,
     private snackbarService: SnackbarService) {
@@ -33,7 +33,6 @@ export class StorageService extends BaseService {
     } catch(err) {
       this.snackbarService.openSnackBar('Création du répertoire racine', err);
     }
-    
   }
 
   /** Méthode doublon de save(Session).
@@ -43,7 +42,7 @@ export class StorageService extends BaseService {
    **/
   saveImportedSession(session: Session): Promise<void> {
     return this.firestore
-      .collection('Import')
+      .collection(this.IMPORT_DESTINATION_COLLECTION)
       .doc(localStorage.getItem('login'))
       .collection(session.workout.name)
       .doc(this.buildSessionDocumentName(session.timestamp))

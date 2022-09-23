@@ -22,6 +22,7 @@ $blue-ligher: #67d4ff;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    caret-color: $text;
 }
 
 html {
@@ -77,6 +78,19 @@ html {
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+main {
+    height: 100%;
+    background: radial-gradient(#97d6ff70, transparent);
+}
+
+
+/**************************************
+********** OVERRIDE MATERIAL **********
+***************************************/
+
+.input-label {
+    color: $orange;
+}
 
 .mat-flat-button, .mat-raised-button, .mat-fab {
     background-color: $button
@@ -85,4 +99,42 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-dialog-container {
     background-color: $background-dialog;
     border: 1px solid white;
+    background: radial-gradient(circle at center, black, #0e1e2c);
 }
+
+// DATEPICKER
+.mat-datepicker-toggle-active .mat-button-wrapper {
+    svg {
+        fill: $orange;
+    }
+}
+.mat-calendar-body-selected {
+    background-color: $orange;
+    color: #fff;
+}
+.mat-form-field {
+    &.mat-focused {
+        .mat-form-field-label {
+        color: $orange;
+        }
+        .mat-form-field-ripple {
+        background-color: $orange;
+        }
+    }
+}
+
+// INPUT DE L'EXERCISE PICKER (Repetition/Charge)
+:host {
+    ::ng-deep {
+      .mat-form-field {
+        &.mat-focused {
+          .mat-form-field-label {
+            color: $orange;
+          }
+          .mat-form-field-ripple {
+            background-color: $orange;
+          }
+        }
+      }
+    }
+  }

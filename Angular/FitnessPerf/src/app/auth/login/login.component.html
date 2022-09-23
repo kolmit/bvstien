@@ -6,12 +6,16 @@
     <h2>Se connecter</h2>
     <form class="flex-column" #loginForm='ngForm' (ngSubmit)='onLogin(loginForm)'>
       
-      <mat-form-field>
-        <input matInput type="text" placeholder="Adresse mail" [(ngModel)]="email" name="email" class="input-txt" required>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="password" placeholder="Mot de passe" (ngModel)="password" name="password" class="input-txt" required>
-      </mat-form-field>
+      <app-input-component 
+        [(ngModel)]="email" 
+        name="email"
+        inputType="text"
+        placeholder="Adresse mail"></app-input-component>
+      <app-input-component 
+        [(ngModel)]="password" 
+        name="password"
+        inputType="password"
+        placeholder="Mot de passe"></app-input-component>
       <button type="submit" [disabled]="!loginForm.valid" class="auth-btn">Se connecter</button>
     </form>
   </div>
@@ -22,12 +26,16 @@
   <div class="flex-column signup-container">
     <h2>Créer un compte</h2>
     <form  class="flex-column" #signupForm='ngForm' (ngSubmit)="onSignup(signupForm)">
-      <mat-form-field>
-        <input matInput type="text" placeholder="Adresse mail" (ngModel)="emailToCreate" name="emailToCreate" class="input-txt" required>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="password" placeholder="Mot de passe" (ngModel)="passwordToCreate" name="passwordToCreate" class="input-txt" required>
-      </mat-form-field>
+      <app-input-component 
+        [(ngModel)]="emailToCreate" 
+        name="emailToCreate"
+        inputType="text"
+        placeholder="Adresse mail"></app-input-component>
+      <app-input-component 
+        [(ngModel)]="passwordToCreate" 
+        name="passwordToCreate"
+        inputType="password"
+        placeholder="Mot de passe"></app-input-component>
       <button type="submit" [disabled]="!signupForm.valid" class="auth-btn">Créer un compte</button>
     </form>
   </div>

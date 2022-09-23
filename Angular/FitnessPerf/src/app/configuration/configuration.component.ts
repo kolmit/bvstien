@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Session } from '../model/session.model';
 import { SnackbarService } from '../services/snackbar.service';
 import { StorageService } from '../services/storage.service';
+import { WorkoutService } from '../services/workout.service';
 
 @Component({
   selector: 'app-configuration',
@@ -13,12 +14,12 @@ export class ConfigurationComponent {
   profilEmail: string = localStorage.getItem('login');
 
   constructor(private storageService: StorageService,
+    private workoutService: WorkoutService,
     private snackbarService: SnackbarService) { }
 
   exportSessions() {
     this.storageService.fetchUserDataAndExport();
   }
-
   
   importSessions(files: FileList) {
     if (!files) return;
@@ -30,13 +31,22 @@ export class ConfigurationComponent {
       let parsed = JSON.parse(fileReader.result.toString());
       let lineIndex = 0;
       let successfulImport = 0;
+      let lastWorkoutName;
+
 
       for (let line of parsed) {
         lineIndex++;
-        let lineData = line[ Object.keys(line)[0] ];
+        let workoutName = Object.keys(line)[0];
+        let sessionData = line[workoutName];
 
-        if (this.isMyJsonCorrect(lineData)) {
-          let session: Session = { timestamp: lineData.timestamp, workout: lineData.workout, totalLifted: lineData.totalLifted };
+        if (this.isMyJsonCorrect(sessionData)) {
+          let session: Session = { 
+            timestamp: sessionData.timestamp, 
+            workout: sessionData.workout, 
+            totalLifted: sessionData.totalLifted ? sessionData.totalLifted : 0,
+            commentary: sessionData.commentary
+          };
+          lastWorkoutName = this.shallAddToExerciseList(lastWorkoutName, session); // TODO : Exporter l'EXERCISE_LIST plutôt que de la compléter comme ça..
           this.storageService.saveImportedSession(session)
           .then(() => {
             successfulImport++;
@@ -53,6 +63,17 @@ export class ConfigurationComponent {
         }
       }
     }
+  }
+
+  /**
+   * Met à jour la liste des "userExercises"
+   */
+  shallAddToExerciseList(lastWorkoutName: string, session: Session) {
+    /** On compare avec l'ancien muscle ajouté, pour ne pas venir écrire en base systématiquement */
+    if (lastWorkoutName && session.workout.name != lastWorkoutName) {
+      this.workoutService.updateUserExercises(session.workout.name, session.workout.exercises.map(e => e.name))
+    }
+    return session.workout.name;
   }
 
 

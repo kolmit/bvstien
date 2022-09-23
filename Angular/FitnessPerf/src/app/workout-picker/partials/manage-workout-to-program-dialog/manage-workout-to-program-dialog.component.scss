@@ -1,0 +1,47 @@
+@import '../../../multi-choice-dialog/multi-choice-dialog.component.scss';
+@import '../../workout-picker.component.scss';
+
+.manageable-workouts {
+    min-height: 50vh;
+    max-height: 75vh;
+}
+
+.program-name {
+    margin: 1rem;
+}
+
+.workouts {
+    .workout {
+        min-width: 11vh;
+        min-height: 11vh;
+        max-height: 11vh;
+        max-width: 11vh;
+        background: radial-gradient(#97d6ff70, transparent);
+        margin: 1rem;
+
+        span {
+            font-size: 0.75rem;
+        }
+    }
+}
+
+.workout-selected {
+    opacity: 0.5;
+}
+
+.tabs-action {
+    justify-content: space-around;
+    margin: -24px -24px 24px;
+
+    .action {
+        display: flex;
+        justify-content: center;
+        width: 50vh;
+        padding: 0.5rem;
+    }
+    
+    .tab-not-active {
+        background: #3a3d46;
+        background: linear-gradient(0, $background, 5%, #3a3d46);
+    }
+}
