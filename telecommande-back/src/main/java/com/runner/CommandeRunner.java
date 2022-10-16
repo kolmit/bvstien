@@ -1,9 +1,9 @@
 package com.runner;
 
-import java.awt.AWTException;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.InputEvent;
@@ -15,10 +15,6 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.stereotype.Service;
 
 @Service
 public class CommandeRunner {
@@ -37,7 +33,7 @@ public class CommandeRunner {
 	}
 
 
-	public boolean executeV2(List<String> cmdArgs) {
+	public boolean execute(List<String> cmdArgs) {
 		try {
 			ProcessBuilder pb = new ProcessBuilder(cmdArgs);
 			pb.redirectErrorStream(true);
@@ -53,7 +49,7 @@ public class CommandeRunner {
 
 
 	/**
-	 * pour CTRL + SHIFT + A, on fait :
+	 * Ex: pour CTRL + SHIFT + A, on fait :
 	 * 
 	 * this.robot.keyPress(keyEvent.get(0));
 				this.robot.keyPress(keyEvent.get(1));
@@ -79,8 +75,7 @@ public class CommandeRunner {
 		}
 		return true;
 	}
-	
-	
+
 	public boolean closeChromeTab() {
 		try {		
 			this.pressCombination(Arrays.asList(KeyEvent.VK_CONTROL, KeyEvent.VK_W));
@@ -89,8 +84,6 @@ public class CommandeRunner {
 		}
 		return true;
 	}
-	
-
 
 	public void runFullScreenBfm() {
 		try {
@@ -104,13 +97,10 @@ public class CommandeRunner {
 			
 			Thread.sleep(500);
 			
-			
 			this.pressCombination(Arrays.asList(KeyEvent.VK_CONTROL, KeyEvent.VK_V));
-	
 			
 			Thread.sleep(500);
-			
-			
+
 			this.robot.keyPress(KeyEvent.VK_ENTER);		
 			this.robot.keyRelease(KeyEvent.VK_ENTER);
 			
@@ -122,7 +112,6 @@ public class CommandeRunner {
 			e.printStackTrace();
 		}
 	}
-
 
 	public void doLeftClick(int x, int y) {
 		this.robot.mouseMove(x, y);

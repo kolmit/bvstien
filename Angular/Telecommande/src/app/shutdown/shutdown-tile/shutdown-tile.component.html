@@ -1,7 +1,7 @@
 <div *ngIf="stateService.getShutdownActive()" class="tuile_1x1" style="background-color: lightcoral" (click)="openShutdown()">
-    <h2>
+    <h4>
         {{stateService.getHourBeforeShutdown()}}h{{stateService.getMinuteBeforeShutdown()}}:{{stateService.getSecondBeforeShutdown()}}
-    </h2>
+    </h4>
 </div>
 <div *ngIf="!stateService.getShutdownActive()" class="tuile_1x1 material-icons" style="background-color: lightcoral" (click)="openShutdown()">
     <h1>power_settings_new</h1>

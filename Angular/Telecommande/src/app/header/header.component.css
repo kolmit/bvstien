@@ -3,6 +3,8 @@
     font-weight: 100;
     text-align: center;
     color: white;  
+    background: linear-gradient(180deg, #000000c4, transparent);
+    padding: 20px 0 20px 0;
   }
 
   .animate__slideOutRight{

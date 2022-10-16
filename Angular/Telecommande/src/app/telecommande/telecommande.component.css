@@ -2,13 +2,16 @@
   flex-wrap: wrap;
   user-select: none;
   user-zoom: none;
+  padding: 0 1vh 0 1vh;
 }
+
+
 
 .tuile_1x1{
   border-radius: 17px 17px 17px 17px;
   margin: 0.5px;
-  height: 33vw;
-  width: 33vw;
+  height: 33%;
+  width: 33%;
   max-height: 100px;
   display: inline-flex;
   align-items: center;
@@ -17,18 +20,8 @@
 
 .tuile_2x1{
   border-radius: 17px 17px 17px 17px;
-  height: 33vw;
-  width: 66vw;
-  max-height: 100px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.tuile_3x1{
-  border-radius: 17px 17px 17px 17px;
-  height: 33vw;
-  width: 100vw;
+  height: 33%;
+  width: 66%;
   max-height: 100px;
   display: inline-flex;
   align-items: center;
