@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class SiriController {
 
     @Autowired
-    SiriService siriService;
+    private SiriService siriService;
 
     @GetMapping("/siri/shutdown/now")
     public Integer sendShutdown() {
-        ShutdownCommand shutdownCommand = new ShutdownCommand(true, 0);
+        ShutdownCommand shutdownCommand = new ShutdownCommand(true, 3600);
         return this.siriService.sendShutdown(shutdownCommand);
     }
 

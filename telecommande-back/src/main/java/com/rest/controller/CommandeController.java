@@ -12,7 +12,7 @@ import java.time.Duration;
 public class CommandeController {
 
    	@Autowired
-	CommandeService commandeService;
+	private CommandeService commandeService;
    	
 
    	@GetMapping("/shutdown")
