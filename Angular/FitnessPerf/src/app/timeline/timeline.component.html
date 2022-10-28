@@ -1,0 +1,14 @@
+<div class="flex-column timeline-container">
+    <div class="timeline">
+        <div class="day-container" *ngFor="let day of timelineDays" [ngClass]="{'has-session': day.session}">
+            <div class="day-span-container flex-column">
+                <span>{{weekdays[day.date.getDay()]}}</span>
+                <span>{{day.date.getDate()}}</span>
+            </div>
+        </div>
+        <img class="day-container calendar" src="assets/svg/calendar.svg"/>
+    </div>
+    <div *ngIf="nextSessionSuggestion">
+        Prochaine séance: {{ this.nextSessionSuggestion }}
+    </div>
+</div>

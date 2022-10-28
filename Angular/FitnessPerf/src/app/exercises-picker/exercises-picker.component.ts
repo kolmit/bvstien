@@ -119,7 +119,7 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
 
 
   getSessionHistory(myWorkout: string) {
-    let sessionsFromService = this.sessionService.getSessionsInMemory(myWorkout);
+    let sessionsFromService = this.sessionService.getSessionsByWorkout(myWorkout);
 
     // Si les séances ont déjà été récupérées par le service
     if (sessionsFromService !== undefined) { 

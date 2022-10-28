@@ -3,8 +3,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Program } from '../model/program.model';
+import { Session } from '../model/session.model';
 import { Constants } from '../utils/constants';
 import { BaseService } from './base.service';
+import { SessionService } from './session.service';
 import { SnackbarService } from './snackbar.service';
 
 @Injectable({
@@ -16,7 +18,11 @@ export class ProgramService extends BaseService {
   selectedProgramTab: any;
   selectedProgramTabChanged: Subject<number> = new Subject();
 
-  constructor(firestore: AngularFirestore, private snackbarService: SnackbarService) {
+  constructor(
+    firestore: AngularFirestore, 
+    private snackbarService: SnackbarService,
+    private sessionService: SessionService) 
+  {
     super(firestore);
     if (localStorage.getItem('login') !== null) {
       this.fetchAllPrograms();
@@ -53,6 +59,14 @@ export class ProgramService extends BaseService {
         .collection(Constants.USER_PROGRAMS)
         .doc(program.id)
         .delete();
+  }
+
+  getSessionsByProgram(program: Program): Map<string, Session[]> {
+    let programSessionsMap: Map<string, Session[]> = new Map();
+    for (let workoutName of program.workoutNames) {
+      programSessionsMap.set(workoutName, this.sessionService.getSessionsByWorkout(workoutName));
+    }
+    return programSessionsMap;
   }
 
   fetchAllPrograms(): Observable<any> {

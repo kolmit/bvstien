@@ -1,5 +1,4 @@
 <app-header [parentModel]="model"></app-header>
-
 <mat-tab-group mat-align-tabs="center" 
     [selectedIndex]="selectedProgramIndex"
     (selectedTabChange)="selectedProgramChanged($event)" #tabGroup>
@@ -9,6 +8,9 @@
         </ng-template>
     </mat-tab>
     <mat-tab *ngFor='let program of programList; let i = index;' label="{{program.programName}}">
+        
+        <app-timeline [program]="program"></app-timeline>
+
         <div class="flex-column workout-container">
             <div class="flex-row workouts">
                 <div class="workout" *ngFor='let element of program.workoutNames' (click)="displayExercises(element)">

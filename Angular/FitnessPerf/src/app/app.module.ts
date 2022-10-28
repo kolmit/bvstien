@@ -42,6 +42,7 @@ import { ManageWorkoutToProgramDialogComponent } from './workout-picker/partials
 import { CollapseMenuComponent } from './collapse-menu/collapse-menu.component';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { InputComponent } from './input-component/input-component.component';
+import { TimelineComponent } from './timeline/timeline.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { InputComponent } from './input-component/input-component.component';
     ManageWorkoutToProgramDialogComponent,
     CollapseMenuComponent,
     InputComponent,
+    TimelineComponent,
   ],
   imports: [
     MatTabsModule,
