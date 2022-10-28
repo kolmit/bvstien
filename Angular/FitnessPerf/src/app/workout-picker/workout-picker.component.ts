@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Program } from '../model/program.model';
 import { MultiChoiceDialogComponent } from '../multi-choice-dialog/multi-choice-dialog.component';
 import { ProgramService } from '../services/program.service';
@@ -36,13 +37,17 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
     this.workoutList = this.workoutService.getConfiguredWorkoutList;
     this.programList = this.programService.getConfiguredPrograms;
 
-    this.workoutSubscription = this.workoutService.fetchAllWorkouts().subscribe( (workouts) => {
-      this.workoutList = workouts;
-     });
-    this.programsSubscription = this.programService.fetchAllPrograms().subscribe( (programs) => {
-      this.programList = programs;
-      //this.selectedProgramIndex = this.programService.selectedProgramTab >= 0 ? this.programService.selectedProgramTab : 0;
-    });
+    this.workoutSubscription = this.workoutService.fetchAllWorkouts()
+      .pipe(take(1))
+      .subscribe( (workouts) => {
+        this.workoutList = workouts;
+      });
+    this.programsSubscription = this.programService.fetchAllPrograms()
+      .pipe(take(1))
+      .subscribe( (programs) => {
+        this.programList = programs;
+        //this.selectedProgramIndex = this.programService.selectedProgramTab >= 0 ? this.programService.selectedProgramTab : 0;
+      });
 
     this.programService.selectedProgramTabChanged.subscribe(newProgramSelected => this.selectedProgramIndex = newProgramSelected);
   }

@@ -56,7 +56,7 @@ export class WorkoutService extends BaseService{
    /** Charge tous les muscles avec les noms des exercices configurés. */
   fetchAllWorkouts(): Observable<any> {
     return this.getUserDataDocuments()
-      .collection(Constants.USER_EXERCISES)
+      .collection(Constants.USER_EXERCISES) // TODO : Ne fetch que les exo du programme consulté.
       .valueChanges()
       .pipe( 
         map((allWorkoutElement) => {
@@ -72,8 +72,8 @@ export class WorkoutService extends BaseService{
           });
 
           // On charge d'avance les séances pour + de fluidité.
-          this.sessionService.prefetchSessions(this.configuredWorkoutList);
-
+          this.sessionService.prefetchAllSessions(this.configuredWorkoutList);
+          
           return this.configuredWorkoutList;
         })
       );
