@@ -9,11 +9,11 @@
     </mat-tab>
     <mat-tab *ngFor='let program of programList; let i = index;' label="{{program.programName}}">
         
-        <app-timeline [program]="program"></app-timeline>
+        <app-timeline [program]="program" (goToSession)="goToExerciseOnDateSession($event)"></app-timeline>
 
         <div class="flex-column workout-container">
             <div class="flex-row workouts">
-                <div class="workout" *ngFor='let element of program.workoutNames' (click)="displayExercises(element)">
+                <div class="workout" *ngFor='let element of program.workoutNames' (click)="goToExercise(element)">
                     <div>{{element}}</div>
                 </div>
             </div>

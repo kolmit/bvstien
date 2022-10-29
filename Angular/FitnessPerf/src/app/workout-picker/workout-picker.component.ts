@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
@@ -18,6 +18,7 @@ import { ManageWorkoutToProgramDialogComponent } from './partials/manage-workout
 })
 export class WorkoutPickerComponent implements OnInit, OnDestroy {
   model: string = 'WorkoutPickerComponent';
+
   workoutSubscription: Subscription;
   programsSubscription: Subscription;
 
@@ -38,12 +39,10 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
     this.programList = this.programService.getConfiguredPrograms;
 
     this.workoutSubscription = this.workoutService.fetchAllWorkouts()
-      .pipe(take(1))
       .subscribe( (workouts) => {
         this.workoutList = workouts;
       });
     this.programsSubscription = this.programService.fetchAllPrograms()
-      .pipe(take(1))
       .subscribe( (programs) => {
         this.programList = programs;
         //this.selectedProgramIndex = this.programService.selectedProgramTab >= 0 ? this.programService.selectedProgramTab : 0;
@@ -59,10 +58,16 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
   }
 
 
-  displayExercises(forThisWorkout) {
+  goToExercise(forThisWorkout: string) {
     this.router.navigate(['exercises'], {queryParams: {workout: forThisWorkout}});
   }
 
+  goToExerciseOnDateSession(event: {forThisWorkout: string, sessionDate: Date}) {
+    this.router.navigate(['exercises'], {queryParams: {
+      workout: event.forThisWorkout,
+      sessionDate: event.sessionDate
+    }});
+  }
 
   addOrDeleteWorkoutFromProgram(programId: string) {
     const dialogConfig = {

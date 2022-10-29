@@ -34,17 +34,15 @@ export class ProgramService extends BaseService {
   }
 
   saveProgram(exerciseList: string[], programName: string): Promise<void> {
-    let programToSave: Partial<Program> = {
-      programName: programName,
-      programIndex: this.configuredPrograms.length, 
-      workoutNames: exerciseList, 
-      selectedProgram: false
-    };
-
     return this.getUserDataDocuments()
         .collection(Constants.USER_PROGRAMS)
         .doc()
-        .set(programToSave);
+        .set({
+          programName: programName,
+          programIndex: this.configuredPrograms.length, 
+          workoutNames: exerciseList, 
+          selectedProgram: false
+        } as Partial<Program>);
   }
 
   updateProgram(programToUpdate: Partial<Program>) {
