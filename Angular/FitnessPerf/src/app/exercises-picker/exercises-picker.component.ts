@@ -54,16 +54,19 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe( param => {
       this.myWorkout = param.workout;
       this.getSessionHistory(this.myWorkout);
+
+      if (param.sessionDate) { // Si on vient d'une redirection du calendrier
+        this.goToSession(param.sessionDate);
+      }
     });
 
     this.textAeraSubscription = this.textaeraSubject
-      .pipe(
-        debounceTime(3000),
-      )
+      .pipe(debounceTime(1000))
       .subscribe(() => {
-        const currentSession: Session = this.allSessions[this.currentSessionIndex];
-        currentSession.commentary = this.sessionCommentary;
-        this.sessionService.update(currentSession);
+        this.sessionService.update({
+          ...this.allSessions[this.currentSessionIndex],
+          commentary: this.sessionCommentary
+        });
       });
   }
 
@@ -164,8 +167,7 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
             myWorkoutExercisesWithSets.push( {name: exo, sets: []} )
           }
         }
-        
-        
+      
         let workout: Workout = {name: this.myWorkout, exercises: myWorkoutExercisesWithSets};
         let session: Session = {timestamp: chosenDate, workout: workout, totalLifted: 0};
 
@@ -179,14 +181,27 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
       }
   }
 
+  goToSession(sessionDate: Date): void {
+    const indexOfSessionToGo = this.allSessions.findIndex(session => 
+      new Date(session.timestamp).getDate() === new Date(sessionDate).getDate() 
+      && new Date(session.timestamp).getMonth() === new Date(sessionDate).getMonth() 
+      && new Date(session.timestamp).getFullYear() === new Date(sessionDate).getFullYear()
+    );
+
+    if (indexOfSessionToGo >= 0) {
+      const indexDifferential = (this.currentSessionIndex - indexOfSessionToGo);
+      this.switchSession(-indexDifferential);
+    } else {
+      this.snackbarService.openSnackBar(`La séance du ${formatDate(sessionDate, "dd-MM-yyyy", "en")} n'existe pas.`, '❌');
+    }
+  }
 
   switchSession(addToIndex: number): void {
     const index = this.currentSessionIndex + addToIndex;
-
     if (this.allSessions[index] != undefined) {
       this.currentSessionIndex = index;
       this.populateForms(this.allSessions[index]);
-    }  
+    }
   }
 
 

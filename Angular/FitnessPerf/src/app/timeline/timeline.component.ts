@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Program } from '../model/program.model';
 import { Session } from '../model/session.model';
 import { ProgramService } from '../services/program.service';
@@ -14,10 +14,14 @@ export class TimelineComponent implements OnInit {
   @Input()
   program: Program;
 
+  @Output()
+  goToSession: EventEmitter<{forThisWorkout: string, sessionDate: Date}> = new EventEmitter();
+
   NB_PAST_DAYS = 40;
+  WEEKDAYS = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
+
   sessionsOfThisProgram: Map<string, Session[]> = new Map();
   timelineDays: TimelineDay[] = [];
-  weekdays = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
   nextSessionSuggestion: string;
   
   constructor(
@@ -28,7 +32,7 @@ export class TimelineComponent implements OnInit {
 
   ngOnInit(): void {
     this.generateLastDays();
-
+    
     this.sessionService.sessionMapSubject
       .subscribe(() => {
         // On cherche les jours pour lesquels on a des séances
@@ -41,10 +45,9 @@ export class TimelineComponent implements OnInit {
                 && day.date.getMonth() === new Date(session.timestamp).getMonth() 
                 && day.date.getFullYear() === new Date(session.timestamp).getFullYear()
               );
-    
+
               if (dayWithSession) dayWithSession.session = session;
             }
-
             this.nextSessionSuggestion = this.computeNextSessionSuggestion(this.sessionsOfThisProgram);
           }
         }
@@ -66,17 +69,25 @@ export class TimelineComponent implements OnInit {
   computeNextSessionSuggestion(sessionsOfThisProgram: Map<string, Session[]>): string {
     let mostRecentSessions: Session[] = [];
     for (let entry of sessionsOfThisProgram.entries()) {
-      const lastSessionForThisWorkout = Utils.sortSessionsByDate(entry[1])[entry[1].length - 1];
-      if (lastSessionForThisWorkout) {
-        mostRecentSessions.push(lastSessionForThisWorkout);
-      } else {
-        return entry[0]; // Si y'a pas de séance pour un muscle, il doit être suggéré
+      if (!entry[1]) { // Si y'a pas de séance pour un muscle, il doit être suggéré
+        return entry[0];
       }
+      const lastSessionForThisWorkout = Utils.sortSessionsByDate(entry[1])[entry[1].length - 1];
+      mostRecentSessions.push(lastSessionForThisWorkout);
     }
 
     // Sinon on va chercher le muscle qui a été travaille le plus anciennement
     mostRecentSessions = Utils.sortSessionsByDate(mostRecentSessions);
     return mostRecentSessions[0]?.workout.name;
+  }
+
+  emitGoToSession(day: TimelineDay) {
+    if (day.session) {
+      this.goToSession.emit({
+        forThisWorkout: day.session.workout.name,
+        sessionDate: day.date
+      });
+    }
   }
 }
 
