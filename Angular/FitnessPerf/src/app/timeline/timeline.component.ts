@@ -17,12 +17,15 @@ export class TimelineComponent implements OnInit {
   @Output()
   goToSession: EventEmitter<{forThisWorkout: string, sessionDate: Date}> = new EventEmitter();
 
-  NB_PAST_DAYS = 40;
+  @Output()
+  nextSessionSuggestion: EventEmitter<string> = new EventEmitter();
+
+  NB_PAST_DAYS = 32;
   WEEKDAYS = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
+  MONTHS = ["Jan","Fév","Mar","Mai","Jun","Jui","Aou","Sep","Oct","Nov","Déc"];
 
   sessionsOfThisProgram: Map<string, Session[]> = new Map();
   timelineDays: TimelineDay[] = [];
-  nextSessionSuggestion: string;
   
   constructor(
     private programService: ProgramService, 
@@ -32,7 +35,7 @@ export class TimelineComponent implements OnInit {
 
   ngOnInit(): void {
     this.generateLastDays();
-    
+
     this.sessionService.sessionMapSubject
       .subscribe(() => {
         // On cherche les jours pour lesquels on a des séances
@@ -48,7 +51,7 @@ export class TimelineComponent implements OnInit {
 
               if (dayWithSession) dayWithSession.session = session;
             }
-            this.nextSessionSuggestion = this.computeNextSessionSuggestion(this.sessionsOfThisProgram);
+            this.nextSessionSuggestion.emit(this.computeNextSessionSuggestion(this.sessionsOfThisProgram));
           }
         }
       });
@@ -57,12 +60,19 @@ export class TimelineComponent implements OnInit {
   generateLastDays() {
     for (let i = 0 ; i < this.NB_PAST_DAYS ; i++) {
       const pastDate: Date = new Date();
-      pastDate.setDate(new Date().getDate() - i)
-
+      pastDate.setDate(new Date().getDate() - i);
       this.timelineDays.push({
         date: pastDate,
         session: null
       });
+      // Les marqueurs de mois
+      if (pastDate.getDate() === 1) {
+        this.timelineDays.push({
+          date: pastDate,
+          session: null,
+          isMonthSeparator: true
+        });
+      }
     }
   }
 
@@ -75,7 +85,6 @@ export class TimelineComponent implements OnInit {
       const lastSessionForThisWorkout = Utils.sortSessionsByDate(entry[1])[entry[1].length - 1];
       mostRecentSessions.push(lastSessionForThisWorkout);
     }
-
     // Sinon on va chercher le muscle qui a été travaille le plus anciennement
     mostRecentSessions = Utils.sortSessionsByDate(mostRecentSessions);
     return mostRecentSessions[0]?.workout.name;
@@ -85,7 +94,7 @@ export class TimelineComponent implements OnInit {
     if (day.session) {
       this.goToSession.emit({
         forThisWorkout: day.session.workout.name,
-        sessionDate: day.date
+        sessionDate: day.date,
       });
     }
   }
@@ -93,5 +102,6 @@ export class TimelineComponent implements OnInit {
 
 class TimelineDay {
   date: Date;
-  session: Session
+  session: Session;
+  isMonthSeparator?: boolean = false;
 }

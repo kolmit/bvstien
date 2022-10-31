@@ -1,14 +1,19 @@
 <div class="flex-column timeline-container">
     <div class="timeline">
-        <div class="day-container" *ngFor="let day of timelineDays" [ngClass]="{'has-session': day.session}" (click)="emitGoToSession(day)">
-            <div class="day-span-container flex-column">
+        <div class="timeline-case" *ngFor="let day of timelineDays" (click)="emitGoToSession(day)" 
+            [ngClass]="{
+                'has-session': day.session, 
+                'day-container': !day.isMonthSeparator, 
+                'month-container': day.isMonthSeparator}">
+            
+            <div *ngIf="!day.isMonthSeparator; else monthSeparator" class="day-span-container flex-column">
                 <span>{{WEEKDAYS[day.date.getDay()]}}</span>
                 <span>{{day.date.getDate()}}</span>
             </div>
+            <ng-template #monthSeparator>
+                <span>{{MONTHS[day.date.getMonth()]}}</span>
+            </ng-template>
         </div>
         <img class="day-container calendar" src="assets/svg/calendar.svg"/>
-    </div>
-    <div *ngIf="nextSessionSuggestion">
-        Prochaine séance: {{ this.nextSessionSuggestion }}
     </div>
 </div>

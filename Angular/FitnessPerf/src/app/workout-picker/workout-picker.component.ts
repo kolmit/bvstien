@@ -1,9 +1,8 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { Program } from '../model/program.model';
 import { MultiChoiceDialogComponent } from '../multi-choice-dialog/multi-choice-dialog.component';
 import { ProgramService } from '../services/program.service';
@@ -25,6 +24,7 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
   workoutList: {name: string, exercises: string[]}[] = [];
   programList: Program[] = [];
   selectedProgramIndex: number;
+  nextSessionSuggestion: string = '';
 
   constructor(
     private router: Router,
@@ -106,7 +106,6 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
             this.programService.deleteWorkoutFromProgram(res.workoutName, programId);
           }
         }
-        
       });
   }
 
@@ -159,6 +158,7 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
     });
   }
 
+  
   renameProgram(program: Program) {
     const dialogConfig = {
       data: {
@@ -184,5 +184,9 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
     if (fromAddedProgram || (newSelectedProgram && oldSelectedProgram !== newSelectedProgram)) {
       this.programService.switchProgramSelectedByDefault(oldSelectedProgram, newSelectedProgram);
     }
+  }
+
+  setNextSessionSuggestion(nextSession: string) {
+    this.nextSessionSuggestion = nextSession;
   }
 }
