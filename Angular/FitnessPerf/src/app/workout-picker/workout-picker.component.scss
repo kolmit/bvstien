@@ -17,6 +17,12 @@
     background: radial-gradient(#97d6ff70, transparent);
     border: 1px solid rgb(255 255 255);
     transition: transform 0.2s;
+
+    .next-session {
+      color: $orange;
+      font-size: 0.6rem;
+      font-weight: 300;
+    }
   }
 
   .workout:active {
