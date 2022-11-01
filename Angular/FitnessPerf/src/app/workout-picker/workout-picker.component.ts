@@ -70,7 +70,7 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
   }
 
   addOrDeleteWorkoutFromProgram(programId: string) {
-    const dialogConfig = {
+    /*const dialogConfig = {
       data: {
         question: "Nom du groupe musculaire",
         inputRequested: true,
@@ -106,7 +106,7 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
             this.programService.deleteWorkoutFromProgram(res.workoutName, programId);
           }
         }
-      });
+      });*/
   }
 
 

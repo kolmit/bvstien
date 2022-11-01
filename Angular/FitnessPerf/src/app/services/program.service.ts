@@ -45,6 +45,18 @@ export class ProgramService extends BaseService {
         } as Partial<Program>);
   }
 
+  saveProgramV2(workoutListId: string[], programName: string): Promise<void> {
+    return this.getUserDataDocuments()
+        .collection(Constants.USER_PROGRAMS)
+        .doc()
+        .set({
+          programName: programName,
+          programIndex: this.configuredPrograms.length, 
+          workoutIds: workoutListId, 
+          selectedProgram: false
+        } as Partial<Program>);
+  }
+
   updateProgram(programToUpdate: Partial<Program>) {
     this.getUserDataDocuments()
         .collection(Constants.USER_PROGRAMS)
@@ -61,8 +73,8 @@ export class ProgramService extends BaseService {
 
   getSessionsByProgram(program: Program): Map<string, Session[]> {
     let programSessionsMap: Map<string, Session[]> = new Map();
-    for (let workoutName of program.workoutNames) {
-      programSessionsMap.set(workoutName, this.sessionService.getSessionsByWorkout(workoutName));
+    for (let workoutId of program.workoutIds) {
+      programSessionsMap.set(workoutId, this.sessionService.getSessionsByWorkout(workoutId));
     }
     return programSessionsMap;
   }
@@ -91,7 +103,7 @@ export class ProgramService extends BaseService {
       );
   }
 
-  addWorkoutToProgram(workoutName: string, programId: string) {
+  /*addWorkoutToProgram(workoutName: string, programId: string) {
     const programToUpdate = this.configuredPrograms.find(p => p.id === programId);
     const isWorkoutNotAlreadyAdded = programToUpdate?.workoutNames.findIndex(w => w.toUpperCase() === workoutName.toUpperCase()) === -1;
 
@@ -111,7 +123,7 @@ export class ProgramService extends BaseService {
       programToUpdate.workoutNames.splice(workoutIndexToDeleteFromProgram, 1);
       this.updateProgram(programToUpdate);
     }
-  }
+  }*/
 
   setProgramSelected(tabIndex: number) {
     this.selectedProgramTab = tabIndex;

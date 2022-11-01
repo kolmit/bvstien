@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, Subscription } from 'rxjs';
+import { AngularFirestore, DocumentData, QuerySnapshot } from '@angular/fire/firestore';
+import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as workouts from '../../assets/workouts.json';
 import { Exercise } from '../model/exercise.model';
@@ -34,30 +34,40 @@ export class WorkoutService extends BaseService{
     this.configuredWorkoutList = [];
   }
 
-  insertDefaultWorkoutList(): void {
-    this.insertWorkout(WorkoutService.defaultWorkoutList);
+  insertDefaultWorkoutList(): Observable<any[]> {
+    return this.insertWorkout(WorkoutService.defaultWorkoutList);
   }
 
   // TODO : Ne faire qu'une seule écriture avec une liste.
   insertWorkout(workouts: Workout[]) {
+    const forkJoinObs: Promise<any>[] = [];
+
     for (let element of workouts) {
       let e: any = {[element.name]: element.exercises};
-
-      this.getUserDataDocuments()
+      forkJoinObs.push(this.getUserDataDocuments()
         .collection(Constants.USER_EXERCISES)
-        .doc(element.name)
+        .doc()
         .set(e)
         .catch( (err) => {
           this.snackbarService.openSnackBar('Erreur technique', err);
-        });
+        })
+      );
     }
+    
+    return forkJoin(forkJoinObs);
+  }
+
+  getAllUserExercises(): Observable<QuerySnapshot<DocumentData>> {
+    return this.getUserDataDocuments()
+    .collection(Constants.USER_EXERCISES)
+    .get();
   }
 
    /** Charge tous les muscles avec les noms des exercices configurés. */
   fetchAllWorkouts(): Observable<any> {
     return this.getUserDataDocuments()
       .collection(Constants.USER_EXERCISES) // TODO : Ne fetch que les exo du programme consulté.
-      .valueChanges()
+      .snapshotChanges()
       .pipe( 
         map((allWorkoutElement) => {
           allWorkoutElement.forEach(element => {
@@ -147,7 +157,7 @@ export class WorkoutService extends BaseService{
   }
 
   addWorkout(newWorkoutName: string, exerciseList?: string[]) {
-    let newWorkout: Workout = {name: newWorkoutName, exercises: (exerciseList ? exerciseList : []) as any[]};
+    let newWorkout: Workout = {name: newWorkoutName, exercises: (exerciseList ? exerciseList : []) as any[]} as Workout; // Refacto Workout
     this.insertWorkout([newWorkout])
   }
 }

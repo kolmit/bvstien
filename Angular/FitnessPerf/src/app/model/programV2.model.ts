@@ -1,4 +1,4 @@
-export class Program {
+export class ProgramV2 {
     id: string;
     programName?: string;
     workoutIds: string[];

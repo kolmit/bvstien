@@ -101,8 +101,16 @@ export class AuthService implements OnInit {
   initUserData(fromSignup?: boolean) {
     if (fromSignup) {
       this.storageService.createUserRootDocument().then( () => {
-        this.workoutService.insertDefaultWorkoutList();
-        this.programService.saveProgram(WorkoutService.defaultWorkoutList.map(w => w.name), Constants.PROGRAM_PREFIX);
+        this.workoutService
+        .insertDefaultWorkoutList()
+        .subscribe(() => {
+          // On récupère les workouts insérés pour avoir les ID
+          this.workoutService
+          .getAllUserExercises()
+          .subscribe((allUserExercises) => {
+            this.programService.saveProgramV2(allUserExercises.docs.map(workout => workout.id), Constants.PROGRAM_PREFIX); 
+          });
+        });
       });
     } 
     else {

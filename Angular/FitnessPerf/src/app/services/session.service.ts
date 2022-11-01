@@ -13,7 +13,7 @@ import { BaseService } from './base.service';
 })
 export class SessionService extends BaseService {
 
-  sessionMapSubject: BehaviorSubject<Map<string, Session[]>> = new BehaviorSubject(new Map()); // Map mémoire (cache) entre : <nom du muscle, séances[]> 
+  sessionMapSubject: BehaviorSubject<Map<string, Session[]>> = new BehaviorSubject(new Map()); // Map mémoire (cache) entre : <id du muscle, séances[]> 
   tonnageMap: Map<Date, number> = new Map();
 
   constructor(firestore: AngularFirestore) { 
@@ -24,7 +24,7 @@ export class SessionService extends BaseService {
     session.totalLifted = this.calculateTonnage(session);
     
     return this.getUserDataDocuments()
-      .collection(session.workout.name)
+      .collection(session.workout.id)
       .doc(this.buildSessionDocumentName(session.timestamp))
       .set(session);
   }
@@ -43,8 +43,8 @@ export class SessionService extends BaseService {
       .update(session);
   }
 
-  getSessionsByWorkout(workoutName: string): Session[] {
-    return this.sessionMapSubject.getValue().get(workoutName);
+  getSessionsByWorkout(workoutId: string): Session[] {
+    return this.sessionMapSubject.getValue().get(workoutId);
   }
 
   prefetchAllSessions(configuredWorkouts: any[]) {

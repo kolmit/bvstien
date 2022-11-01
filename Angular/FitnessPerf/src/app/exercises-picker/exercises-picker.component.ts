@@ -168,7 +168,7 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
           }
         }
       
-        let workout: Workout = {name: this.myWorkout, exercises: myWorkoutExercisesWithSets};
+        let workout: Workout = {name: this.myWorkout, exercises: myWorkoutExercisesWithSets} as Workout; // Refacto Workout
         let session: Session = {timestamp: chosenDate, workout: workout, totalLifted: 0};
 
         this.sessionService.save(session)

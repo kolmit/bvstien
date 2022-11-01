@@ -63,21 +63,21 @@ export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComp
   }
   
   /** Liste les noms des workouts ajoutables */
-  getAddabledWorkouts(): string[] {
-    let workoutAlreadyInProgram: string[] = this.currentProgram.workoutNames;
+  getAddabledWorkouts()/*: string[]*/ {
+    /*let workoutAlreadyInProgram: string[] = this.currentProgram.workoutNames;
     this.addableWorkoutsName = this.allWorkoutsList
       .filter(w => 
         !workoutAlreadyInProgram.some(workoutNameInProgram => w.name?.toUpperCase() === workoutNameInProgram.toUpperCase()
         )
       )
       .map(w => w.name);
-    return this.addableWorkoutsName;
+    return this.addableWorkoutsName;*/
   }
 
   /** Liste les noms des workouts supprimables */
-  getDeletabledWorkouts(): string[] {
-    this.deletableWorkoutsName = this.currentProgram.workoutNames;
-    return this.deletableWorkoutsName;
+  getDeletabledWorkouts()/*: string[]*/ {
+    /*this.deletableWorkoutsName = this.currentProgram.workoutNames;
+    return this.deletableWorkoutsName;*/
   }
 
   selectWorkout(workoutName: string): void {
