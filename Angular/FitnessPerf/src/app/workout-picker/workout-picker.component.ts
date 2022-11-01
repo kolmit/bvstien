@@ -24,7 +24,7 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
   workoutList: {name: string, exercises: string[]}[] = [];
   programList: Program[] = [];
   selectedProgramIndex: number;
-  nextSessionSuggestion: string = '';
+  nextSessionSuggestion: Map<Program, string> = new Map();
 
   constructor(
     private router: Router,
@@ -182,11 +182,11 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
     const newSelectedProgram: Program = this.programList[event.index];
 
     if (fromAddedProgram || (newSelectedProgram && oldSelectedProgram !== newSelectedProgram)) {
-      this.programService.switchProgramSelectedByDefault(oldSelectedProgram, newSelectedProgram);
+      //this.programService.switchProgramSelectedByDefault(oldSelectedProgram, newSelectedProgram);
     }
   }
 
-  setNextSessionSuggestion(nextSession: string) {
-    this.nextSessionSuggestion = nextSession;
+  setNextSessionSuggestion(suggestion: {program: Program, nextSession: string}) {
+    this.nextSessionSuggestion.set(suggestion.program, suggestion.nextSession);
   }
 }

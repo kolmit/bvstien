@@ -18,7 +18,7 @@ export class TimelineComponent implements OnInit {
   goToSession: EventEmitter<{forThisWorkout: string, sessionDate: Date}> = new EventEmitter();
 
   @Output()
-  nextSessionSuggestion: EventEmitter<string> = new EventEmitter();
+  nextSessionSuggestion: EventEmitter<{program: Program, nextSession: string}> = new EventEmitter();
 
   NB_PAST_DAYS = 32;
   WEEKDAYS = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
@@ -51,7 +51,10 @@ export class TimelineComponent implements OnInit {
 
               if (dayWithSession) dayWithSession.session = session;
             }
-            this.nextSessionSuggestion.emit(this.computeNextSessionSuggestion(this.sessionsOfThisProgram));
+            this.nextSessionSuggestion.emit({
+              program:this.program, 
+              nextSession: this.computeNextSessionSuggestion(this.sessionsOfThisProgram)
+            });
           }
         }
       });

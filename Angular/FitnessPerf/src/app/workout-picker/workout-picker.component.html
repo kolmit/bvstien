@@ -15,7 +15,7 @@
             <div class="flex-row workouts">
                 <div class="flex-column workout" *ngFor='let element of program.workoutNames' (click)="goToExercise(element)">
                     <div>{{element}}</div>
-                    <span class="next-session" *ngIf="nextSessionSuggestion === element">Prochaine séance</span>
+                    <span class="next-session" *ngIf="nextSessionSuggestion.get(program) === element">Prochaine séance</span>
                 </div>
             </div>
             

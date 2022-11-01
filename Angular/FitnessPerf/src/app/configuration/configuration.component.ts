@@ -44,7 +44,7 @@ export class ConfigurationComponent {
             timestamp: sessionData.timestamp, 
             workout: sessionData.workout, 
             totalLifted: sessionData.totalLifted ? sessionData.totalLifted : 0,
-            commentary: sessionData.commentary
+            commentary: sessionData.commentary ? sessionData.commentary : ''
           };
           lastWorkoutName = this.shallAddToExerciseList(lastWorkoutName, session); // TODO : Exporter l'EXERCISE_LIST plutôt que de la compléter comme ça..
           this.storageService.saveImportedSession(session)
