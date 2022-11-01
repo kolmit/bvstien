@@ -67,6 +67,7 @@ export class TimelineComponent implements OnInit {
       });
       // Les marqueurs de mois
       if (pastDate.getDate() === 1) {
+        pastDate.setMonth(pastDate.getMonth() - 1);
         this.timelineDays.push({
           date: pastDate,
           session: null,
@@ -79,7 +80,7 @@ export class TimelineComponent implements OnInit {
   computeNextSessionSuggestion(sessionsOfThisProgram: Map<string, Session[]>): string {
     let mostRecentSessions: Session[] = [];
     for (let entry of sessionsOfThisProgram.entries()) {
-      if (!entry[1]) { // Si y'a pas de séance pour un muscle, il doit être suggéré
+      if (!entry[1]?.length) { // Si y'a pas de séance pour un muscle, il doit être suggéré
         return entry[0];
       }
       const lastSessionForThisWorkout = Utils.sortSessionsByDate(entry[1])[entry[1].length - 1];
