@@ -70,9 +70,10 @@ export class TimelineComponent implements OnInit {
       });
       // Les marqueurs de mois
       if (pastDate.getDate() === 1) {
-        pastDate.setMonth(pastDate.getMonth() - 1);
+        const monthSeparator: Date = new Date();
+        monthSeparator.setMonth(monthSeparator.getMonth() - 1);
         this.timelineDays.push({
-          date: pastDate,
+          date: monthSeparator,
           session: null,
           isMonthSeparator: true
         });
