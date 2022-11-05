@@ -1,10 +1,9 @@
 <app-header [parentModel]="model"></app-header>
 
 <div class="flex-column workout-title">
-    <h1 (click)="pickSessionDate()" class="flex-column add-session">{{this.myWorkout}}
-        <div class="add-symbol">
-            +
-        </div>
+    <h1 (click)="pickSessionDate()" class="flex-column add-session">
+        <span>{{this.myWorkout}}</span>
+        <span class="add-symbol">+</span>
     </h1>
     <div class="flex-row">
         <button mat-raised-button style="padding: 0 1rem;" (click)="openSessionHistory()" *ngIf="this.allSessions.length > 0">Mes dernières séances</button>

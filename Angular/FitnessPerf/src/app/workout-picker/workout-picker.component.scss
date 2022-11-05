@@ -23,6 +23,14 @@
       font-size: 0.6rem;
       font-weight: 300;
     }
+
+    :nth-child(1) {
+      width: 90%;
+      max-height: 50%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+    }
   }
 
   .workout:active {

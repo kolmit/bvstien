@@ -7,14 +7,14 @@
             <div class="add-program" (click)='addProgram()'>+</div>
         </ng-template>
     </mat-tab>
-    <mat-tab *ngFor='let program of programList; let i = index;' label="{{program.programName}}">
+    <mat-tab *ngFor='let program of programList; let i = index;' label="{{program.programName | uppercase}}">
         
         <app-timeline [program]="program" (goToSession)="goToExerciseOnDateSession($event)" (nextSessionSuggestion)="setNextSessionSuggestion($event)"></app-timeline>
 
         <div class="flex-column workout-container">
             <div class="flex-row workouts">
                 <div class="flex-column workout" *ngFor='let element of program.workoutNames' (click)="goToExercise(element)">
-                    <div>{{element}}</div>
+                    <span>{{element}}</span>
                     <span class="next-session" *ngIf="nextSessionSuggestion.get(program) === element">Prochaine séance</span>
                 </div>
             </div>
