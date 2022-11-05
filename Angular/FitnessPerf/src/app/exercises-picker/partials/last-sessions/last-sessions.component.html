@@ -13,12 +13,12 @@
         </div>
 
         <hr style="width: 100%; margin-bottom: 1rem;">
-        
-        <div class="flex-column history-container" *ngFor="let exerciseHistory of this.currentHistory">
+
+        <div class="flex-column history-container" *ngFor="let exerciseHistory of this.currentHistory; first as isFirst">
             <span class="exercise-title">{{exerciseHistory.exerciseName}}</span>
             <div class="flex-row history-exercise">
                 <div class="history-set" *ngFor="let history of exerciseHistory.setsHistory">
-                    <span class="set-date">{{history.date | date: 'dd MMM. yy'}}</span>
+                    <span *ngIf="isFirst" class="set-date">{{history.date | date: 'dd MMM. yy'}}</span>
                     <span *ngIf="!history.exercisesSets || history.exercisesSets.length === 0 ">-</span>
                     <span *ngFor="let set of history.exercisesSets">{{set.repetition}} × {{set.weight}} kg</span>
                 </div>
