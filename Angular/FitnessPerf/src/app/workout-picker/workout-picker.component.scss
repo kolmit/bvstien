@@ -52,49 +52,30 @@
   margin: 1rem;
 }
 
-.program-actions {
-
-  .delete-program {
-    color: $pink;
-    font-weight: 700;
-    margin: 0.5rem;
-
-    ::after ::content {
-      content: ' Suppr.';
-    }
-  }
-}
-
-
-.actions-deployed {
-  height: 100%;
-  background: red;
-}
-
-.actions-minimized {
-  height: 100%;
-  //animation: fadeInMenu 1s;
-  transition: heigth 0.5s;
-  background: blue;
-}
-
 .workout-container {
   align-items: center;
 }
 
 .program-actions {
-  margin-top: 1vh;
+  margin: 1vh 0;
   justify-content: space-around;
   align-items: unset;
 
   .program-action {
+    font-size: 0.7rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 5vh;
-    width: 15vh;
+    height: 4vh;
+    width: 12vh;
     margin: 0 0.5vh;
     background-color: rgba(255, 255, 255, 0.25);
+  }
+
+  .default-program-check {
+    font-size: 1rem;
+    color: greenyellow;
+    margin-right: 0.5rem;
   }
 }
 

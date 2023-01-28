@@ -20,12 +20,52 @@ mat-panel-title {
     background: $background-panel;
 }
 
-.workout-title {
+
+.workout-manage {
+    //justify-content: space-around;
+    background: rgba(0, 0, 0, 0.2);
     align-items: center;
-    font-weight: 300;
-    margin-bottom: 1rem;
-    margin-top: 1.5rem;
+    margin: 1rem 0;
+
+    span {
+        padding: 0.5rem;
+        width: 33%;
+        height: 100%;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+
+        &:nth-child(2n+1){
+            font-size: 2rem;
+            border: 1px solid rgb(0, 0, 0, 0.3);
+            &:active{
+                filter: brightness(150%);
+            }
+        }
+        
+        &:nth-child(1) {
+            box-shadow: inset -2rem 0 19px -11px rgba(0, 0, 0, 0.2);
+            background-color: #ff00001f;
+        }
+        &:nth-child(2){
+            box-shadow: 6px 0px 41px -10px rgba(0, 0, 0, 0.5);
+            width: 75%;
+            border: 1px solid black;
+        }
+        &:nth-child(3) {
+            box-shadow: inset 2rem 0 19px -11px rgba(0, 0, 0, 0.2);
+            background-color: #00ff151f;
+        }
+    }
+
+    .workout-title {
+        font-weight: 300;
+        
+    }
 }
+
+
 
 .workout-date {
     align-items: center;
@@ -46,6 +86,7 @@ mat-panel-title {
 .exercises-container, .session-commentary {
     padding: 1vh;
     align-items: center;
+    resize: vertical;
 }
 
 div[formarrayname="exercisesForms"] {
@@ -81,14 +122,6 @@ div[formarrayname="exercisesForms"] {
     opacity: 0.7;
 }
 
-.session-commentary {
-    width: 90%;
-    margin: 5% 5% 0% 5%;
-    color: white;
-    background: repeating-linear-gradient(45deg, #00000080, transparent 10px);
-    border-radius: 4px;
-}
-
 .add-session {
     max-width: 60%;
     max-height: 4rem;
@@ -107,10 +140,6 @@ div[formarrayname="exercisesForms"] {
     }
 }
 
-.add-session:active {
-    background: rgba($text, 0.3);
-}
-
 .add-symbol {
     position: absolute;
     font-size: 1.5rem;
@@ -121,4 +150,16 @@ div[formarrayname="exercisesForms"] {
     border: 1px solid $text;
     background-color: $background;
     border-radius: 100%;
+}
+
+.add-session:active {
+    background: rgba($text, 0.3);
+}
+
+.session-commentary {
+    width: 90%;
+    margin: 5% 5% 0% 5%;
+    color: white;
+    background: repeating-linear-gradient(45deg, #00000080, transparent 10px);
+    border-radius: 4px;
 }

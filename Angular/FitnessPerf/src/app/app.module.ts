@@ -42,7 +42,9 @@ import { ManageWorkoutToProgramDialogComponent } from './workout-picker/partials
 import { CollapseMenuComponent } from './collapse-menu/collapse-menu.component';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { InputComponent } from './input-component/input-component.component';
-import { TimelineComponent } from './timeline/timeline.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { TimelineProgramComponent } from './timeline/program-timeline/timeline-program.component';
+import { TimelinePickerComponent } from './timeline/timeline-picker/timeline-picker.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,8 @@ import { TimelineComponent } from './timeline/timeline.component';
     ManageWorkoutToProgramDialogComponent,
     CollapseMenuComponent,
     InputComponent,
-    TimelineComponent,
+    TimelineProgramComponent,
+    TimelinePickerComponent
   ],
   imports: [
     MatTabsModule,
@@ -68,6 +71,7 @@ import { TimelineComponent } from './timeline/timeline.component';
     MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
+    MatMenuModule,
     MatDialogModule,
     MatListModule,
     MatSnackBarModule,

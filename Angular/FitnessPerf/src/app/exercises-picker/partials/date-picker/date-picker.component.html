@@ -1,9 +1,5 @@
 <div class="flex-column">
-    <mat-form-field class="customfield" appearance="fill" (click)="picker.open()">
-        <mat-label class="input-label">A quelle date ?</mat-label>
-            <input matInput [(ngModel)]="chosenDate" [max]="maxDate" [matDatepicker]="picker">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+    <mat-label class="input-label">Choisissez la date :</mat-label>
+    <app-timeline-picker (chosenDate)="setChosenDate($event)"></app-timeline-picker>
     <button mat-raised-button (click)="submitDate()">Créer une séance</button>
 </div>

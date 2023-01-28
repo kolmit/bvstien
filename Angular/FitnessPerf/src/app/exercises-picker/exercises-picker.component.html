@@ -1,9 +1,14 @@
 <app-header [parentModel]="model"></app-header>
 
 <div class="flex-column workout-title">
-    <h1 (click)="pickSessionDate()" class="flex-column add-session">
-        <span>{{this.myWorkout}}</span>
+    <!--<h1 (click)="pickSessionDate()" class="flex-column add-session">
+        <span>{{this.myWorkout | titlecase}}</span>
         <span class="add-symbol">+</span>
+    </h1>-->
+    <h1 class="flex-row workout-manage">
+        <span (click)="deleteCurrentSession()">{{CONSTANTS.CROSS_MARK}}</span>
+        <span>{{this.myWorkout | titlecase}}</span>
+        <span (click)="pickSessionDate()">{{CONSTANTS.PLUS_MARK}}</span>
     </h1>
     <div class="flex-row">
         <button mat-raised-button style="padding: 0 1rem;" (click)="openSessionHistory()" *ngIf="this.allSessions.length > 0">Mes dernières séances</button>
@@ -13,12 +18,13 @@
 <hr class="separator">
 
 <mat-accordion multi>
-    <!---->
         <div class="flex-row date-container">
             <div (click)="switchSession(-1)" (disabled)="isSessionIndexExisting(-1)" [style.opacity]="isSessionIndexExisting(-1) ? 1 : 0.2"> &#10094; </div>
             <div class="flex-column session-date">
-                <div class="flex-column workout-date" *ngIf="this.allSessions[this.currentSessionIndex]; else noSessionToday"> Séance du {{this.allSessions[this.currentSessionIndex]?.timestamp | date:'dd MMM. yyyy'}}</div>
-                <div>Tonnage : {{this.allSessions[this.currentSessionIndex]?.totalLifted}} kg</div>
+                <div class="flex-column workout-date" *ngIf="this.allSessions[this.currentSessionIndex]; else noSessionToday"> 
+                    Séance du {{this.allSessions[this.currentSessionIndex]?.timestamp | date:'dd MMM. yyyy'}}
+                    <span>Tonnage : {{this.allSessions[this.currentSessionIndex]?.totalLifted}} kg</span>
+                </div>
                 <ng-template #noSessionToday>Pas de séance</ng-template>
             </div>
             <div (click)="switchSession(1)" (disabled)="isSessionIndexExisting(1)" [style.opacity]="isSessionIndexExisting(1) ? 1 : 0.2"> &#10095; </div>
@@ -34,7 +40,10 @@
                             <mat-panel-title>
                                 {{this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex]?.name}}
                             </mat-panel-title>
-                            <div (click)="deleteExercise(this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].name)"> <img class="delete-exo-button" width="10px" src="assets/svg/close.svg"/> </div>
+                            <span class="delete-exo-button" 
+                                (click)="deleteExercise(this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].name)"> 
+                                {{CONSTANTS.CROSS_MARK}} 
+                            </span>
                         </mat-expansion-panel-header>
                         
                         <div [formGroupName]="exerciceIndex">
@@ -59,9 +68,18 @@
                                             >
                                         </mat-form-field>
                                         
-                                        <button mat-mini-fab class="submit-exercise-set" *ngIf="!isSerieEmpty(exerciceIndex, serieIndex)" (click)="submitSerie(exerciceIndex, serieIndex)" >✓</button>
-                                        <button mat-mini-fab class="delete-exercise-set" *ngIf="!isSerieEmpty(exerciceIndex, serieIndex) && !isPrefilled(exerciceIndex, serieIndex)" (click)="deleteSerie(exerciceIndex, serieIndex)" >&#10007;</button>
-
+                                        <button mat-mini-fab 
+                                                class="submit-exercise-set" 
+                                                *ngIf="!isSerieEmpty(exerciceIndex, serieIndex)" 
+                                                (click)="submitSerie(exerciceIndex, serieIndex)" >
+                                                {{CONSTANTS.CHECK_MARK}}
+                                        </button>
+                                        <button mat-mini-fab 
+                                                class="delete-exercise-set" 
+                                                *ngIf="!isSerieEmpty(exerciceIndex, serieIndex) && !isPrefilled(exerciceIndex, serieIndex)" 
+                                                (click)="deleteSerie(exerciceIndex, serieIndex)" >
+                                                {{CONSTANTS.CROSS_MARK}}
+                                        </button>
                                     </div>
                                 </div>
                             </div>

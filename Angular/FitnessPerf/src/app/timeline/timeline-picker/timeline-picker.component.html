@@ -1,0 +1,23 @@
+<div class="flex-column timeline-container">
+    <div class="timeline">
+        <ng-container *ngFor="let day of timelineDays">
+            <div class="timeline-case" 
+                (click)="pickDay(day)" 
+                [ngClass]="{
+                    'highlight picked': isPickedDay(day), 
+                    'day-container': !day.isMonthSeparator, 
+                    'month-container': day.isMonthSeparator}">
+
+                <div *ngIf="!day.isMonthSeparator; else monthSeparator" class="day-span-container flex-column">
+                    <span>{{WEEKDAYS[day.date.getDay()]}}</span>
+                    <span>{{day.date.getDate()}}</span>
+                </div>
+                <ng-template #monthSeparator>
+                    <span>{{MONTHS[day.date.getMonth()]}}</span>
+                </ng-template>
+            </div>
+        </ng-container>
+        
+        <!--<input class="datepicker-calendar" [(ngModel)]="chosenDate" type="date">-->
+    </div>
+</div>

@@ -1,4 +1,4 @@
-@import '../../styles.scss';
+@import '../../../styles.scss';
 
 .timeline-container {
     margin: 0.5rem 0 1rem 0;
@@ -43,7 +43,11 @@
         }
     }
 
-    .has-session {
+    .datepicker-calendar {
+        min-width: 5vh;
+    }
+
+    .highlight {
         opacity: 1;
     }
 

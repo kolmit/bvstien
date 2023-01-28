@@ -9,7 +9,7 @@
     <ng-container *ngIf="this.addWorkoutTabActive">
         <div *ngIf="this.inputRequested" class="flex-column">
             <mat-form-field floatLabel="Séance">
-                <input matInput [(ngModel)]="inputValue" placeholder="{{this.question}}">
+                <input matInput [(ngModel)]="inputValue"  maxlength="30" placeholder="{{this.question}}">
             </mat-form-field>
             <div class="manageable-workouts">
                 <div class="flex-row workouts">

@@ -1,21 +1,21 @@
 <app-header [parentModel]="model"></app-header>
 <mat-tab-group mat-align-tabs="center" 
     [selectedIndex]="selectedProgramIndex"
-    (selectedTabChange)="selectedProgramChanged($event)" #tabGroup>
+    #tabGroup>
     <mat-tab>
         <ng-template mat-tab-label>
             <div class="add-program" (click)='addProgram()'>+</div>
         </ng-template>
     </mat-tab>
-    <mat-tab *ngFor='let program of programList; let i = index;' label="{{program.programName | uppercase}}">
+    <mat-tab *ngFor='let program of programList; let i = index; trackBy:identifyProgram' label="{{program.programName}}">
         
-        <app-timeline [program]="program" (goToSession)="goToExerciseOnDateSession($event)" (nextSessionSuggestion)="setNextSessionSuggestion($event)"></app-timeline>
+        <app-timeline-program [program]="program" (goToSession)="goToExerciseOnDateSession($event)" (nextSessionSuggestion)="setNextSessionSuggestion($event)"></app-timeline-program>
 
         <div class="flex-column workout-container">
             <div class="flex-row workouts">
-                <div class="flex-column workout" *ngFor='let element of program.workoutNames' (click)="goToExercise(element)">
-                    <span>{{element}}</span>
-                    <span class="next-session" *ngIf="nextSessionSuggestion.get(program) === element">Prochaine séance</span>
+                <div class="flex-column workout" *ngFor='let workoutName of program.workoutNames' (click)="goToExercise(workoutName)">
+                    <span>{{workoutName}}</span> 
+                    <span class="next-session" *ngIf="isNextSession(program, workoutName)">Prochaine séance</span>
                 </div>
             </div>
             
@@ -23,6 +23,10 @@
             <div class="flex-row program-actions">
                 <div class="program-action" (click)="renameProgram(program)">Renommer</div>
                 <div class="program-action" (click)="deleteProgram(program)">Supprimer</div>
+                <div class="program-action" (click)="setDefaultProgram(program)">
+                    <span *ngIf="this.isDefaultProgram(program)" class="default-program-check">✔</span>
+                    <span>Par défaut</span>
+                </div>
             </div>
         </div>
     </mat-tab>

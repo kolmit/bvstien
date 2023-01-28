@@ -1,0 +1,54 @@
+<div class="flex-column timeline-container">
+    <div class="timeline">
+
+        <!-- Cas où on a plusieurs séances pour le jour ; on vient faire pop un menu -->
+        <ng-container *ngFor="let day of timelineDays">
+            <ng-container *ngIf="day.sessions?.length > 1; else singleSessionDay" >
+                <div class="timeline-case" 
+                    [matMenuTriggerFor]="multipleSession"
+                    [ngClass]="{
+                        'highlight': day.sessions, 
+                        'day-container': !day.isMonthSeparator, 
+                        'month-container': day.isMonthSeparator}">
+                    
+                    <mat-menu #multipleSession="matMenu">
+                        <button mat-menu-item 
+                            *ngFor="let session of day.sessions; let index = index" 
+                            (click)="emitGoToSession(day, index)">
+                                {{session.workout.name}}
+                        </button>
+                    </mat-menu>
+
+                    <div *ngIf="!day.isMonthSeparator; else monthSeparator" class="day-span-container flex-column">
+                        <span>{{WEEKDAYS[day.date.getDay()]}}</span>
+                        <span>{{day.date.getDate()}}</span>
+                    </div>
+                    <ng-template #monthSeparator>
+                        <span>{{MONTHS[day.date.getMonth()]}}</span>
+                    </ng-template>
+                </div>
+            </ng-container>
+
+            <!-- Cas où on a une seule séance pour le jour -->
+            <ng-template #singleSessionDay>
+                <div class="timeline-case" 
+                    (click)="emitGoToSession(day)" 
+                    [ngClass]="{
+                        'highlight': day.sessions, 
+                        'day-container': !day.isMonthSeparator, 
+                        'month-container': day.isMonthSeparator}">
+
+                    <div *ngIf="!day.isMonthSeparator; else monthSeparator" class="day-span-container flex-column">
+                        <span>{{WEEKDAYS[day.date.getDay()]}}</span>
+                        <span>{{day.date.getDate()}}</span>
+                    </div>
+                    <ng-template #monthSeparator>
+                        <span>{{MONTHS[day.date.getMonth()]}}</span>
+                    </ng-template>
+                </div>
+            </ng-template>
+        </ng-container>
+        
+        <img class="day-container calendar" src="assets/svg/calendar.svg"/>
+    </div>
+</div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
-import { first, map, take } from 'rxjs/operators';
+import { debounceTime, first, map, take } from 'rxjs/operators';
 
 import { Session } from '../model/session.model';
 import { Constants } from '../utils/constants';
@@ -51,10 +51,12 @@ export class SessionService extends BaseService {
     //On requête les N muscles dans un forkjoin pour éviter d'émettre N fois une nouvelle valeur pour subject
     const sessionsByWorkout$: Observable<Session[]>[] = [];
     for (let workout of configuredWorkouts.map(w => w.name).slice(0, Constants.MAX_PREFETCH)) {
-      sessionsByWorkout$.push(this.fetchAllSessionByWorkout(workout).pipe(first()))
+      sessionsByWorkout$.push(this.fetchAllSessionByWorkout(workout).pipe(first()));
     }
     forkJoin(sessionsByWorkout$)
-      .subscribe(() => this.sessionMapSubject.next(this.sessionMapSubject.getValue()));
+      .subscribe(() => {
+        this.sessionMapSubject.next(this.sessionMapSubject.getValue());
+      });
   }
 
   /**
