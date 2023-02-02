@@ -13,6 +13,10 @@ export class DatePickerComponent {
 
   constructor(public dialogRef: MatDialogRef<DatePickerComponent>) { }
 
+  setChosenDate(event: Date) {
+    this.chosenDate = event;
+  }
+
   submitDate() {
     this.dialogRef.close(this.chosenDate);
   }

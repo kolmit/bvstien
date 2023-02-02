@@ -27,9 +27,10 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class ExercisePickerComponent implements OnInit, OnDestroy {
   model: string = 'ExercisePickerComponent';
+  CONSTANTS = Constants;
 
   myWorkout: string;
-  allSessions: any[] = [];
+  allSessions: Session[] = [];
   
   currentSessionIndex: number;
 
@@ -54,16 +55,19 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe( param => {
       this.myWorkout = param.workout;
       this.getSessionHistory(this.myWorkout);
+
+      if (param.sessionDate) { // Si on vient d'une redirection du calendrier
+        this.goToSession(param.sessionDate);
+      }
     });
 
     this.textAeraSubscription = this.textaeraSubject
-      .pipe(
-        debounceTime(3000),
-      )
+      .pipe(debounceTime(2000))
       .subscribe(() => {
-        const currentSession: Session = this.allSessions[this.currentSessionIndex];
-        currentSession.commentary = this.sessionCommentary;
-        this.sessionService.update(currentSession);
+        this.sessionService.update({
+          ...this.allSessions[this.currentSessionIndex],
+          commentary: this.sessionCommentary
+        });
       });
   }
 
@@ -119,17 +123,18 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
 
 
   getSessionHistory(myWorkout: string) {
-    let sessionsFromService = this.sessionService.getSessionsInMemory(myWorkout);
+    let sessionsFromService = this.sessionService.getSessionsByWorkout(myWorkout);
 
     // Si les séances ont déjà été récupérées par le service
     if (sessionsFromService !== undefined) { 
       this.sortSessionsAndInitIndex(sessionsFromService);
     }
     // On s'abonne aux changement de valeurs sur les Sessions (pour se màj à chaque submit de série, d'exo, etc...)
-    this.sessionSubscription = this.sessionService.fetchAllSessionByWorkout(myWorkout)
-    .subscribe((allSessionsForMyWorkout: Session[]) => {
-      this.sortSessionsAndInitIndex(allSessionsForMyWorkout);
-    });
+    this.sessionSubscription = this.sessionService
+      .fetchAllSessionByWorkout(myWorkout)
+      .subscribe((allSessionsForMyWorkout: Session[]) => {
+        this.sortSessionsAndInitIndex(allSessionsForMyWorkout);
+      });
   }
     
 
@@ -141,7 +146,7 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
     if (fetchedSessions.length > 0) {
       this.allSessions = Utils.sortSessionsByDate(fetchedSessions);
 
-      if (this.currentSessionIndex === undefined) {
+      if (this.currentSessionIndex === undefined || !this.allSessions[this.currentSessionIndex]) {
         this.currentSessionIndex = this.allSessions?.length - 1;
       }
       this.populateForms(this.allSessions[this.currentSessionIndex]); 
@@ -165,7 +170,6 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
           }
         }
         
-        
         let workout: Workout = {name: this.myWorkout, exercises: myWorkoutExercisesWithSets};
         let session: Session = {timestamp: chosenDate, workout: workout, totalLifted: 0};
 
@@ -179,14 +183,57 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
       }
   }
 
+  deleteCurrentSession(){
+    if (this.allSessions[this.currentSessionIndex]) {
+      const dialogConfig = {
+        data: {
+          question: `Supprimer la séance du ${formatDate(this.allSessions[this.currentSessionIndex].timestamp, 'dd/MM/YYYY', 'en')} ?`,
+          choices: [
+            'Supprimer',
+            'Annuler'
+          ]
+        }
+      };
+  
+      this.dialog
+        .open(MultiChoiceDialogComponent, dialogConfig)
+        .afterClosed()
+        .subscribe( (choiceSelected) => {
+          switch(choiceSelected) {
+            case dialogConfig.data.choices[0]:
+              this.sessionService.delete(this.allSessions[this.currentSessionIndex])
+              .then(() => {
+                this.snackbarService.openSnackBar("Séance supprimée.", "✔");
+              }).catch((err) => {
+                this.snackbarService.openSnackBar("Problème lors de la suppression de la séance.", err);
+              });
+  
+            case dialogConfig.data.choices[1]:
+            default: 
+              break;
+          }
+        });
+    }
+  }
 
-  switchSession(addToIndex: number): void {
+  goToSession(sessionDate: Date): void {
+    const indexOfSessionToGo = this.allSessions.findIndex(session => Utils.isSameDay(session.timestamp, sessionDate));
+    if (indexOfSessionToGo >= 0) {
+      const indexDifferential = (this.currentSessionIndex - indexOfSessionToGo);
+      this.switchSession(-indexDifferential);
+    } else {
+      this.snackbarService.openSnackBar(`La séance du ${formatDate(sessionDate, "dd-MM-yyyy", "en")} n'existe pas.`, '❌');
+    }
+  }
+
+  switchSession(addToIndex: number): boolean {
     const index = this.currentSessionIndex + addToIndex;
-
     if (this.allSessions[index] != undefined) {
       this.currentSessionIndex = index;
       this.populateForms(this.allSessions[index]);
-    }  
+      return true;
+    }
+    return false;
   }
 
 

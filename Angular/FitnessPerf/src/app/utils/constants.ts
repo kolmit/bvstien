@@ -8,4 +8,8 @@ export class Constants {
     
     public static FIREBASE_DELAY: number = environment.delayFirebase;
     public static MAX_PREFETCH: number = 10;
+
+    public static CHECK_MARK: string = '✔';
+    public static CROSS_MARK: string = '✖';
+    public static PLUS_MARK: string = '✚';
 }

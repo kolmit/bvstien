@@ -102,7 +102,10 @@ export class AuthService implements OnInit {
     if (fromSignup) {
       this.storageService.createUserRootDocument().then( () => {
         this.workoutService.insertDefaultWorkoutList();
-        this.programService.saveProgram(WorkoutService.defaultWorkoutList.map(w => w.name), Constants.PROGRAM_PREFIX);
+        this.programService.saveProgram(
+          WorkoutService.defaultWorkoutList.map(w => w.name), 
+          Constants.PROGRAM_PREFIX,
+          true);
       });
     } 
     else {
@@ -115,7 +118,10 @@ export class AuthService implements OnInit {
           // Si l'utilisateur était enregistré AVANT la feature des Programmes, 
           // on lui crée un programme comme s'il venait de s'enregistrer, qui va contenir tous ses groupes musculaires.
           if (programs.length === 0) {
-            this.programService.saveProgram(configuredWorkoutList.map(w => w.name), Constants.PROGRAM_PREFIX);
+            this.programService.saveProgram(
+              configuredWorkoutList.map(w => w.name), 
+              Constants.PROGRAM_PREFIX,
+              true);
           }
         });
       });

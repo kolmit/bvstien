@@ -42,7 +42,10 @@ export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComp
   }
 
   ngOnInit(): void {
-    let obs: Observable<any>[] = [this.workoutService.fetchAllWorkouts().pipe(first()), this.programService.fetchAllPrograms().pipe(first())];
+    let obs: Observable<any>[] = [
+      this.workoutService.fetchAllWorkouts().pipe(first()), 
+      this.programService.fetchAllPrograms().pipe(first())
+    ];
 
     forkJoin(obs)
     .subscribe( ([w, p])  => {

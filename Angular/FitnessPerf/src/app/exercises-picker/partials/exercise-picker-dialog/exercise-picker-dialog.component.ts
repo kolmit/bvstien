@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { DatePickerComponent } from '../date-picker/date-picker.component';
 
 @Component({
   selector: 'app-exercise-picker-dialog',
@@ -9,7 +8,7 @@ import { DatePickerComponent } from '../date-picker/date-picker.component';
 })
 export class ExercisePickerDialogComponent implements OnInit {
   newExoName;
-  constructor(public dialogRef: MatDialogRef<DatePickerComponent>) { }
+  constructor(public dialogRef: MatDialogRef<ExercisePickerDialogComponent>) { }
 
   ngOnInit(): void {
   }

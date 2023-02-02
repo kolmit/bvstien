@@ -102,14 +102,4 @@ export class LastSessionsComponent {
   getCurrentPageNumber() {
     return Math.floor(this.currentSessionIndex / this.maxParallelSessions) + 1 ;
   }
-
-  deleteThisSession(indexToDelete: number){
-    this.sessionService.delete(this.workoutSessions[indexToDelete])
-      .then(() => {
-        this.snackbarService.openSnackBar("Séance supprimée.", "✔");
-        this.closeDialog();
-      }).catch((err) => {
-        this.snackbarService.openSnackBar("Problème lors de la suppression de la séance.", err);
-      });
-  }
 }
