@@ -23,7 +23,7 @@ public class CommandeServiceImpl implements CommandeService {
     CommandeParser parser;
 
     @Autowired
-    private CommandeRunner commandRunner;
+    CommandeRunner commandRunner;
 
     @Override
     public Integer sendShutdown(ShutdownCommand shutdownCommand) {
