@@ -14,17 +14,18 @@ import java.util.List;
 public class VolumeServiceImpl implements VolumeService {
 
     @Autowired
-    private CommandeService commandeService;
+    CommandeService commandeService;
 
     @Autowired
-    private CommandeParser parser;
+    CommandeParser parser;
+
     @Autowired
-    private CommandeRunner commandRunner;
+    CommandeRunner commandRunner;
 
     private Integer currentVolume;
     private boolean muted;
 
-    private final double tickVolume = 655.35; // 65535/100 (100 étant le nombre de pas sur le slider du front)
+    private final double TICK_VOLUME = 655.35; // 65535/100 (100 étant le nombre de pas sur le slider du front)
     private final String speakersOutput = "\"Haut-parleurs\"";
     private final String headsetOutput = "\"Casque pour téléphone\"";
     private String currentSoundDevice;
@@ -114,11 +115,11 @@ public class VolumeServiceImpl implements VolumeService {
 
         if (valeurNircmdPositive) {
             coefficient = valeurSliderConverted - this.currentVolume;
-            valeurNircmd = (coefficient * this.tickVolume);
+            valeurNircmd = (coefficient * this.TICK_VOLUME);
         }
         else {
             coefficient = this.currentVolume - valeurSliderConverted;
-            valeurNircmd = (coefficient * this.tickVolume);
+            valeurNircmd = (coefficient * this.TICK_VOLUME);
             valeurNircmd = -valeurNircmd; // On baisse le volume, donc négatif
         }
         this.currentVolume = valeurSliderConverted;

@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 public class SiriServiceImpl implements SiriService {
 
     @Autowired
-    private CommandeService commandeService;
+    CommandeService commandeService;
 
     @Autowired
-    private VolumeService volumeService;
+    VolumeService volumeService;
 
     @Override
     public Integer sendShutdown(ShutdownCommand shutdownCommand) {

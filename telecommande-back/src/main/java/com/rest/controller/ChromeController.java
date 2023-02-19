@@ -18,9 +18,9 @@ import java.util.*;
 public class ChromeController {
 	
 	@Autowired
-	private CommandeParser parser;
+	CommandeParser parser;
 	@Autowired
-	private CommandeRunner commandRunner;
+	CommandeRunner commandRunner;
    	
    	private String currentMedia;
 	private boolean fullscreenOn = false;

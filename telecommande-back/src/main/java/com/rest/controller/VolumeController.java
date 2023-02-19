@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 public class VolumeController {
 
 	@Autowired
-	private VolumeService volumeService;
+    VolumeService volumeService;
     
     @GetMapping("/volume")
     public Integer getCurrentVolume() {

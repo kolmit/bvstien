@@ -25,7 +25,7 @@ import java.util.TimerTask;
 public class ImageController {
 	
 	@Autowired
-	private CommandeRunner commandRunner;
+	CommandeRunner commandRunner;
 
 	private Webcam webcam;
 
@@ -56,7 +56,7 @@ public class ImageController {
                 outputStream.flush();
 	        };
 
-	    return new ResponseEntity<StreamingResponseBody>(body, HttpStatus.OK);
+	    return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 
 	

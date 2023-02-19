@@ -1,14 +1,10 @@
 package com;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.URL;
 
 @Component
@@ -17,10 +13,10 @@ public class MySystemTray extends TrayIcon {
     private static final String TOOLTIP = "Télécommande";
 
     private PopupMenu popup;
-    private SystemTray tray;
+    private final SystemTray tray;
 
     public MySystemTray(){
-        super(createImage(IMAGE_PATH,TOOLTIP),TOOLTIP);
+        super(createImage(),TOOLTIP);
         tray = SystemTray.getSystemTray();
     }
 
@@ -34,23 +30,18 @@ public class MySystemTray extends TrayIcon {
     private void initMenu(){
         popup = new PopupMenu();
         MenuItem m = new MenuItem("Quitter");
-        m.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        m.addActionListener(e -> System.exit(0));
         popup.add(m);
     }
 
 
-    protected static Image createImage(String path, String description){
-        URL imageURL = MySystemTray.class.getResource(path);
+    protected static Image createImage(){
+        URL imageURL = MySystemTray.class.getResource(MySystemTray.IMAGE_PATH);
         if (imageURL == null) {
-            System.err.println("Problème pour récupérer l'image: "+path);
+            System.err.println("Problème pour récupérer l'image: "+ MySystemTray.IMAGE_PATH);
             return null;
         } else {
-            return new ImageIcon(imageURL,description).getImage();
+            return new ImageIcon(imageURL, MySystemTray.TOOLTIP).getImage();
         }
     }
 }

@@ -2,7 +2,7 @@ package com.model;
 
 public class ShutdownCommand {
     private Boolean isShutdown;
-    private Integer time;
+    private final Integer time;
 
     public ShutdownCommand(Boolean isShutdown, Integer time) {
         this.isShutdown = isShutdown;

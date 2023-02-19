@@ -37,8 +37,7 @@ public class CommandeRunner {
 		try {
 			ProcessBuilder pb = new ProcessBuilder(cmdArgs);
 			pb.redirectErrorStream(true);
-			Process process;
-			process = pb.start();
+			Process process = pb.start();
 			new BufferedReader(new InputStreamReader(process.getInputStream()) );
 		} catch (IOException e) {
 			e.printStackTrace();

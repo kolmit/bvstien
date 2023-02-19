@@ -20,7 +20,7 @@ public class CommandeServiceImpl implements CommandeService {
     private LocalDateTime shutdownRequestHour;
 
     @Autowired
-    private CommandeParser parser;
+    CommandeParser parser;
 
     @Autowired
     private CommandeRunner commandRunner;

@@ -17,7 +17,7 @@ import java.util.List;
 public class KeyboardController {
 
     @Autowired
-    private CommandeRunner commandRunner;
+    CommandeRunner commandRunner;
 
 
     @PostMapping(value="/pressKeyboardKey")
