@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Service
 public interface VolumeService {
     boolean muteVolume(@RequestBody String muteOrUnmute);
-    int changeVolume(@RequestBody String cmd);
+    int changeVolumeFromSlider(@RequestBody String cmd);
     boolean getCurrentMuted();
     Integer getCurrentVolume();
+    int changeVolumeFromSiri(Integer volumeVariation);
 }

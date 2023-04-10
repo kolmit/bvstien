@@ -126,7 +126,7 @@ public class CommandeRunner {
 
 
 	public BufferedImage generateScreenshot() {
-		return this.robot.createScreenCapture(new Rectangle(3840, 1080));
+		return this.robot.createScreenCapture(new Rectangle(6000, 1440));
 	}
 
 

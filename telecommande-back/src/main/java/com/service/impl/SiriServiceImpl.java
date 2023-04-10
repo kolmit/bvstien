@@ -30,4 +30,14 @@ public class SiriServiceImpl implements SiriService {
     public boolean unmuteVolume() {
         return this.volumeService.muteVolume("0");
     }
+
+    @Override
+    public int lowerVolume() {
+        return this.volumeService.changeVolumeFromSiri(-33);
+    }
+
+    @Override
+    public int higherVolume() {
+        return this.volumeService.changeVolumeFromSiri(33);
+    }
 }

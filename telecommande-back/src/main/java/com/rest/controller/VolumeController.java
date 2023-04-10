@@ -21,10 +21,9 @@ public class VolumeController {
 		return this.volumeService.getCurrentMuted();
     }
 
-	
     @PostMapping("/volume")
     public int changeVolume(@RequestBody String cmd) {
-		return this.volumeService.changeVolume(cmd);
+		return this.volumeService.changeVolumeFromSlider(cmd);
     }
 
 	@PostMapping("/muteVolume")

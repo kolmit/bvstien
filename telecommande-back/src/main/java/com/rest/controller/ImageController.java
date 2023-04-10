@@ -35,7 +35,6 @@ public class ImageController {
 
 	@GetMapping(value = "/imageBureau", produces = MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<StreamingResponseBody> desktopStream() {
-
 		BufferedImage bImage = this.commandRunner.generateScreenshot();
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try {
@@ -49,14 +48,11 @@ public class ImageController {
 			}
 		}
 		byte [] data = bos.toByteArray();
-		
-	    
 	    StreamingResponseBody body = (outputStream) -> {
                 outputStream.write(data);
                 outputStream.flush();
 	        };
-
-	    return new ResponseEntity<>(body, HttpStatus.OK);
+	    return new ResponseEntity<StreamingResponseBody>(body, HttpStatus.OK);
 	}
 
 	
@@ -65,52 +61,49 @@ public class ImageController {
 		commandRunner.doLeftClick(body.getxPosition(), body.getyPosition());
 	}
 
+
 	@GetMapping(value = "/imageWebcam", produces = MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<StreamingResponseBody> webcamStream() {
 		try {
-			if (this.webcam == null){
+			if (this.webcam == null) {
 				this.webcam = Webcam.getDefault();
 				this.webcam.setViewSize(new Dimension(640, 480));
 			}
-
 			this.openWebcamAndStartCount();
-
-			BufferedImage bImage = this.webcam.getImage();
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			try {
-				if (bImage != null){
-					ImageIO.write(bImage, "jpeg", bos );
-				}
-			} catch (IOException | IllegalArgumentException iae) {
-				System.out.println("Fermeture du stream. " + iae.getMessage());
-				try {
-					bos.close();
-					this.closeWebcam();
-				} catch (IOException ioException) {
-					System.out.println("Même la fermeture de l'OutputStream a bugué, lol.");
-				}
-			}
-			byte [] data = bos.toByteArray();
-
+			byte[] data = getImageData();
 
 			StreamingResponseBody body = (outputStream) -> {
 				try {
 					outputStream.write(data);
 					outputStream.flush();
-				} catch (ClientAbortException abort){
+				} catch (ClientAbortException e) {
 					System.out.println("Client Abort. Fermeture de la webcam.");
 					this.closeWebcam();
-					return;
 				}
 			};
 
-			return new ResponseEntity<StreamingResponseBody>(body, HttpStatus.OK);
-
-		} catch (Exception generalException) {
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		} catch (Exception e) {
 			this.closeWebcam();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return null;
 	}
+
+
+	private byte[] getImageData() throws IOException {
+		BufferedImage bImage = this.webcam.getImage();
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+		if (bImage != null) {
+			ImageIO.write(bImage, "jpeg", bos);
+		} else {
+			bos.close();
+			throw new IOException("Fermeture du stream.");
+		}
+
+		return bos.toByteArray();
+	}
+
 
 	private void openWebcamAndStartCount() {
 		if (this.webcam.isOpen()) {
@@ -119,6 +112,7 @@ public class ImageController {
 			this.webcam.open();
 		}
 	}
+
 
 	/**
 	 * Permet de faire en sorte que la webcam se ferme après 10s d'inactivté
@@ -137,6 +131,7 @@ public class ImageController {
 		};
 		this.closeWebcamTimer.schedule(timerTask, CLOSE_WEBCAM_DELAY);
 	}
+
 
 	@GetMapping(value = "/closeWebcam")
 	public boolean closeWebcam() {
