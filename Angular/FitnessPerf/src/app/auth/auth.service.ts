@@ -105,8 +105,14 @@ export class AuthService implements OnInit {
         this.programService.saveProgram(
           WorkoutService.defaultWorkoutList.map(w => w.name), 
           Constants.PROGRAM_PREFIX,
-          true);
+          true
+        );
+        this.storageService.createWeightCollection().then( () => {
+
+        });
+
       });
+
     } 
     else {
       this.workoutService.fetchAllWorkouts()

@@ -1,0 +1,17 @@
+.weight-container {
+    border: 1px solid rgba(255, 255, 255, 0.283);
+    justify-content: center;
+    width: 100%;
+    overflow-x: scroll;
+
+    .weight {
+        font-size: 0.75rem;
+        min-width: 30%;
+        padding: 0.5rem;
+        border-right: 1px solid white;
+        border-left: 1px solid white;
+    }
+}
+
+.add-weight {
+}

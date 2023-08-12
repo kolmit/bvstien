@@ -1,0 +1,25 @@
+<div class="flex-column add-exercise-container">
+    <h3>Ajouter un poids</h3>
+    <hr class="separator" style="margin-bottom: 2rem;">
+
+    <div class="flex-row weights">
+        <mat-form-field floatLabel="Poids total (kg)" style="width: 45%;">
+            <input matInput [(ngModel)]="weight.totalWeight" maxlength="5" placeholder="Poids total (kg)">
+        </mat-form-field>
+        <mat-form-field floatLabel="Gras (kg)" style="width: 45%;">
+            <input matInput [(ngModel)]="weight.fatWeight" maxlength="5" placeholder="Gras (kg)">
+        </mat-form-field>
+    </div>
+    
+    <!--<app-timeline-picker (chosenDate)="setChosenDate($event)"></app-timeline-picker>-->
+    <mat-form-field class="flex-row">
+        <mat-label>Quand ?</mat-label>
+        <input matInput [(ngModel)]="weight.date" [matDatepicker]="picker">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+</div>
+
+<div class="flex-column choice-buttons">
+    <button mat-raised-button style="background-color: #376c9f" (click)="submitWeight()">Ajouter</button>
+</div>

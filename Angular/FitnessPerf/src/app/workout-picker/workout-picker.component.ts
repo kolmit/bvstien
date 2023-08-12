@@ -9,6 +9,7 @@ import { ProgramService } from "../services/program.service";
 import { SnackbarService } from "../services/snackbar.service";
 import { WorkoutService } from "../services/workout.service";
 import { ManageWorkoutToProgramDialogComponent } from "./partials/manage-workout-to-program-dialog/manage-workout-to-program-dialog.component";
+import { StorageService } from "../services/storage.service";
 
 @Component({
   selector: "app-workout-picker",
@@ -31,6 +32,7 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
     private workoutService: WorkoutService,
     private programService: ProgramService,
     private snackbarService: SnackbarService,
+    private storageService: StorageService,
     public dialog: MatDialog
   ) {}
 
@@ -208,6 +210,12 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
           this.programService.updateProgram(program);
         }
       });
+  }
+
+  openModalPoids() {
+    this.storageService.createWeightCollection().then( () => {
+      console.log('ok')
+    })
   }
 
   setNextSessionSuggestion(suggestion: {

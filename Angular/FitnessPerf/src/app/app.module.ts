@@ -45,6 +45,8 @@ import { InputComponent } from './input-component/input-component.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { TimelineProgramComponent } from './timeline/program-timeline/timeline-program.component';
 import { TimelinePickerComponent } from './timeline/timeline-picker/timeline-picker.component';
+import { WeightChartComponent } from './weight-chart/weight-chart.component';
+import { WeightDialogComponent } from './weight-chart/partials/weight-dialog/weight-dialog.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,9 @@ import { TimelinePickerComponent } from './timeline/timeline-picker/timeline-pic
     CollapseMenuComponent,
     InputComponent,
     TimelineProgramComponent,
-    TimelinePickerComponent
+    TimelinePickerComponent,
+    WeightChartComponent,
+    WeightDialogComponent
   ],
   imports: [
     MatTabsModule,

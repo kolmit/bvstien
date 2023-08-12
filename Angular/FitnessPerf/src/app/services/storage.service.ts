@@ -10,6 +10,7 @@ import * as imported from '../../assets/exampleImportData.json';
 import { SnackbarService } from './snackbar.service';
 import { BaseService } from './base.service';
 import { environment } from 'src/environments/environment';
+import { Weight } from '../model/weight.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,24 @@ export class StorageService extends BaseService {
       .set({});
     } catch(err) {
       this.snackbarService.openSnackBar('Création du répertoire racine', err);
+    }
+  }
+
+  createWeightCollection() {
+    try {
+      const weightModel: Weight = {
+        totalWeight: -1,
+        date: new Date(),
+        fatWeight: -1
+      }
+      return this.firestore
+      .collection(Constants.USER_DATA)
+      .doc(localStorage.getItem('login'))
+      .collection(Constants.USER_WEIGHT)
+      .doc()
+      .set(weightModel)
+    } catch(err) {
+      this.snackbarService.openSnackBar('Création de la collection weight', err);
     }
   }
 
