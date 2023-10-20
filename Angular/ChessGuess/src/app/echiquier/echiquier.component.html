@@ -1,0 +1,41 @@
+<div class="main-container flex-column">
+    <button style="margin-top: 2rem">
+        <h1 class="start-button" (click)="startGame()">Commencer la game</h1>
+    </button>
+
+    <app-countdown *ngIf="gameStartedClicked && !gameStarted" [countdown]="countdownGameStart"></app-countdown>
+    <h1 *ngIf="!(gameStartedClicked && !gameStarted)">&nbsp;</h1>
+    <div class="flex-column board-nextcases">
+        <table class="echiquier">
+            <tr *ngFor="let row of rows; let rowIndex = index" class="row">
+                <td *ngFor="let col of columns; let colIndex = index"
+                   class="case"
+                   (click)="onClickCase(row, col)">
+                   <!--{{col}}{{row}}-->
+                   <img class="piece" [src]="getPieceSvg(row, col)" >
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div *ngIf="gameStarted" class="flex-row next-cases">
+        <div>
+            <span class="next1">{{getNextCase()?.col}}{{getNextCase()?.row}}</span>
+            <app-progress-bar 
+                [maxSecondToAnswer]="maxSecondToAnswer"
+                (countdownFinished)="onCountdownFinished()">
+            </app-progress-bar>
+        </div>
+        <div class="next2">
+            {{getNextCase(1)?.col}}{{getNextCase(1)?.row}}
+        </div>
+        <div class="next3">
+            {{getNextCase(2)?.col}}{{getNextCase(2)?.row}}
+        </div>
+    </div>
+
+    <div class="flex-column">
+        <span>Score : {{getScore()}}</span>
+        <span>{{this.correctClick}}/{{this.nextCases.length}}</span>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+.main-container {
+  justify-content: center;
+  align-items: center;
+}
+  
+table {
+  border-spacing: 0;
+  border: 1px solid rgb(153, 153, 153);
+}
+
+table tr td {
+  width: 50px;
+  height: 50px;
+}
+
+// Les cases noires :
+table tr:nth-child(odd) td:nth-child(even), 
+table tr:nth-child(even) td:nth-child(odd) {
+  background: #5b9ec5;
+}
+
+table tr:nth-child(even) td:nth-child(even), 
+table tr:nth-child(odd) td:nth-child(odd) {
+  background: #ffffff;
+}
+
+.row {
+  display: flex;
+}
+
+.piece {
+  width: 100%;
+}
+
+.case {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    filter: brightness(95%);
+    
+  }
+}
+
+.next-cases {
+  pointer-events: none; 
+
+  position: absolute;
+  div {
+    text-shadow: #FC0 1px 0 10px;
+    color: #ffb600;
+    margin: 0 1rem;
+  }
+  .next1 {
+    font-size: 5rem;
+  }
+  
+  .next2 {
+    font-size: 3.5rem;
+  }
+  
+  .next3 {
+    font-size: 2.5rem;
+  }
+}
+
+.board-nextcases {
+  position: relative;
+}
