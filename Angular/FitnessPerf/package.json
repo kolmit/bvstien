@@ -1,6 +1,6 @@
 {
   "name": "fitness-perf",
-  "version": "1.2.9",
+  "version": "1.2.12",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
