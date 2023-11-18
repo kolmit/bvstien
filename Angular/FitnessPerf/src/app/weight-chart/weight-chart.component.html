@@ -8,9 +8,12 @@
         </div>
     </div>
     
-    <button mat-flat-button class="add-weight" (click)="addWeight()">
-        Ajouter
-    </button>
+    <div class="flex-row">
+        <button mat-flat-button class="add-weight" (click)="addWeight()">
+            Ajouter
+        </button>
+    </div>
+    
 </div>
 <div class="chart-container">
     <canvas  id="MyChart" >{{ chart }}z</canvas>

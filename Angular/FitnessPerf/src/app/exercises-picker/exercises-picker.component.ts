@@ -42,6 +42,9 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
   textaeraSubject: Subject<string> = new Subject<string>();
   sessionCommentary: string;
 
+
+  recapToggled = false;
+
   constructor(private route: ActivatedRoute, 
     private workoutService: WorkoutService,
     private sessionService: SessionService,
@@ -69,6 +72,11 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
           commentary: this.sessionCommentary
         });
       });
+
+      // setTimeout(() => {
+      //         this.openSessionHistory();
+
+      // }, 500);
   }
 
   textaeraChanged(e) {

@@ -44,11 +44,11 @@ export class StorageService extends BaseService {
         fatWeight: -1
       }
       return this.firestore
-      .collection(Constants.USER_DATA)
-      .doc(localStorage.getItem('login'))
-      .collection(Constants.USER_WEIGHT)
-      .doc()
-      .set(weightModel)
+        .collection(Constants.USER_DATA)
+        .doc(localStorage.getItem('login'))
+        .collection(Constants.USER_WEIGHT)
+        .doc()
+        .set(weightModel)
     } catch(err) {
       this.snackbarService.openSnackBar('Création de la collection weight', err);
     }

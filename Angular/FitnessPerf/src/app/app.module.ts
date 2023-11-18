@@ -47,6 +47,7 @@ import { TimelineProgramComponent } from './timeline/program-timeline/timeline-p
 import { TimelinePickerComponent } from './timeline/timeline-picker/timeline-picker.component';
 import { WeightChartComponent } from './weight-chart/weight-chart.component';
 import { WeightDialogComponent } from './weight-chart/partials/weight-dialog/weight-dialog.component';
+import { SessionDetailsComponent } from './exercises-picker/partials/session-details/session-details.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { WeightDialogComponent } from './weight-chart/partials/weight-dialog/wei
     TimelineProgramComponent,
     TimelinePickerComponent,
     WeightChartComponent,
-    WeightDialogComponent
+    WeightDialogComponent,
+    SessionDetailsComponent
   ],
   imports: [
     MatTabsModule,

@@ -1,5 +1,10 @@
 <app-header [parentModel]="model"></app-header>
-<app-weight-chart></app-weight-chart>
+<div class="flex-column">
+    <button mat-flat-button color="primary" (click)="toggleState()" [class.collapsed]="state === 'collapsed'">Mon poids</button>
+</div>
+<div [@expandCollapse]="state" class="poids">
+    <app-weight-chart></app-weight-chart>
+</div>
 <mat-tab-group mat-align-tabs="center" 
     [selectedIndex]="selectedProgramIndex"
     #tabGroup>

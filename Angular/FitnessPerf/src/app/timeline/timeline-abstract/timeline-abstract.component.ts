@@ -28,8 +28,7 @@ export abstract class TimelineAbstractComponent {
       });
       // Les marqueurs de mois
       if (pastDate.getDate() === 1) {
-        const monthSeparator: Date = new Date();
-        monthSeparator.setMonth(monthSeparator.getMonth() - 1);
+        const monthSeparator: Date = new Date(pastDate);
         this.timelineDays.push({
           date: monthSeparator,
           sessions: null,

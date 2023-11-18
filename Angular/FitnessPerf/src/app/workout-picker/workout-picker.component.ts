@@ -10,13 +10,35 @@ import { SnackbarService } from "../services/snackbar.service";
 import { WorkoutService } from "../services/workout.service";
 import { ManageWorkoutToProgramDialogComponent } from "./partials/manage-workout-to-program-dialog/manage-workout-to-program-dialog.component";
 import { StorageService } from "../services/storage.service";
+import { trigger, state, style, transition, animate } from "@angular/animations";
 
 @Component({
   selector: "app-workout-picker",
   templateUrl: "./workout-picker.component.html",
   styleUrls: ["./workout-picker.component.scss"],
+  animations: [
+    trigger('expandCollapse', [
+      state('collapsed', style({
+        height: '0',
+        overflow: 'hidden',
+        opacity: '0',
+      })),
+      state('expanded', style({
+        height: '*',
+        overflow: 'visible',
+        opacity: '1',
+      })),
+      transition('collapsed <=> expanded', animate('300ms ease-in-out')),
+    ]),
+  ]
 })
 export class WorkoutPickerComponent implements OnInit, OnDestroy {
+  state = 'collapsed';
+
+  toggleState() {
+    this.state = (this.state === 'collapsed') ? 'expanded' : 'collapsed';
+  }
+
   model: string = "WorkoutPickerComponent";
 
   workoutSubscription: Subscription;

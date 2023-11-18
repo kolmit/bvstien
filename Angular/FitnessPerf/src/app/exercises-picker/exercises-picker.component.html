@@ -1,10 +1,6 @@
 <app-header [parentModel]="model"></app-header>
 
 <div class="flex-column workout-title">
-    <!--<h1 (click)="pickSessionDate()" class="flex-column add-session">
-        <span>{{this.myWorkout | titlecase}}</span>
-        <span class="add-symbol">+</span>
-    </h1>-->
     <h1 class="flex-row workout-manage">
         <span (click)="deleteCurrentSession()">{{CONSTANTS.CROSS_MARK}}</span>
         <span>{{this.myWorkout | titlecase}}</span>
@@ -15,21 +11,34 @@
     </div>
 </div>
 
-<hr class="separator">
+<hr class="separator" style="margin-bottom: 0;">
+
 
 <mat-accordion multi>
-        <div class="flex-row date-container">
-            <div (click)="switchSession(-1)" (disabled)="isSessionIndexExisting(-1)" [style.opacity]="isSessionIndexExisting(-1) ? 1 : 0.2"> &#10094; </div>
-            <div class="flex-column session-date">
-                <div class="flex-column workout-date" *ngIf="this.allSessions[this.currentSessionIndex]; else noSessionToday"> 
-                    Séance du {{this.allSessions[this.currentSessionIndex]?.timestamp | date:'dd MMM. yyyy'}}
-                    <span>Tonnage : {{this.allSessions[this.currentSessionIndex]?.totalLifted}} kg</span>
+        <div class="flex-row date-recap-container">
+            <div class="flex-row date-container" style="width: 65%;">
+                <div (click)="switchSession(-1)" (disabled)="isSessionIndexExisting(-1)" [style.opacity]="isSessionIndexExisting(-1) ? 1 : 0.2"> &#10094; </div>
+                <div class="flex-column session-date">
+                    <div class="flex-column workout-date" *ngIf="this.allSessions[this.currentSessionIndex]; else noSessionToday"> 
+                        Séance du {{this.allSessions[this.currentSessionIndex]?.timestamp | date:'dd MMM. yyyy'}}
+                        <span>Tonnage : {{this.allSessions[this.currentSessionIndex]?.totalLifted}} kg</span>
+                    </div>
+                    <ng-template #noSessionToday>Pas de séance</ng-template>
                 </div>
-                <ng-template #noSessionToday>Pas de séance</ng-template>
+                <div (click)="switchSession(1)" (disabled)="isSessionIndexExisting(1)" [style.opacity]="isSessionIndexExisting(1) ? 1 : 0.2"> &#10095; </div>
             </div>
-            <div (click)="switchSession(1)" (disabled)="isSessionIndexExisting(1)" [style.opacity]="isSessionIndexExisting(1) ? 1 : 0.2"> &#10095; </div>
+            <!-- <div style="width: 30%;">
+                <button mat-flat-button (click)="this.recapToggled = !this.recapToggled">
+                    Récap
+                    <span *ngIf="recapToggled" class="default-program-check">✔</span>
+                </button>
+            </div> -->
         </div>
-    <div *ngIf="this.allSessions[this.currentSessionIndex]">
+    
+    <ng-container *ngIf="recapToggled">
+        <app-session-details [session]="this.allSessions[this.currentSessionIndex]"></app-session-details>
+    </ng-container>
+    <div *ngIf="this.allSessions[this.currentSessionIndex] && !recapToggled">
         <form [formGroup]="workoutForm" class="exercises-container flex-column">
 
             <div formArrayName="exercisesForms">
@@ -98,7 +107,6 @@
     </div>
 </mat-accordion>
 
-
-<div *ngIf="this.allSessions[this.currentSessionIndex]" class="flex-row">
+<div *ngIf="this.allSessions[this.currentSessionIndex] && !recapToggled" class="flex-row">
     <button mat-mini-fab class="add-button" (click)="addExercise()">+</button>
 </div>

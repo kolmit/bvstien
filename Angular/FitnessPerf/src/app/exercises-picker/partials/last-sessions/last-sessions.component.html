@@ -2,29 +2,40 @@
     Aucune séance historisée.
 </div>
 <ng-template #history>
-    <div class="flex-column container">
-        <div class="flex-row date-container">
-            <div (click)="switchSession(-1)" [style.opacity]="!isSessionIndexExisting(-1) ? 0.2 : 1"> < Avant </div>
-            <div class="history-title flex-column">
-                <span>Historique<br></span>
-                <span>Page {{this.getCurrentPageNumber()}}/{{this.getTotalPageNumber()}}</span>
-            </div>
-            <div (click)="switchSession(1)" [style.opacity]="!isSessionIndexExisting(1) ? 0.2 : 1"> Après > </div>
-        </div>
-
-        <hr style="width: 100%; margin-bottom: 1rem;">
-
-        <div class="flex-column history-container" *ngFor="let exerciseHistory of this.currentHistory; first as isFirst">
-            <span class="exercise-title">{{exerciseHistory.exerciseName}}</span>
-            <div class="flex-row history-exercise">
-                <div class="history-set" *ngFor="let history of exerciseHistory.setsHistory">
-                    <span *ngIf="isFirst" class="set-date">{{history.date | date: 'dd MMM. yy'}}</span>
-                    <span *ngIf="!history.exercisesSets || history.exercisesSets.length === 0 ">-</span>
-                    <span *ngFor="let set of history.exercisesSets">{{set.repetition}} × {{set.weight}} kg</span>
+    <ng-container *ngIf="!historyDetailsSelected">
+        <div class="flex-column container">
+            <div class="flex-row date-container">
+                <div (click)="switchSession(-1)" [style.opacity]="!isSessionIndexExisting(-1) ? 0.2 : 1"> < Avant </div>
+                <div class="history-title flex-column">
+                    <span>Historique<br></span>
+                    <span>Page {{this.getCurrentPageNumber()}}/{{this.getTotalPageNumber()}}</span>
                 </div>
+                <div (click)="switchSession(1)" [style.opacity]="!isSessionIndexExisting(1) ? 0.2 : 1"> Après > </div>
             </div>
-
-            <hr class="separator">
-        </div>
-    </div>    
+    
+            <hr style="width: 100%; margin-bottom: 1rem;">
+    
+            <div class="flex-column history-container" *ngFor="let exerciseHistory of this.currentHistory; first as isFirst">
+                <span class="exercise-title">{{exerciseHistory.exerciseName}}</span>
+                <div class="flex-row history-exercise">
+                    <div class="history-set" *ngFor="let history of exerciseHistory.setsHistory" (click)="selectHistoryDetails(history); toggleState();">
+                        <span *ngIf="isFirst" class="set-date">{{history.date | date: 'dd MMM. yy'}}</span>
+                        <span *ngIf="!history.exercisesSets || history.exercisesSets.length === 0 ">-</span>
+                        <span *ngFor="let set of history.exercisesSets">{{set.repetition}} × {{set.weight}} kg</span>
+                    </div>
+                </div>
+    
+                <hr class="separator">
+            </div>
+        </div>    
+    </ng-container>
 </ng-template>
+
+<!-- *ngIf="historyDetailsSelected" -->
+<div [@expandCollapse]="state">
+    <app-session-details 
+        [session]="historyDetailsSession"
+        [fromHistory]="true"
+        (closeDetails)="historyDetailsClosed()">
+    </app-session-details>
+</div>

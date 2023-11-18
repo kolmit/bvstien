@@ -7,6 +7,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { WeightDialogComponent } from './partials/weight-dialog/weight-dialog.component';
 import { filter } from 'rxjs/operators';
 import { Chart } from 'chart.js/auto';
+import { Utils } from '../utils/utils';
 
 @Component({
   selector: 'app-weight-chart',
@@ -21,18 +22,14 @@ export class WeightChartComponent implements OnInit {
 
   ngOnInit(): void {
     this.weightService.getWeights().subscribe((allWeights) => {
-      this.allWeights = allWeights;
+      this.allWeights = Utils.sortWeightsByDate(allWeights);
+
       this.createChart();
     });
   }
 
   createChart() {
     this.chart?.destroy();
-    console.log(
-      this.allWeights.map((w) => {
-        return formatDate(w.date, 'yyyy-MM-dd', 'en');
-      })
-    );
     this.chart = new Chart('MyChart', {
       type: 'line',
 
@@ -77,9 +74,10 @@ export class WeightChartComponent implements OnInit {
       .afterClosed()
       .pipe(filter((w) => !!w))
       .subscribe((weight: Weight) => {
-        this.weightService.save(weight).then(() => {
-          console.log('ok weight', weight);
-        });
+        if (weight.date && weight.totalWeight) {
+          this.weightService.save(weight).then(() => {
+          });
+        }      
       });
   }
 
