@@ -40,13 +40,12 @@ export class AuthService implements OnInit {
   login(email: string, password: string, fromSignup?: boolean) {
     this.afAuth.signInWithEmailAndPassword(email, password)
     .then(value => {
-      this.snackbarService.openSnackBar("Bienvenue " + email, "💪");
+      this.snackbarService.openSnackBar("Salut ! \n" + email, "💪");
       this.afAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
       localStorage.setItem('login', email);
       localStorage.setItem('userid', value.user.uid);
 
       this.initUserData(fromSignup);
-
       this.router.navigateByUrl('/workout');
     })
     .catch(error => {

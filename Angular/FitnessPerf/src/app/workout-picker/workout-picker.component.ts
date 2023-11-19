@@ -11,6 +11,7 @@ import { WorkoutService } from "../services/workout.service";
 import { ManageWorkoutToProgramDialogComponent } from "./partials/manage-workout-to-program-dialog/manage-workout-to-program-dialog.component";
 import { StorageService } from "../services/storage.service";
 import { trigger, state, style, transition, animate } from "@angular/animations";
+import { AuthService } from "../auth/auth.service";
 
 @Component({
   selector: "app-workout-picker",
@@ -55,6 +56,7 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
     private programService: ProgramService,
     private snackbarService: SnackbarService,
     private storageService: StorageService,
+    private authService: AuthService,
     public dialog: MatDialog
   ) {}
 
@@ -66,6 +68,9 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
       .fetchAllWorkouts()
       .subscribe((workouts) => {
         this.workoutList = workouts;
+      }, (error) => {
+        this.snackbarService.openSnackBar(`Quotat d'utilisation dépassé... ⌛ \n${error}`);
+        this.authService.logout();
       });
     this.programsSubscription = this.programService
       .fetchAllPrograms()
@@ -77,8 +82,8 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.workoutList = [];
-    this.programsSubscription ? this.programsSubscription.unsubscribe() : null;
-    this.workoutSubscription ? this.workoutSubscription.unsubscribe() : null;
+    this.programsSubscription?.unsubscribe();
+    this.workoutSubscription?.unsubscribe();
   }
 
   goToExercise(forThisWorkout: string) {

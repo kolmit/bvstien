@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { Weight } from '../model/weight.model';
 import { WeightService } from '../services/weight.service';
 import { formatDate } from '@angular/common';
@@ -8,24 +8,29 @@ import { WeightDialogComponent } from './partials/weight-dialog/weight-dialog.co
 import { filter } from 'rxjs/operators';
 import { Chart } from 'chart.js/auto';
 import { Utils } from '../utils/utils';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-weight-chart',
   templateUrl: './weight-chart.component.html',
   styleUrls: ['./weight-chart.component.scss'],
 })
-export class WeightChartComponent implements OnInit {
+export class WeightChartComponent implements OnInit, OnDestroy {
   @Input() allWeights: Weight[] = [];
   public chart: any;
+  subWeight: Subscription;
 
   constructor(private weightService: WeightService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.weightService.getWeights().subscribe((allWeights) => {
+    this.subWeight = this.weightService.getWeights().subscribe((allWeights) => {
       this.allWeights = Utils.sortWeightsByDate(allWeights);
-
       this.createChart();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subWeight?.unsubscribe();
   }
 
   createChart() {

@@ -84,7 +84,7 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sessionSubscription ? this.sessionSubscription.unsubscribe() : null;
+    this.sessionSubscription?.unsubscribe()
   }
 
 

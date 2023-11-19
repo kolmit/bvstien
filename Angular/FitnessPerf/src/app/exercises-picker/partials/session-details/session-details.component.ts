@@ -28,6 +28,7 @@ export class SessionDetailsComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.session.currentValue) {
+      console.log('changes sessiondetails', changes)
       this.computeGeneralInformations();
     }
   }

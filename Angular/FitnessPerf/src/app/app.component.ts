@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +7,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent{
   title = 'FitnessPerf';
+
+  @HostListener('window:orientationchange', ['$event'])
+  onOrientationChange(event: Event): void {
+    // Forcer l'orientation en mode portrait
+    if (window.screen.orientation) {
+      (window.screen.orientation as any).lock('portrait');
+    }
+  }
 }
