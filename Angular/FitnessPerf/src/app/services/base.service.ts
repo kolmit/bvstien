@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Session } from '../model/session.model';
 import { Constants } from '../utils/constants';
 

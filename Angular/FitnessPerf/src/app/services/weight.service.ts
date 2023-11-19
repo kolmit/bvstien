@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { environment } from 'src/environments/environment';
 import { BaseService } from './base.service';
 import { SnackbarService } from './snackbar.service';

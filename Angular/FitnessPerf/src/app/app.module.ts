@@ -7,9 +7,12 @@ import { WorkoutPickerComponent } from './workout-picker/workout-picker.componen
 import { ExercisePickerComponent } from './exercises-picker/exercises-picker.component';
 import { WorkoutService } from './services/workout.service';
 
-import { AngularFireModule } from '@angular/fire';
 import { firebaseConfig } from 'src/environments/environment';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
+
+import { AngularFireModule} from '@angular/fire/compat'
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { list } from '@angular/fire/database';
 
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -25,7 +28,6 @@ import { MatLegacyTabsModule as MatTabsModule, MAT_LEGACY_TABS_CONFIG as MAT_TAB
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AngularFireAuthModule } from '@angular/fire/auth';
 import { LoginComponent } from './auth/login/login.component';
 import { AuthGuard } from './auth/auth.guard';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
@@ -99,6 +101,15 @@ import { SessionDetailsComponent } from './exercises-picker/partials/session-det
             // or after 30 seconds (whichever comes first).
             registrationStrategy: 'registerWhenStable:30000'
         })
+
+        //provideFirebaseApp(() => initializeApp(config)),
+        // provideFirestore(() => {
+        //     const firestore = getFirestore();
+        //     connectEmulator(firestore, 'localhost', 8080);
+        //     enableIndexedDbPersistence(firestore);
+        //     return firestore;
+        // }),
+        // provideStorage(() => getStorage()),
     ],
     providers: [
         WorkoutService,

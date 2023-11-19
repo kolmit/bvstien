@@ -1,6 +1,6 @@
 import { formatDate } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentData, QuerySnapshot } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentData, QuerySnapshot } from '@angular/fire/compat/firestore';
 import { forkJoin, Observable } from 'rxjs';
 import { Session } from '../model/session.model';
 import { Constants } from '../utils/constants';
