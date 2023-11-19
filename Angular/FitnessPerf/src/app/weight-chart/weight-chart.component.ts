@@ -3,7 +3,7 @@ import { Weight } from '../model/weight.model';
 import { WeightService } from '../services/weight.service';
 import { formatDate } from '@angular/common';
 import { Session } from '../model/session.model';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { WeightDialogComponent } from './partials/weight-dialog/weight-dialog.component';
 import { filter } from 'rxjs/operators';
 import { Chart } from 'chart.js/auto';

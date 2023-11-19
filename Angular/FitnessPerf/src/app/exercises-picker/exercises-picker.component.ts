@@ -7,7 +7,7 @@ import { WorkoutService } from '../services/workout.service';
 import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder, UntypedFormArray, RequiredValidator } from '@angular/forms';
 import { ExerciseSet } from '../model/exercise-set.model';
 import { LastSessionsComponent } from './partials/last-sessions/last-sessions.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { DatePickerComponent } from './partials/date-picker/date-picker.component';
 import { Utils } from '../utils/utils';
 import { formatDate } from '@angular/common';
