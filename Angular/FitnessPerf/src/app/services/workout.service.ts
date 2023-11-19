@@ -1,7 +1,4 @@
-import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
 import * as workouts from '../../assets/workouts.json';
 import { Exercise } from '../model/exercise.model';
 import { Program } from '../model/program.model';
@@ -10,6 +7,8 @@ import { Constants } from '../utils/constants';
 import { BaseService } from './base.service';
 import { SessionService } from './session.service';
 import { SnackbarService } from './snackbar.service';
+import { Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -59,7 +58,7 @@ export class WorkoutService extends BaseService{
       .collection(Constants.USER_EXERCISES) // TODO : Ne fetch que les exo du programme consulté.
       .valueChanges()
       .pipe( 
-        map((allWorkoutElement) => {
+        map((allWorkoutElement: any) => {
           allWorkoutElement.forEach(element => {
             let workoutName = Object.keys(element)[0];
             const workoutIndex = this.configuredWorkoutList.findIndex(e => e.name === workoutName);

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { ExercisePickerComponent } from './exercises-picker/exercises-picker.component';
 import { LoginComponent } from './auth/login/login.component';
 import { WorkoutPickerComponent } from './workout-picker/workout-picker.component';
@@ -16,7 +16,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

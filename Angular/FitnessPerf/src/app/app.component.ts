@@ -6,7 +6,7 @@ import { Component, HostListener } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent{
-  title = 'FitnessPerf';
+  title = 'FitnessPerfs';
 
   @HostListener('window:orientationchange', ['$event'])
   onOrientationChange(event: Event): void {
