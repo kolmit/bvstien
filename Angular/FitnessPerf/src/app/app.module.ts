@@ -50,64 +50,62 @@ import { WeightDialogComponent } from './weight-chart/partials/weight-dialog/wei
 import { SessionDetailsComponent } from './exercises-picker/partials/session-details/session-details.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    WorkoutPickerComponent,
-    ExercisePickerComponent,
-    LastSessionsComponent,
-    LoginComponent,
-    ResetPasswordComponent,
-    DatePickerComponent,
-    ExercisePickerDialogComponent,
-    ConfigurationComponent,
-    MultiChoiceDialogComponent,
-    HeaderComponent,
-    ManageWorkoutToProgramDialogComponent,
-    CollapseMenuComponent,
-    InputComponent,
-    TimelineProgramComponent,
-    TimelinePickerComponent,
-    WeightChartComponent,
-    WeightDialogComponent,
-    SessionDetailsComponent
-  ],
-  imports: [
-    MatTabsModule,
-    MatButtonModule,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatMenuModule,
-    MatDialogModule,
-    MatListModule,
-    MatSnackBarModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    TextFieldModule,
-    BrowserModule,
-    FormsModule, 
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    BrowserModule,
-    AppRoutingModule,
-    AngularFireModule.initializeApp(firebaseConfig),
-    AngularFirestoreModule,
-    AngularFireAuthModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
-      // Register the ServiceWorker as soon as the app is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    })
-
-  ],
-  providers: [
-    WorkoutService, 
-    AuthGuard, 
-    SnackbarService,
-    { provide: MAT_TABS_CONFIG, useValue: { animationDuration: 250 }}
-  ],
-  entryComponents: [LastSessionsComponent, DatePickerComponent],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        WorkoutPickerComponent,
+        ExercisePickerComponent,
+        LastSessionsComponent,
+        LoginComponent,
+        ResetPasswordComponent,
+        DatePickerComponent,
+        ExercisePickerDialogComponent,
+        ConfigurationComponent,
+        MultiChoiceDialogComponent,
+        HeaderComponent,
+        ManageWorkoutToProgramDialogComponent,
+        CollapseMenuComponent,
+        InputComponent,
+        TimelineProgramComponent,
+        TimelinePickerComponent,
+        WeightChartComponent,
+        WeightDialogComponent,
+        SessionDetailsComponent
+    ],
+    imports: [
+        MatTabsModule,
+        MatButtonModule,
+        MatExpansionModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatMenuModule,
+        MatDialogModule,
+        MatListModule,
+        MatSnackBarModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        TextFieldModule,
+        BrowserModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        BrowserModule,
+        AppRoutingModule,
+        AngularFireModule.initializeApp(firebaseConfig),
+        AngularFirestoreModule,
+        AngularFireAuthModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {
+            enabled: environment.production,
+            // Register the ServiceWorker as soon as the app is stable
+            // or after 30 seconds (whichever comes first).
+            registrationStrategy: 'registerWhenStable:30000'
+        })
+    ],
+    providers: [
+        WorkoutService,
+        AuthGuard,
+        SnackbarService,
+        { provide: MAT_TABS_CONFIG, useValue: { animationDuration: 250 } }
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

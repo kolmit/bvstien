@@ -4,7 +4,7 @@ import { Exercise } from '../model/exercise.model';
 import { Workout } from '../model/workout.model';
 import { Session } from '../model/session.model';
 import { WorkoutService } from '../services/workout.service';
-import { FormGroup, FormControl, FormBuilder, FormArray, RequiredValidator } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder, UntypedFormArray, RequiredValidator } from '@angular/forms';
 import { ExerciseSet } from '../model/exercise-set.model';
 import { LastSessionsComponent } from './partials/last-sessions/last-sessions.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -34,8 +34,8 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
   
   currentSessionIndex: number;
 
-  floatLabelControl = new FormControl('auto');
-  workoutForm: FormGroup;
+  floatLabelControl = new UntypedFormControl('auto');
+  workoutForm: UntypedFormGroup;
   sessionSubscription: Subscription;
 
   textAeraSubscription: Subscription;
@@ -49,7 +49,7 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
     private workoutService: WorkoutService,
     private sessionService: SessionService,
     private snackbarService: SnackbarService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialog: MatDialog) { }
 
 
@@ -362,20 +362,20 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
     }
   }
 
-  getExerciseForms(): FormArray {
-    return this.workoutForm.get('exercisesForms') as FormArray;
+  getExerciseForms(): UntypedFormArray {
+    return this.workoutForm.get('exercisesForms') as UntypedFormArray;
   }
 
-  newExerciseForm(): FormGroup {
+  newExerciseForm(): UntypedFormGroup {
     return this.fb.group({
       serieForm: this.fb.array([])
     });
   }
 
-  getExerciseSeries(exerciceIndex: number): FormArray {
+  getExerciseSeries(exerciceIndex: number): UntypedFormArray {
     return this.getExerciseForms()
       .at(exerciceIndex)
-      .get('serieForm') as FormArray;
+      .get('serieForm') as UntypedFormArray;
   }
 
   addSerieExercise(exerciceIndex: number, repetitionValue?: number, weightValue?: number, preFilled?: boolean) {
@@ -391,7 +391,7 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
     return this.getExerciseSeries(exerciceIndex).at(serieIndex).dirty;
   }
   
-  newSerie(repetitionValue?: number, weightValue?: number): FormGroup {
+  newSerie(repetitionValue?: number, weightValue?: number): UntypedFormGroup {
     return this.fb.group({
       repetitionCtrl: repetitionValue ? repetitionValue : '',
       weightCtrl: weightValue || weightValue === 0 ? weightValue : ''

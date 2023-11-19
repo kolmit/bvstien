@@ -140,7 +140,6 @@
       }
     }
   },
-  "defaultProject": "FitnessPerf",
   "cli": {
     "analytics": false
   }
