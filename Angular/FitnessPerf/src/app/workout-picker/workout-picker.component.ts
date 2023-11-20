@@ -12,6 +12,7 @@ import { ManageWorkoutToProgramDialogComponent } from "./partials/manage-workout
 import { StorageService } from "../services/storage.service";
 import { trigger, state, style, transition, animate } from "@angular/animations";
 import { AuthService } from "../auth/auth.service";
+import { FirebaseError } from "firebase/app";
 
 @Component({
   selector: "app-workout-picker",
@@ -68,9 +69,11 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
       .fetchAllWorkouts()
       .subscribe((workouts) => {
         this.workoutList = workouts;
-      }, (error) => {
-        this.snackbarService.openSnackBar(`Quotat d'utilisation dépassé... ⌛ \n${error}`);
-        this.authService.logout();
+      }, (error: FirebaseError) => {
+        if (error.code === 'resource-exhausted') {
+          this.snackbarService.openSnackBar(`Quotat d'utilisation dépassé... ⌛ \n${error}`);
+          this.authService.logout();
+        }
       });
     this.programsSubscription = this.programService
       .fetchAllPrograms()

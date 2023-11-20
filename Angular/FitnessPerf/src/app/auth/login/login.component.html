@@ -16,29 +16,61 @@
         name="password"
         inputType="password"
         placeholder="Mot de passe"></app-input-component>
-      <button type="submit" [disabled]="!loginForm.valid" class="auth-btn">Se connecter</button>
+      <button mat-flat-button type="submit" [disabled]="!loginForm.valid" class="signin">Go</button>
     </form>
   </div>
   <div (click)="openResetPasswordDialog()">Mot de passe oublié ?</div>
 
   <hr class="separator">
 
-  <div class="flex-column signup-container">
-    <h2>Créer un compte</h2>
-    <form  class="flex-column" #signupForm='ngForm' (ngSubmit)="onSignup(signupForm)">
-      <app-input-component 
-        [(ngModel)]="emailToCreate" 
-        name="emailToCreate"
-        inputType="text"
-        placeholder="Adresse mail"></app-input-component>
-      <app-input-component 
-        [(ngModel)]="passwordToCreate" 
-        name="passwordToCreate"
-        inputType="password"
-        placeholder="Mot de passe"></app-input-component>
-      <button type="submit" [disabled]="!signupForm.valid" class="auth-btn">Créer un compte</button>
-    </form>
+  <div class="flex-column create-btn">
+    <button mat-flat-button class="signup" (click)="toggleState()" 
+      [class.collapsed]="state === 'collapsed'"  
+      [class.expanded]="state === 'expanded'">
+      <!-- {{state === 'collapsed' ? 'Créer mon compte' : '^'}} -->
+      Créer mon compte
+    </button>
   </div>
+  <div [@expandCollapse]="state" class="poids">
+    <div class="flex-column signup-container">
+      <form  class="flex-column" #signupForm='ngForm' (ngSubmit)="onSignup(signupForm)">
+        <app-input-component 
+          [(ngModel)]="emailToCreate" 
+          name="emailToCreate"
+          inputType="text"
+          placeholder="Adresse mail"></app-input-component>
+        <app-input-component 
+          [(ngModel)]="passwordToCreate" 
+          name="passwordToCreate"
+          inputType="password"
+          placeholder="Mot de passe"></app-input-component>
+
+        <div class="siginfo flex-column">
+          <div class="signup-info">
+            <span>Création d'un programme par défaut</span>
+            <span class="check">✓</span>
+          </div>
+          <div class="signup-info">
+            <span>Initialisation du poids à 70kg</span>
+            <span class="check">✓</span>
+          </div>
+        </div>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!signupForm.valid" class="signin signup signup-go">Je crée mon compte</button>
+      </form>
+    </div>
+  </div>
+<!-- 
+  <div class="stepper">
+    <div class="step">
+      <div class="step-number"></div>
+      <div class="step-title"></div>
+    </div>
+    <div class="step">
+      <div class="step-number"></div>
+      <div class="step-title"></div>
+    </div>
+  </div> -->
+
   <hr class="separator">
 
   <div>

@@ -1,3 +1,4 @@
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { environment } from 'src/environments/environment';
@@ -7,7 +8,24 @@ import { ResetPasswordComponent } from '../reset-password/reset-password.compone
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  animations: [
+    trigger('expandCollapse', [
+      state('collapsed', style({
+        height: '0',
+        width: '100%',
+        overflow: 'hidden',
+        opacity: '0',
+      })),
+      state('expanded', style({
+        height: '*',
+        width: '100%',
+        overflow: 'visible',
+        opacity: '1',
+      })),
+      transition('collapsed <=> expanded', animate('300ms ease-in-out')),
+    ]),
+  ]
 })
 export class LoginComponent implements OnInit {
 
@@ -21,6 +39,11 @@ export class LoginComponent implements OnInit {
   emailToCreate;
   password;
   passwordToCreate;
+  state = 'collapsed';
+
+  toggleState() {
+    this.state = (this.state === 'collapsed') ? 'expanded' : 'collapsed';
+  }
   
   openResetPasswordDialog() {
     let dialogRef = this.dialog.open(ResetPasswordComponent, {
