@@ -1,6 +1,8 @@
 <app-header [parentModel]="model"></app-header>
 <div class="flex-column">
-    <button mat-flat-button color="primary" (click)="toggleState()" [class.collapsed]="state === 'collapsed'">Mon poids</button>
+    <button mat-flat-button class="poids-btn" color="primary" (click)="toggleState()" [class.collapsed]="state === 'collapsed'">
+        <span>Mon poids</span>
+    </button>
 </div>
 <div [@expandCollapse]="state" class="poids">
     <app-weight-chart></app-weight-chart>

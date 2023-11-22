@@ -71,7 +71,7 @@ export class WorkoutService extends BaseService{
           });
 
           // On charge d'avance les séances pour + de fluidité.
-          this.sessionService.prefetchAllSessions(this.configuredWorkoutList);
+          //this.sessionService.prefetchAllSessions(this.configuredWorkoutList);
           
           return this.configuredWorkoutList;
         })

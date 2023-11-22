@@ -19,7 +19,10 @@ import { SessionService } from '../services/session.service';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-
+interface WheelItem {
+  label: string;
+  angle: number;
+}
 @Component({
   selector: 'app-exercises-picker',
   templateUrl: './exercises-picker.component.html',
@@ -51,9 +54,25 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
     private snackbarService: SnackbarService,
     private fb: UntypedFormBuilder,
     public dialog: MatDialog) { }
-
+    rotation = 0;
+      
+    items: WheelItem[] = [
+      { label: 'Item 1', angle: 0 },
+      { label: 'Item 2', angle: 60 },
+      { label: 'Item 3', angle: 120 },
+      { label: 'Item 4', angle: 180 },
+      { label: 'Item 5', angle: 240 },
+      { label: 'Item 6', angle: 300 },
+    ];
 
   ngOnInit(): void {
+
+    
+    
+    
+      
+
+
     // On récupère les noms d'exercices à partir du groupe musculaire sélectionné
     this.route.queryParams.subscribe( param => {
       this.myWorkout = param.workout;

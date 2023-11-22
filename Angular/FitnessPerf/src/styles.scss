@@ -4,7 +4,7 @@
 $text: #B7C7D4;
 
 $background: #0E1E2C;
-$background-panel: #314a60;
+$background-panel: #314a604a;
 $background-dialog: #141518;
 
 $button-valid: #2FAC69;
@@ -80,7 +80,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 main {
     height: 100%;
-    background: radial-gradient(#97d6ff70, transparent);
+    background: radial-gradient(#39516170, transparent);
 }
 
 
@@ -93,7 +93,8 @@ main {
 }
 
 .mat-flat-button, .mat-raised-button, .mat-fab {
-    background-color: $button
+    background-color: $button;
+    border: 1px solid $blue-ligher;
 }
 
 .mat-dialog-container {

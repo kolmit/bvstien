@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: space-evenly;
     row-gap: 1rem;
 
     .exercise {
@@ -37,13 +37,14 @@
 }
 
 .infos-generale {
-    justify-content: space-around;
+    justify-content: space-evenly;
 }
 
 .commentary {
     font-size: 0.75rem;
     font-style: italic;
     padding: 0 1rem;
+    margin-bottom: 0.5rem;
     text-align: center;
 }
 

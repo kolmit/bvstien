@@ -84,3 +84,24 @@
   overflow: hidden;
   transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
+
+
+.poids-btn {
+  
+}
+
+#chevron {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+}
+
+#chevron.up {
+  border-bottom: 8px solid black;
+}
+
+#chevron.down {
+  border-top: 8px solid black;
+}
+

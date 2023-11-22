@@ -1,40 +1,40 @@
 <app-header [parentModel]="model"></app-header>
-
 <div class="flex-column workout-title">
     <h1 class="flex-row workout-manage">
-        <span (click)="deleteCurrentSession()">{{CONSTANTS.CROSS_MARK}}</span>
         <span>{{this.myWorkout | titlecase}}</span>
-        <span (click)="pickSessionDate()">{{CONSTANTS.PLUS_MARK}}</span>
     </h1>
     <div class="flex-row">
-        <button mat-raised-button style="padding: 0 1rem;" (click)="openSessionHistory()" *ngIf="this.allSessions.length > 0">Mes dernières séances</button>
+        <button mat-raised-button style="padding: 0 1rem; margin-top: -2rem;" (click)="openSessionHistory()" *ngIf="this.allSessions.length > 0">
+            Mes dernières séances
+        </button>
     </div>
 </div>
 
 <hr class="separator" style="margin-bottom: 0;">
 
-
 <mat-accordion multi>
-        <div class="flex-row date-recap-container">
+    <div class="flex-column">
+        <div class="flex-row session-add-del">
+            <span class="add-del del-btn" (click)="deleteCurrentSession()">{{CONSTANTS.CROSS_MARK}}</span>
             <div class="flex-row date-container" style="width: 65%;">
-                <div (click)="switchSession(-1)" (disabled)="isSessionIndexExisting(-1)" [style.opacity]="isSessionIndexExisting(-1) ? 1 : 0.2"> &#10094; </div>
+                <div class="add-del" (click)="switchSession(-1)" (disabled)="isSessionIndexExisting(-1)" [style.opacity]="isSessionIndexExisting(-1) ? 1 : 0.2"> &#10094; </div>
                 <div class="flex-column session-date">
                     <div class="flex-column workout-date" *ngIf="this.allSessions[this.currentSessionIndex]; else noSessionToday"> 
-                        Séance du {{this.allSessions[this.currentSessionIndex]?.timestamp | date:'dd MMM. yyyy'}}
-                        <span>Tonnage : {{this.allSessions[this.currentSessionIndex]?.totalLifted}} kg</span>
+                        <span class="session-duno">Séance du {{this.allSessions[this.currentSessionIndex]?.timestamp | date:'dd MMM. yyyy'}}</span>
                     </div>
                     <ng-template #noSessionToday>Pas de séance</ng-template>
                 </div>
-                <div (click)="switchSession(1)" (disabled)="isSessionIndexExisting(1)" [style.opacity]="isSessionIndexExisting(1) ? 1 : 0.2"> &#10095; </div>
+                <div class="add-del" (click)="switchSession(1)" (disabled)="isSessionIndexExisting(1)" [style.opacity]="isSessionIndexExisting(1) ? 1 : 0.2"> &#10095; </div>
             </div>
-            <!-- <div style="width: 30%;">
-                <button mat-flat-button (click)="this.recapToggled = !this.recapToggled">
-                    Récap
-                    <span *ngIf="recapToggled" class="default-program-check">✔</span>
-                </button>
-            </div> -->
+            <span class="add-del add-btn" (click)="pickSessionDate()">{{CONSTANTS.PLUS_MARK}}</span>
         </div>
-    
+        <div class="recap-btn-container">
+            <button mat-raised-button class="recap-btn" (click)="this.recapToggled = !this.recapToggled">
+                Synthèse
+                <span *ngIf="recapToggled" class="default-program-check">✔</span>
+            </button>
+        </div>
+    </div>
     <ng-container *ngIf="recapToggled">
         <app-session-details [session]="this.allSessions[this.currentSessionIndex]"></app-session-details>
     </ng-container>
@@ -62,9 +62,10 @@
                                     <div [formGroupName]="serieIndex"  class="flex-row exercise-set">
 
                                         <mat-form-field [floatLabel]="floatLabelControl.value">
+                                            <mat-label>Répétitions</mat-label>
                                             <input type="number" 
                                                 [ngStyle]="{'opacity': isPrefilled(exerciceIndex, serieIndex) ? '0.5' : '1' }" 
-                                                matInput placeholder="Répétitions" 
+                                                matInput
                                                 formControlName="repetitionCtrl"
                                             >
                                         </mat-form-field>
@@ -110,3 +111,4 @@
 <div *ngIf="this.allSessions[this.currentSessionIndex] && !recapToggled" class="flex-row">
     <button mat-mini-fab class="add-button" (click)="addExercise()">+</button>
 </div>
+

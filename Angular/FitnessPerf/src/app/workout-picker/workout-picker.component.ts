@@ -275,4 +275,7 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
   identifyProgram(program: Program) {
     return program.id;
   }
+
+
+
 }

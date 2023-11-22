@@ -3,23 +3,24 @@
         <span (click)="back()"><img src="../../../../assets/svg/back.svg"/></span>
         <span (click)="null" style="opacity: 0.3;">Modifier</span>
     </div>
-    <ng-container  *ngIf="this.session">
-        <div class="session-date">
-            {{this.session.timestamp | date: 'dd MMMM yyyy'}}
+    <ng-container  *ngIf="this.sessionWithoutEmptyExo">
+        <div class="session-date" *ngIf="fromHistory">
+            {{this.sessionWithoutEmptyExo.timestamp | date: 'dd MMMM yyyy'}}
         </div>
+        <hr class="separator">
         <div class="flex-row infos-generale">
-            <span>Tonnage : {{this.session.totalLifted}} kg</span>
+            <span>Tonnage : {{this.sessionWithoutEmptyExo.totalLifted}} kg</span>
             <div class="flex-column">
                 <span>{{this.totalExercisesNumber}} exercices</span>
                 <span>{{this.totalSetsNumber}} séries</span>
             </div>
         </div>
-        <div class="commentary">
-            {{this.session.commentary}}
-        </div>
         <hr class="separator">
+        <div class="commentary">
+            {{this.sessionWithoutEmptyExo.commentary}}
+        </div>
         <div class="flex-wrap">
-            <div class="flex-column exercise" *ngFor="let exercise of this.session?.workout?.exercises">
+            <div class="flex-column exercise" *ngFor="let exercise of this.sessionWithoutEmptyExo?.workout?.exercises">
                 <span class="exercise-title">{{exercise.name}}</span>
                 <div *ngFor="let set of exercise.sets">
                     {{set.repetition}} × {{set.weight}} kg

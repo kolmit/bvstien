@@ -14,6 +14,7 @@ export class SessionDetailsComponent implements OnInit, OnChanges {
   
   @Input()
   session: Session;
+  sessionWithoutEmptyExo: Session;
 
   @Input() 
   fromHistory = false;
@@ -29,20 +30,18 @@ export class SessionDetailsComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.session.currentValue) {
       console.log('changes sessiondetails', changes)
-      this.computeGeneralInformations();
+      this.computeGeneralInformations(changes.session.currentValue);
     }
   }
   
   ngOnInit(): void {
-    if (this.session?.workout?.exercises) {
-      this.computeGeneralInformations();
-    }
   }
 
-  computeGeneralInformations() {
-    this.session.workout.exercises = this.session.workout.exercises.filter(exercise => exercise.sets?.length > 0);
-    this.totalExercisesNumber = this.session.workout.exercises.length;
-    this.session.workout.exercises.map(e => this.totalSetsNumber += e.sets.length);
+  computeGeneralInformations(sessionChanged: Session) {
+    this.sessionWithoutEmptyExo = JSON.parse(JSON.stringify(this.session));
+    this.sessionWithoutEmptyExo.workout.exercises = sessionChanged.workout.exercises.filter(exercise => exercise.sets?.length > 0);
+    this.totalExercisesNumber = this.sessionWithoutEmptyExo.workout.exercises.length;
+    this.sessionWithoutEmptyExo.workout.exercises.map(e => this.totalSetsNumber += e.sets.length);
   }
 
   back() {
