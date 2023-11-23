@@ -20,7 +20,10 @@
                 <div class="add-del" (click)="switchSession(-1)" (disabled)="isSessionIndexExisting(-1)" [style.opacity]="isSessionIndexExisting(-1) ? 1 : 0.2"> &#10094; </div>
                 <div class="flex-column session-date">
                     <div class="flex-column workout-date" *ngIf="this.allSessions[this.currentSessionIndex]; else noSessionToday"> 
-                        <span class="session-duno">Séance du {{this.allSessions[this.currentSessionIndex]?.timestamp | date:'dd MMM. yyyy'}}</span>
+                        <span class="flex-column" style="align-items: center;">
+                            <span>Séance</span>
+                            <span>{{this.allSessions[this.currentSessionIndex]?.timestamp | date:'dd MMM. yyyy'}}</span>
+                        </span>
                     </div>
                     <ng-template #noSessionToday>Pas de séance</ng-template>
                 </div>
@@ -30,8 +33,8 @@
         </div>
         <div class="recap-btn-container">
             <button mat-raised-button class="recap-btn" (click)="this.recapToggled = !this.recapToggled">
-                Synthèse
-                <span *ngIf="recapToggled" class="default-program-check">✔</span>
+                <mat-icon>insert_chart</mat-icon>
+                <span *ngIf="recapToggled" class="default-program-check">{{CONSTANTS.CHECK_MARK}}</span>
             </button>
         </div>
     </div>

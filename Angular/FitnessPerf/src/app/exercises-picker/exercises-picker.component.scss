@@ -180,8 +180,8 @@ div[formarrayname="exercisesForms"] {
 }
 
 .default-program-check {
-    font-size: 1rem;
-    color: greenyellow;
+    font-size: 0.75rem;
+    color: #ff9a2f;
     margin-left: 3px;
   }
 
@@ -191,7 +191,6 @@ div[formarrayname="exercisesForms"] {
     justify-content: center;
 
     .recap-btn {
-        width: 30%;
         font-size: 0.75rem;
         line-height: 25px;
       }
@@ -202,39 +201,3 @@ div[formarrayname="exercisesForms"] {
     font-size: 1.25rem;
     text-align: center;
 }
-
-
-.wheel-container {
-    position: relative;
-    width: 200px;
-    height: 200px;
-  }
-  
-  .wheel {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    transform-origin: center center;
-  }
-  
-  .wheel-item {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 80px;
-    height: 80px;
-    margin-top: -40px;
-    margin-left: -40px;
-    line-height: 80px;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    background-color: #fff;
-    transform-origin: center center;
-    cursor: pointer;
-    transition: transform 0.5s ease;
-  }
-  
-  
