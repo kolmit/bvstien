@@ -18,6 +18,7 @@ export class WorkoutService extends BaseService{
 
   static defaultWorkoutList: any[] = (workouts as any).default;
   configuredWorkoutList: any[] = [];
+  allSessionInit: boolean = false;
 
   constructor(firestore: AngularFirestore,
     private snackbarService: SnackbarService,
@@ -70,8 +71,11 @@ export class WorkoutService extends BaseService{
             }
           });
 
-          // On charge d'avance les séances pour + de fluidité.
-          //this.sessionService.prefetchAllSessions(this.configuredWorkoutList);
+          // On charge d'avance les séances pour + de fluidité, pouvoir afficher la timeline.
+          if (!this.allSessionInit) {
+            this.sessionService.prefetchAllSessions(this.configuredWorkoutList);
+            this.allSessionInit = true;
+          }
           
           return this.configuredWorkoutList;
         })

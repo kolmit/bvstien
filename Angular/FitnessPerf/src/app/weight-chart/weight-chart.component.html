@@ -1,20 +1,21 @@
-<div class="flex-column">
-    <div class="flex-row weight-container">
-        <div class="flex-column weight" *ngFor="let weight of this.allWeights">
-            <div class="flex-column" (click)="editWeight(weight)">
-                <span>{{weight.totalWeight}} kg<span> ({{getBodyFatPercentage(weight.totalWeight, weight.fatWeight)}}%)</span></span>
-                <span>{{displayDate(weight.date)}}</span>
+<div class="chart-weight-container">
+    <div class="chart-container">
+        <canvas  id="MyChart" >{{ chart }}</canvas>
+    </div>
+    <div class="flex-row weight-bar">
+        <div class="flex-row weight-container">
+            <div class="weight-history">
+                <div class="flex-column weight" *ngFor="let weight of this.allWeights">
+                    <div class="flex-column" (click)="editWeight(weight)">
+                        <span>{{weight.totalWeight}} kg</span>
+                        <span>({{getBodyFatPercentage(weight.totalWeight, weight.fatWeight)}}%)</span>
+                        <span>{{displayDate(weight.date)}}</span>
+                    </div>
+                </div>
             </div>
+            <span  mat-flat-button class="add-del add-btn" (click)="addWeight()">
+                {{CONSTANTS.PLUS_MARK}}
+            </span>
         </div>
     </div>
-    
-    <div class="flex-row">
-        <button mat-flat-button class="add-weight" (click)="addWeight()">
-            Ajouter
-        </button>
-    </div>
-    
-</div>
-<div class="chart-container">
-    <canvas  id="MyChart" >{{ chart }}z</canvas>
 </div>

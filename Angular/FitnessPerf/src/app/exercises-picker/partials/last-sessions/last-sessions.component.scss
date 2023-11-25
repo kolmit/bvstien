@@ -49,6 +49,10 @@
     border-right: 1px solid rgb(128, 128, 128, 0.5);
     border-left: 1px solid rgb(128, 128, 128, 0.5);
 
+    .set-line {
+        font-size: 0.75rem;
+    }
+
     &:active {
         transform: scale(0.9);
         transition: 300ms;

@@ -1,5 +1,9 @@
 @import '../../styles.scss';
 
+mat-tab-group {
+  box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.50196078);
+}
+
 .workouts {
   flex-wrap: wrap;
 
@@ -42,6 +46,7 @@
   }
 }
 
+
 #tabGroup {
   height: 100%;
 }
@@ -83,25 +88,18 @@
 .poids {
   overflow: hidden;
   transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  padding-top: 1rem;
 }
 
 
 .poids-btn {
-  
+  background: linear-gradient(180deg, #5f8aaf47 10%, transparent);
+  border: 0;
+  border-top: 2px solid #f79730;
+  border-radius: 15px 15px 0 0;
 }
 
-#chevron {
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
+.poids-btn-expanded {
+  background: linear-gradient(180deg, #6f553847 10%, transparent);
+  transition: 300ms;
 }
-
-#chevron.up {
-  border-bottom: 8px solid black;
-}
-
-#chevron.down {
-  border-top: 8px solid black;
-}
-

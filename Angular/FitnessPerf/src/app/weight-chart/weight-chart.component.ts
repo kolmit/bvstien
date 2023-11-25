@@ -9,6 +9,7 @@ import { filter } from 'rxjs/operators';
 import { Chart } from 'chart.js/auto';
 import { Utils } from '../utils/utils';
 import { Subscription } from 'rxjs';
+import { Constants } from '../utils/constants';
 
 @Component({
   selector: 'app-weight-chart',
@@ -16,6 +17,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./weight-chart.component.scss'],
 })
 export class WeightChartComponent implements OnInit, OnDestroy {
+  CONSTANTS = Constants;
   @Input() allWeights: Weight[] = [];
   public chart: any;
   subWeight: Subscription;
@@ -66,11 +68,11 @@ export class WeightChartComponent implements OnInit, OnDestroy {
   }
 
   displayDate(date: any) {
-    return formatDate(date, 'dd MMM yyyy', 'en');
+    return formatDate(date, 'dd MMM yy', 'en');
   }
 
   getBodyFatPercentage(total: number, fat: number) {
-    return ((fat / total) * 100).toFixed(2);
+    return ((fat / total) * 100).toFixed(1);
   }
 
   addWeight() {

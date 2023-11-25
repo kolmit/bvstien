@@ -75,6 +75,32 @@ html {
     color: white;
 }
 
+.add-del {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 50px;
+    font-size: 2rem;
+    &:active{
+        filter: brightness(150%);
+    }
+}
+
+.del-btn {
+    box-shadow: inset -2rem 0 19px -11px rgba(0, 0, 0, 0.2);
+    background-color: #ff00001f;
+    border: 2px solid #980000;
+    border-radius: 0.5rem;
+}
+
+.add-btn {
+    box-shadow: inset 2rem 0 19px -11px rgba(0, 0, 0, 0.2);
+    background-color: #00ff151f;
+    border: 2px solid #2e9800;
+    border-radius: 0.5rem;
+}
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 

@@ -35,7 +35,7 @@ import { FirebaseError } from "firebase/app";
   ]
 })
 export class WorkoutPickerComponent implements OnInit, OnDestroy {
-  state = 'collapsed';
+  state = 'expanded';
 
   toggleState() {
     this.state = (this.state === 'collapsed') ? 'expanded' : 'collapsed';

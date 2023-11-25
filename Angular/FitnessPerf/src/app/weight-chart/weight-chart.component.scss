@@ -1,21 +1,40 @@
-.weight-container {
+.chart-weight-container {
+    max-width: 95%;
+    align-items: center;
+    justify-content: center;
     display: flex;
-    border: 1px solid rgba(255, 255, 255, 0.283);
-    overflow-x: scroll;
-    direction: rtl;
-    width: 100%;
-    height: 5vh;
-    // background-color: rgba(255, 255, 255, 0.2);
+    flex-direction: column;
 
-    .weight {
-        font-size: 0.75rem;
-        min-width: 30%;
-        padding: 0.5rem;
-        border-right: 1px solid white;
-        border-left: 1px solid white;
+    .weight-bar {
+        max-width: 100%;
+    
+        .weight-container {
+            width: 100%;
+            .weight {
+                font-size: 0.75rem;
+                line-height: 0.75rem;
+                direction: ltr;
+                min-width: 10vh;
+                max-width: 10vh;
+                padding: 0.5rem;
+                border-right: 1px solid white;
+                border-left: 1px solid white;
+            }
+            
+            .weight-history {
+                display: flex;
+                flex-direction: row;
+                max-width: 85%;
+                display: flex;
+                border: 1px solid rgba(255, 255, 255, 0.283);
+                overflow-x: scroll;
+                direction: rtl;
+                height: 5vh;
+            }
+        }
+        
+        .add-weight {
+            display: flex;
+        }
     }
-}
-
-.add-weight {
-    display: flex;
 }

@@ -21,7 +21,7 @@
                     <div class="history-set" *ngFor="let history of exerciseHistory.setsHistory" (click)="selectHistoryDetails(history); toggleState();">
                         <span *ngIf="isFirst" class="set-date">{{history.date | date: 'dd MMM. yy'}}</span>
                         <span *ngIf="!history.exercisesSets || history.exercisesSets.length === 0 ">-</span>
-                        <span *ngFor="let set of history.exercisesSets">{{set.repetition}} × {{set.weight}} kg</span>
+                        <span *ngFor="let set of history.exercisesSets" class="set-line">{{set.repetition}} × {{set.weight}} kg</span>
                     </div>
                 </div>
     
