@@ -42,7 +42,7 @@ export class WeightChartComponent implements OnInit, OnDestroy {
 
       data: {
         labels: this.allWeights.map((w) => {
-          return formatDate(w.date, 'yyyy-MM-dd', 'en');
+          return formatDate(w.date, 'dd MMM yy', 'en');
         }),
         datasets: [
           {

@@ -35,22 +35,18 @@ import { FirebaseError } from "firebase/app";
   ]
 })
 export class WorkoutPickerComponent implements OnInit, OnDestroy {
-  state = 'expanded';
-
-  toggleState() {
-    this.state = (this.state === 'collapsed') ? 'expanded' : 'collapsed';
-  }
-
+  
   model: string = "WorkoutPickerComponent";
-
+  
   workoutSubscription: Subscription;
   programsSubscription: Subscription;
-
+  
   workoutList: { name: string; exercises: string[] }[] = [];
   programList: Program[] = [];
   selectedProgramIndex: number;
   nextSessionSuggestion: Map<string, string> = new Map(); // Map entre <ID du programme, Muscle> (Pour chaque programme, on a un muscle suggéré)
-
+  state = 'collapsed';
+  
   constructor(
     private router: Router,
     private workoutService: WorkoutService,
@@ -269,13 +265,14 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
     return program.id === this.programService.selectedDefaultProgram.id;
   }
 
+  toggleState() {
+    this.state = (this.state === 'collapsed') ? 'expanded' : 'collapsed';
+  }
+
   /**
    * Utilisé par le TrackBy
    */
   identifyProgram(program: Program) {
     return program.id;
   }
-
-
-
 }

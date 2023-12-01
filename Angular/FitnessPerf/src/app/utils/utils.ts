@@ -16,7 +16,7 @@ export class Utils {
 
     static sortWeightsByDate (sessions: Weight[]): Weight[] { // easy refacto 
         return sessions.sort((a, b) => {
-            return <any>new Date(a.date) - <any>new Date(b.date);
+            return <any>new Date(b.date) - <any>new Date(a.date);
         });
     }
 }

@@ -47,23 +47,4 @@ export class WeightService extends BaseService {
         })
       );
   }
-
-  mockWeights() {
-    let weightList: Weight[] = [];
-
-    for (let i = 0 ; i < 15 ; i++) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      weightList.push(
-        {
-          id: i.toString(),
-          date: d,
-          totalWeight: Number.parseFloat((80 + (i * i%2) + Math.random()*10).toPrecision(1)),
-          fatWeight: Number.parseFloat((80 * 0.2 + (i * i%2)).toPrecision(1))
-        }
-      )
-    }
-
-    return weightList;
-  }
 }

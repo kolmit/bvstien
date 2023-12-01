@@ -1,24 +1,24 @@
 .chart-weight-container {
     max-width: 95%;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
+    margin: auto;
 
     .weight-bar {
         max-width: 100%;
     
         .weight-container {
+            margin-top: 0.5rem;
             width: 100%;
             .weight {
                 font-size: 0.75rem;
                 line-height: 0.75rem;
                 direction: ltr;
+                align-items: center;
+                justify-content: center;
                 min-width: 10vh;
                 max-width: 10vh;
                 padding: 0.5rem;
-                border-right: 1px solid white;
-                border-left: 1px solid white;
+                border-right: 1px solid rgba(255, 255, 255, 0.25);
+                border-left: 1px solid rgba(255, 255, 255, 0.25);
             }
             
             .weight-history {
@@ -37,4 +37,11 @@
             display: flex;
         }
     }
+}
+
+.add {
+    height: auto;
+    width: 10vh;
+    margin-left: 5px;
+    font-size: 1.5rem;
 }
