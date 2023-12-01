@@ -36,7 +36,6 @@ export class WeightService extends BaseService {
         map((allWeights) => {
           let weightList: Weight[] = [];
 
-          return this.mockWeights();
           allWeights.map((programMetadata) => {
             let p: Weight = programMetadata.payload.doc.data() as Weight;
             p.id = programMetadata.payload.doc.id;
