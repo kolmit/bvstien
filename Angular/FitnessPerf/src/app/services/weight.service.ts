@@ -16,8 +16,11 @@ export class WeightService extends BaseService {
     super(firestore);
   }
 
-  save(weight: Weight) {
-    return this.getUserDataDocuments().collection(Constants.USER_WEIGHT).doc().set(weight);
+  save(weight: Weight): Promise<void> {
+    if (this.formatAndValidateWeight(weight)) {
+      return this.getUserDataDocuments().collection(Constants.USER_WEIGHT).doc().set(weight);
+    } 
+    return Promise.reject('Les poids ou la date ne sont pas correctes.');
   }
 
   delete(weight: Weight) {
@@ -25,7 +28,10 @@ export class WeightService extends BaseService {
   }
 
   update(weight: Weight) {
-    return this.getUserDataDocuments().collection(Constants.USER_WEIGHT).doc(weight.id).update(weight);
+    if (this.formatAndValidateWeight(weight)) {
+      return this.getUserDataDocuments().collection(Constants.USER_WEIGHT).doc(weight.id).update(weight);
+    }
+    return Promise.reject('Les poids ou la date ne sont pas correctes.');
   }
 
   getWeights() {
@@ -46,5 +52,21 @@ export class WeightService extends BaseService {
           return weightList;
         })
       );
+  }
+
+  private formatWeightComa(weight: Weight): Weight {
+    weight.totalWeight = parseFloat(weight.totalWeight.toString().replace(',', '.'));
+    if (weight.fatWeight >= 0) {
+      weight.fatWeight = parseFloat(weight.fatWeight.toString().replace(',', '.'));
+    }
+    return weight;
+  }
+
+  private formatAndValidateWeight(weight: Weight): boolean {
+    weight = this.formatWeightComa(weight);
+    return weight.date 
+      && weight.totalWeight
+      && typeof weight.totalWeight === 'number'
+      && (!weight.fatWeight || typeof weight.fatWeight === 'number');
   }
 }

@@ -11,15 +11,19 @@
         </mat-form-field>
     </div>
     
-    <!--<app-timeline-picker (chosenDate)="setChosenDate($event)"></app-timeline-picker>-->
     <mat-form-field class="flex-row">
         <mat-label>Quand ?</mat-label>
-        <input matInput [(ngModel)]="weight.date" [matDatepicker]="picker">
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <div class="flex-row">
+            <input matInput [(ngModel)]="weight.date" [matDatepicker]="picker">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        </div>
         <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 </div>
 
 <div class="flex-column choice-buttons">
-    <button mat-raised-button style="background-color: #376c9f" (click)="submitWeight()">Ajouter</button>
+    <button mat-raised-button style="background-color: #376c9f; margin-bottom: 0.5rem;" (click)="submitWeight()">Ajouter</button>
+    <ng-container *ngIf="this.weight.id">
+        <button mat-raised-button color="warn" (click)="deleteWeight()">Supprimer</button>
+    </ng-container>
 </div>

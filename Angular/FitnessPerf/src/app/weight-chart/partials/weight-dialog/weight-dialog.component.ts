@@ -3,6 +3,10 @@ import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDia
 import { Weight } from 'src/app/model/weight.model';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
+export declare type WeightDialogResult = {
+  weight: Weight,
+  isUpdate: boolean
+}
 @Component({
   selector: 'app-weight-dialog',
   templateUrl: './weight-dialog.component.html',
@@ -11,21 +15,34 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 export class WeightDialogComponent implements OnInit {
   weight: Weight;
 
-  constructor(
-    private snackbarService: SnackbarService,
+  constructor(private snackbarService: SnackbarService,
     private dialog: MatDialogRef<WeightDialogComponent>, 
-    @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.weight = data?.weight ?? {};
+    @Inject(MAT_DIALOG_DATA) public data: any) 
+  {
+      this.weight = data?.weight ?? {};
+      if (!this.weight?.date) {
+        this.weight.date = new Date();
+      }
   }
 
   ngOnInit(): void {}
 
   submitWeight() {
     if (this.weight.date && this.weight.totalWeight) {
-      this.dialog.close(this.weight);
+      this.dialog.close({
+        weight: this.weight,
+        isUpdate: true
+      });
     } else {
       this.snackbarService.openSnackBar('Poids et date obligatoires');
     }
+  }
+
+  deleteWeight() {
+    this.dialog.close({
+      weight: this.weight,
+      isUpdate: false
+    });  
   }
 
   setChosenDate(event: Date) {

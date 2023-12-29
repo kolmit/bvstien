@@ -4,12 +4,13 @@ import { WeightService } from '../services/weight.service';
 import { formatDate } from '@angular/common';
 import { Session } from '../model/session.model';
 import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
-import { WeightDialogComponent } from './partials/weight-dialog/weight-dialog.component';
+import { WeightDialogComponent, WeightDialogResult } from './partials/weight-dialog/weight-dialog.component';
 import { filter } from 'rxjs/operators';
 import { Chart } from 'chart.js/auto';
 import { Utils } from '../utils/utils';
 import { Subscription } from 'rxjs';
 import { Constants } from '../utils/constants';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-weight-chart',
@@ -22,12 +23,15 @@ export class WeightChartComponent implements OnInit, OnDestroy {
   public chart: any;
   subWeight: Subscription;
 
-  constructor(private weightService: WeightService, private dialog: MatDialog) {}
+  constructor(private weightService: WeightService,
+    private dialog: MatDialog,
+    private snackbarService: SnackbarService) {}
 
   ngOnInit(): void {
     this.subWeight = this.weightService.getWeights().subscribe((allWeights) => {
       this.allWeights = Utils.sortWeightsByDate(allWeights);
       this.createChart();
+      this.addWeight();
     });
   }
 
@@ -38,9 +42,11 @@ export class WeightChartComponent implements OnInit, OnDestroy {
   createChart() {
     this.chart?.destroy();
     this.chart = new Chart('MyChart', {
-      type: 'line',
+      type: 'bar',
+      
 
       data: {
+        yLabels: ['kg'],
         labels: this.allWeights.map((w) => {
           return formatDate(w.date, 'dd MMM yy', 'en');
         }),
@@ -81,10 +87,12 @@ export class WeightChartComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter((w) => !!w))
       .subscribe((weight: Weight) => {
-        if (weight.date && weight.totalWeight) {
           this.weightService.save(weight).then(() => {
+            this.snackbarService.openSnackBar('Sauvegardé ! ✅');
+          }).catch((promiseRejected) => {
+            this.snackbarService.openSnackBar(promiseRejected);
           });
-        }      
+            
       });
   }
 
@@ -98,10 +106,14 @@ export class WeightChartComponent implements OnInit, OnDestroy {
       })
       .afterClosed()
       .pipe(filter((w) => !!w))
-      .subscribe((weight: Weight) => {
-        this.weightService.update(weight).then(() => {
-          console.log('ok weight', weight);
-        });
+      .subscribe((result: WeightDialogResult) => {
+        const serviceAction = result.isUpdate ? this.weightService.update(result.weight) : this.weightService.delete(result.weight);
+        serviceAction.then(() => {
+          this.snackbarService.openSnackBar('Sauvegardé ! ✅');
+        })
+        .catch((promiseRejected) => {
+          this.snackbarService.openSnackBar(promiseRejected);
+        }); 
       });
   }
 }

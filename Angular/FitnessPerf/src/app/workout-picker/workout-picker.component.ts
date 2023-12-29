@@ -238,12 +238,6 @@ export class WorkoutPickerComponent implements OnInit, OnDestroy {
       });
   }
 
-  openModalPoids() {
-    this.storageService.createWeightCollection().then( () => {
-      console.log('ok')
-    })
-  }
-
   setNextSessionSuggestion(suggestion: {
     programId: string;
     nextSession: string;
