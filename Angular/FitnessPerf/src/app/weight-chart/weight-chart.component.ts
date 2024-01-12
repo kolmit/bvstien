@@ -3,8 +3,15 @@ import { Weight } from '../model/weight.model';
 import { WeightService } from '../services/weight.service';
 import { formatDate } from '@angular/common';
 import { Session } from '../model/session.model';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
-import { WeightDialogComponent, WeightDialogResult } from './partials/weight-dialog/weight-dialog.component';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef
+} from '@angular/material/legacy-dialog';
+import {
+  WeightDialogComponent,
+  WeightDialogResult
+} from './partials/weight-dialog/weight-dialog.component';
 import { filter } from 'rxjs/operators';
 import { Chart } from 'chart.js/auto';
 import { Utils } from '../utils/utils';
@@ -15,7 +22,7 @@ import { SnackbarService } from '../services/snackbar.service';
 @Component({
   selector: 'app-weight-chart',
   templateUrl: './weight-chart.component.html',
-  styleUrls: ['./weight-chart.component.scss'],
+  styleUrls: ['./weight-chart.component.scss']
 })
 export class WeightChartComponent implements OnInit, OnDestroy {
   CONSTANTS = Constants;
@@ -23,9 +30,11 @@ export class WeightChartComponent implements OnInit, OnDestroy {
   public chart: any;
   subWeight: Subscription;
 
-  constructor(private weightService: WeightService,
+  constructor(
+    private weightService: WeightService,
     private dialog: MatDialog,
-    private snackbarService: SnackbarService) {}
+    private snackbarService: SnackbarService
+  ) {}
 
   ngOnInit(): void {
     this.subWeight = this.weightService.getWeights().subscribe((allWeights) => {
@@ -43,7 +52,6 @@ export class WeightChartComponent implements OnInit, OnDestroy {
     this.chart?.destroy();
     this.chart = new Chart('MyChart', {
       type: 'bar',
-      
 
       data: {
         yLabels: ['kg'],
@@ -55,21 +63,21 @@ export class WeightChartComponent implements OnInit, OnDestroy {
             label: 'Poids',
             data: this.allWeights.map((w) => w.totalWeight),
             backgroundColor: '#ff9900',
-            borderColor: '#ff9900',
+            borderColor: '#ff9900'
           },
           {
             label: 'Bodyfat',
             data: this.allWeights.map((w) => w.fatWeight),
             borderColor: '#67d4ff',
-            backgroundColor: '#67d4ff',
-          },
-        ],
+            backgroundColor: '#67d4ff'
+          }
+        ]
       },
       options: {
         aspectRatio: 2.5,
         color: 'white',
-        borderColor: 'grey',
-      },
+        borderColor: 'grey'
+      }
     });
   }
 
@@ -87,12 +95,14 @@ export class WeightChartComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter((w) => !!w))
       .subscribe((weight: Weight) => {
-          this.weightService.save(weight).then(() => {
+        this.weightService
+          .save(weight)
+          .then(() => {
             this.snackbarService.openSnackBar('Sauvegardé ! ✅');
-          }).catch((promiseRejected) => {
+          })
+          .catch((promiseRejected) => {
             this.snackbarService.openSnackBar(promiseRejected);
           });
-            
       });
   }
 
@@ -100,20 +110,23 @@ export class WeightChartComponent implements OnInit, OnDestroy {
     this.dialog
       .open(WeightDialogComponent, {
         data: {
-          weight: weight,
+          weight: weight
         },
-        width: '100vh',
+        width: '100vh'
       })
       .afterClosed()
       .pipe(filter((w) => !!w))
       .subscribe((result: WeightDialogResult) => {
-        const serviceAction = result.isUpdate ? this.weightService.update(result.weight) : this.weightService.delete(result.weight);
-        serviceAction.then(() => {
-          this.snackbarService.openSnackBar('Sauvegardé ! ✅');
-        })
-        .catch((promiseRejected) => {
-          this.snackbarService.openSnackBar(promiseRejected);
-        }); 
+        const serviceAction = result.isUpdate
+          ? this.weightService.update(result.weight)
+          : this.weightService.delete(result.weight);
+        serviceAction
+          .then(() => {
+            this.snackbarService.openSnackBar('Sauvegardé ! ✅');
+          })
+          .catch((promiseRejected) => {
+            this.snackbarService.openSnackBar(promiseRejected);
+          });
       });
   }
 }

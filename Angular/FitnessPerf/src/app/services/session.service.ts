@@ -7,22 +7,20 @@ import { Session } from '../model/session.model';
 import { Constants } from '../utils/constants';
 import { BaseService } from './base.service';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService extends BaseService {
-
-  sessionMapSubject: BehaviorSubject<Map<string, Session[]>> = new BehaviorSubject(new Map()); // Map mémoire (cache) entre : <nom du muscle, séances[]> 
+  sessionMapSubject: BehaviorSubject<Map<string, Session[]>> = new BehaviorSubject(new Map()); // Map mémoire (cache) entre : <nom du muscle, séances[]>
   tonnageMap: Map<Date, number> = new Map();
 
-  constructor(firestore: AngularFirestore) { 
-    super(firestore); 
+  constructor(firestore: AngularFirestore) {
+    super(firestore);
   }
 
   save(session: Session) {
     session.totalLifted = this.calculateTonnage(session);
-    
+
     return this.getUserDataDocuments()
       .collection(session.workout.name)
       .doc(this.buildSessionDocumentName(session.timestamp))
@@ -50,13 +48,12 @@ export class SessionService extends BaseService {
   prefetchAllSessions(configuredWorkouts: any[]) {
     //On requête les N muscles dans un forkjoin pour éviter d'émettre N fois une nouvelle valeur pour subject
     const sessionsByWorkout$: Observable<Session[]>[] = [];
-    for (let workout of configuredWorkouts.map(w => w.name).slice(0, Constants.MAX_PREFETCH)) {
+    for (let workout of configuredWorkouts.map((w) => w.name).slice(0, Constants.MAX_PREFETCH)) {
       sessionsByWorkout$.push(this.fetchAllSessionByWorkout(workout).pipe(first()));
     }
-    forkJoin(sessionsByWorkout$)
-      .subscribe(() => {
-        this.sessionMapSubject.next(this.sessionMapSubject.getValue());
-      });
+    forkJoin(sessionsByWorkout$).subscribe(() => {
+      this.sessionMapSubject.next(this.sessionMapSubject.getValue());
+    });
   }
 
   /**
@@ -64,7 +61,7 @@ export class SessionService extends BaseService {
    * @param workoutName : Le muscle pour lequel on veut les séances.
    * @returns Il suffit de s'abonner à cette méthode pour recevoir les Session[].
    */
-   fetchAllSessionByWorkout(workoutName: string): Observable<Session[]> {
+  fetchAllSessionByWorkout(workoutName: string): Observable<Session[]> {
     return this.getUserDataDocuments()
       .collection(workoutName)
       .valueChanges()
@@ -73,8 +70,13 @@ export class SessionService extends BaseService {
           let sessions: Session[] = [];
 
           if (fetchedSessions) {
-            fetchedSessions.forEach(session => sessions.push(session));
-            sessions.forEach((session: any) => session.timestamp = session.timestamp.seconds ? Session.convertTimestampToDate(session.timestamp.seconds) : session.timestamp);
+            fetchedSessions.forEach((session) => sessions.push(session));
+            sessions.forEach(
+              (session: any) =>
+                (session.timestamp = session.timestamp.seconds
+                  ? Session.convertTimestampToDate(session.timestamp.seconds)
+                  : session.timestamp)
+            );
           }
           this.sessionMapSubject.getValue().set(workoutName, sessions);
           return sessions;
@@ -83,14 +85,14 @@ export class SessionService extends BaseService {
   }
 
   calculateTonnage(session: Session): number {
-      let totalSession: number = 0;
-      for (let exo of session.workout.exercises) {
-        let totalPerExercise: number = 0;
-        for (let set of exo.sets) {
-          totalPerExercise = totalPerExercise + (set.repetition * set.weight)
-        }
-        totalSession = totalSession + totalPerExercise;
+    let totalSession: number = 0;
+    for (let exo of session.workout.exercises) {
+      let totalPerExercise: number = 0;
+      for (let set of exo.sets) {
+        totalPerExercise = totalPerExercise + set.repetition * set.weight;
       }
-      return totalSession;
+      totalSession = totalSession + totalPerExercise;
     }
+    return totalSession;
+  }
 }

@@ -1,6 +1,6 @@
-import { ExerciseSet } from "./exercise-set.model";
+import { ExerciseSet } from './exercise-set.model';
 
 export class ExerciseHistoryTuple {
-    date: Date;
-    exercisesSets: ExerciseSet[];
-} 
+  date: Date;
+  exercisesSets: ExerciseSet[];
+}

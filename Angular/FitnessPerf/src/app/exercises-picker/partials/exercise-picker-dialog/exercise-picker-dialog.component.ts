@@ -8,17 +8,14 @@ import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dia
 })
 export class ExercisePickerDialogComponent implements OnInit {
   newExoName;
-  constructor(public dialogRef: MatDialogRef<ExercisePickerDialogComponent>) { }
+  constructor(public dialogRef: MatDialogRef<ExercisePickerDialogComponent>) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   submitExercise(addExoToConfiguration: boolean) {
-    this.dialogRef.close(
-      {
-        exerciseName: this.newExoName,
-        addExoToConfiguration: addExoToConfiguration
-      }
-    );
+    this.dialogRef.close({
+      exerciseName: this.newExoName,
+      addExoToConfiguration: addExoToConfiguration
+    });
   }
 }

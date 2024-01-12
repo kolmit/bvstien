@@ -1,5 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+} from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'app-reset-password',
@@ -10,9 +13,9 @@ export class ResetPasswordComponent {
   email;
 
   constructor(
-    public dialogRef: MatDialogRef<ResetPasswordComponent>, 
+    public dialogRef: MatDialogRef<ResetPasswordComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { emailPlaceholder: string }
-  ) { 
+  ) {
     this.email = data.emailPlaceholder;
   }
 

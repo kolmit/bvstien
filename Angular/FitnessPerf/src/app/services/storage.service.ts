@@ -4,7 +4,7 @@ import { AngularFirestore, DocumentData, QuerySnapshot } from '@angular/fire/com
 import { forkJoin, Observable } from 'rxjs';
 import { Session } from '../model/session.model';
 import { Constants } from '../utils/constants';
-import { saveAs } from 'file-saver/src/FileSaver'; 
+import { saveAs } from 'file-saver/src/FileSaver';
 
 import * as imported from '../../assets/exampleImportData.json';
 import { SnackbarService } from './snackbar.service';
@@ -16,22 +16,23 @@ import { Weight } from '../model/weight.model';
   providedIn: 'root'
 })
 export class StorageService extends BaseService {
-
   importedWorkouts: any[] = (imported as any).default;
   IMPORT_DESTINATION_COLLECTION = environment.USER_DATA;
 
-  constructor(firestore: AngularFirestore,
-    private snackbarService: SnackbarService) {
-      super(firestore); 
-    }
+  constructor(
+    firestore: AngularFirestore,
+    private snackbarService: SnackbarService
+  ) {
+    super(firestore);
+  }
 
   createUserRootDocument() {
     try {
       return this.firestore
-      .collection(Constants.USER_DATA)
-      .doc(localStorage.getItem('login'))
-      .set({});
-    } catch(err) {
+        .collection(Constants.USER_DATA)
+        .doc(localStorage.getItem('login'))
+        .set({});
+    } catch (err) {
       this.snackbarService.openSnackBar('Création du répertoire racine', err);
     }
   }
@@ -42,22 +43,22 @@ export class StorageService extends BaseService {
         totalWeight: -1,
         date: new Date(),
         fatWeight: -1
-      }
+      };
       return this.firestore
         .collection(Constants.USER_DATA)
         .doc(localStorage.getItem('login'))
         .collection(Constants.USER_WEIGHT)
         .doc()
-        .set(weightModel)
-    } catch(err) {
+        .set(weightModel);
+    } catch (err) {
       this.snackbarService.openSnackBar('Création de la collection weight', err);
     }
   }
 
   /** Méthode doublon de save(Session).
    * Permet de sauvegarder une session dans la collection "Import"
-   * 
-   * Exemple de fichier JSON valide pour l'importation : exampleImportData.json 
+   *
+   * Exemple de fichier JSON valide pour l'importation : exampleImportData.json
    **/
   saveImportedSession(session: Session): Promise<void> {
     return this.firestore
@@ -74,49 +75,44 @@ export class StorageService extends BaseService {
     this.getUserDataDocuments()
       .collection(Constants.USER_EXERCISES)
       .get()
-      .subscribe( (allExercises) => {
-
+      .subscribe((allExercises) => {
         // Pour chaque exercice, on prépare les requêtes pour récupérer les séances :
         let forkJoinArray: Observable<QuerySnapshot<DocumentData>>[] = [];
-        allExercises.docs.forEach( (exo) => {
+        allExercises.docs.forEach((exo) => {
           let muscle: string = Object.keys(exo.data())[0];
 
-          forkJoinArray.push(
-            this.getUserDataDocuments()
-            .collection(muscle)
-            .get()
-          );
+          forkJoinArray.push(this.getUserDataDocuments().collection(muscle).get());
         });
 
         let dataToExport = [];
 
         // ForkJoin pour que toutes les requêtes des différents muscles soient traitées en même temps
-        forkJoin(forkJoinArray)
-          .subscribe( (allResponse: QuerySnapshot<DocumentData>[]) => {
+        forkJoin(forkJoinArray).subscribe((allResponse: QuerySnapshot<DocumentData>[]) => {
+          allResponse.forEach((response) => {
+            response.docs.forEach((doc) => {
+              let session: Session = {
+                timestamp: Session.convertTimestampToDate(doc.data().timestamp.seconds),
+                workout: doc.data().workout,
+                totalLifted: doc.data().totalLifted
+              };
 
-            allResponse.forEach(response => {
-              response.docs.forEach(doc => {
-                
-                let session: Session = {
-                  timestamp: Session.convertTimestampToDate(doc.data().timestamp.seconds),
-                  workout: doc.data().workout,
-                  totalLifted: doc.data().totalLifted
-                };
-
-                dataToExport.push(
-                  {
-                    [session.workout.name] : session
-                  }
-                );
+              dataToExport.push({
+                [session.workout.name]: session
               });
             });
-            console.log('Export : ', dataToExport);
-
-            var blob = new Blob([JSON.stringify(dataToExport)], {type: "text/plain;charset=utf-8"});
-            const exportFileName = "Export_" + formatDate(new Date(), 'yyyy-MM-dd', 'en') + "_" + localStorage.getItem('login') + ".json";
-            saveAs(blob, exportFileName);
-            this.snackbarService.openSnackBar("Export réussi.")
           });
+          console.log('Export : ', dataToExport);
+
+          var blob = new Blob([JSON.stringify(dataToExport)], { type: 'text/plain;charset=utf-8' });
+          const exportFileName =
+            'Export_' +
+            formatDate(new Date(), 'yyyy-MM-dd', 'en') +
+            '_' +
+            localStorage.getItem('login') +
+            '.json';
+          saveAs(blob, exportFileName);
+          this.snackbarService.openSnackBar('Export réussi.');
+        });
       });
   }
 }

@@ -8,9 +8,8 @@ describe('FlipComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FlipComponent ]
-    })
-    .compileComponents();
+      declarations: [FlipComponent]
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -1,4 +1,4 @@
 export class ExerciseSet {
-    repetition: number;
-    weight: number;
+  repetition: number;
+  weight: number;
 }

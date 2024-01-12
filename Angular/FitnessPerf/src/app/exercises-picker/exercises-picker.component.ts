@@ -4,7 +4,13 @@ import { Exercise } from '../model/exercise.model';
 import { Workout } from '../model/workout.model';
 import { Session } from '../model/session.model';
 import { WorkoutService } from '../services/workout.service';
-import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder, UntypedFormArray, RequiredValidator } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  UntypedFormBuilder,
+  UntypedFormArray,
+  RequiredValidator
+} from '@angular/forms';
 import { ExerciseSet } from '../model/exercise-set.model';
 import { LastSessionsComponent } from './partials/last-sessions/last-sessions.component';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
@@ -34,7 +40,7 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
 
   myWorkout: string;
   allSessions: Session[] = [];
-  
+
   currentSessionIndex: number;
 
   floatLabelControl = new UntypedFormControl('auto');
@@ -45,57 +51,50 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
   textaeraSubject: Subject<string> = new Subject<string>();
   sessionCommentary: string;
 
-
   recapToggled = false;
 
-  constructor(private route: ActivatedRoute, 
+  constructor(
+    private route: ActivatedRoute,
     private workoutService: WorkoutService,
     private sessionService: SessionService,
     private snackbarService: SnackbarService,
     private fb: UntypedFormBuilder,
-    public dialog: MatDialog) { }
-    rotation = 0;
-      
-    items: WheelItem[] = [
-      { label: 'Item 1', angle: 0 },
-      { label: 'Item 2', angle: 60 },
-      { label: 'Item 3', angle: 120 },
-      { label: 'Item 4', angle: 180 },
-      { label: 'Item 5', angle: 240 },
-      { label: 'Item 6', angle: 300 },
-    ];
+    public dialog: MatDialog
+  ) {}
+  rotation = 0;
+
+  items: WheelItem[] = [
+    { label: 'Item 1', angle: 0 },
+    { label: 'Item 2', angle: 60 },
+    { label: 'Item 3', angle: 120 },
+    { label: 'Item 4', angle: 180 },
+    { label: 'Item 5', angle: 240 },
+    { label: 'Item 6', angle: 300 }
+  ];
 
   ngOnInit(): void {
-
-    
-    
-    
-      
-
-
     // On récupère les noms d'exercices à partir du groupe musculaire sélectionné
-    this.route.queryParams.subscribe( param => {
+    this.route.queryParams.subscribe((param) => {
       this.myWorkout = param.workout;
       this.getSessionHistory(this.myWorkout);
 
-      if (param.sessionDate) { // Si on vient d'une redirection du calendrier
+      if (param.sessionDate) {
+        // Si on vient d'une redirection du calendrier
         this.goToSession(param.sessionDate);
       }
     });
 
-    this.textAeraSubscription = this.textaeraSubject
-      .pipe(debounceTime(2000))
-      .subscribe(() => {
-        this.sessionService.update({
-          ...this.allSessions[this.currentSessionIndex],
-          commentary: this.sessionCommentary
-        });
+    this.textAeraSubscription = this.textaeraSubject.pipe(debounceTime(2000)).subscribe(() => {
+      this.sessionService.update({
+        ...this.allSessions[this.currentSessionIndex],
+        commentary: this.sessionCommentary
       });
+    });
 
-      // setTimeout(() => {
-      //         this.openSessionHistory();
+    // setTimeout(() => {
+    //         this.openSessionHistory();
 
-      // }, 500);
+    // }, 500);
   }
 
   textaeraChanged(e) {
@@ -103,57 +102,66 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sessionSubscription?.unsubscribe()
+    this.sessionSubscription?.unsubscribe();
   }
-
 
   openSessionHistory() {
     this.dialog.open(LastSessionsComponent, {
       width: '70vh',
       height: '75vh',
-      data: { 
-        myWorkout : this.myWorkout,
+      data: {
+        myWorkout: this.myWorkout,
         allSessions: this.allSessions
-       }
-    });    
+      }
+    });
   }
-
 
   /** Sauvegarde une série d'un exercice */
   submitSerie(exerciceIndex, serieIndex) {
-    if (this.isSerieEmpty(exerciceIndex, serieIndex)){ 
-      return; 
+    if (this.isSerieEmpty(exerciceIndex, serieIndex)) {
+      return;
     }
-    
+
     const theSerie = this.getExerciseSeries(exerciceIndex).at(serieIndex);
     const reps = theSerie.get('repetitionCtrl');
     const weight = theSerie.get('weightCtrl');
-    const newSerie: ExerciseSet = {repetition: reps.value, weight: weight.value};
+    const newSerie: ExerciseSet = { repetition: reps.value, weight: weight.value };
 
-    if (this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets[serieIndex]) { 
-      this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets[serieIndex] = newSerie; // Modification d'une série
-    } else { 
-      this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets.push(newSerie); // Ajout d'une nouvelle 
+    if (
+      this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets[serieIndex]
+    ) {
+      this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets[serieIndex] =
+        newSerie; // Modification d'une série
+    } else {
+      this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets.push(
+        newSerie
+      ); // Ajout d'une nouvelle
     }
     this.sessionService.save(this.allSessions[this.currentSessionIndex]);
   }
 
   deleteSerie(exerciceIndex, serieIndex) {
-    this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets.splice(serieIndex, 1);
+    this.allSessions[this.currentSessionIndex].workout.exercises[exerciceIndex].sets.splice(
+      serieIndex,
+      1
+    );
     this.sessionService.save(this.allSessions[this.currentSessionIndex]);
   }
 
-
   isSessionExisting(date: Date): boolean {
-    return (this.allSessions.findIndex((s: Session) => formatDate(s.timestamp, "dd-MM-yyyy", "en") === formatDate(date, "dd-MM-yyyy", "en")) !== -1);
+    return (
+      this.allSessions.findIndex(
+        (s: Session) =>
+          formatDate(s.timestamp, 'dd-MM-yyyy', 'en') === formatDate(date, 'dd-MM-yyyy', 'en')
+      ) !== -1
+    );
   }
-
 
   getSessionHistory(myWorkout: string) {
     let sessionsFromService = this.sessionService.getSessionsByWorkout(myWorkout);
 
     // Si les séances ont déjà été récupérées par le service
-    if (sessionsFromService !== undefined) { 
+    if (sessionsFromService !== undefined) {
       this.sortSessionsAndInitIndex(sessionsFromService);
     }
     // On s'abonne aux changement de valeurs sur les Sessions (pour se màj à chaque submit de série, d'exo, etc...)
@@ -163,11 +171,10 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
         this.sortSessionsAndInitIndex(allSessionsForMyWorkout);
       });
   }
-    
 
   /**
    * Sauvegarde les séances en mémoire (this.allSessions)
-   * @param fetchedSessions 
+   * @param fetchedSessions
    */
   sortSessionsAndInitIndex(fetchedSessions: Session[]) {
     if (fetchedSessions.length > 0) {
@@ -176,67 +183,73 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
       if (this.currentSessionIndex === undefined || !this.allSessions[this.currentSessionIndex]) {
         this.currentSessionIndex = this.allSessions?.length - 1;
       }
-      this.populateForms(this.allSessions[this.currentSessionIndex]); 
+      this.populateForms(this.allSessions[this.currentSessionIndex]);
     } else {
       this.allSessions = [];
       this.currentSessionIndex = 0;
     }
   }
 
-
   newSession(chosenDate: Date) {
     if (!this.isSessionExisting(chosenDate)) {
-        // On récupère un objet Workout mais qui ne contient que les noms d'exo (et pas de série...)
-        const myExercisesNames: string[] = this.workoutService.getConfiguredExercises(this.myWorkout);
-        let myWorkoutExercisesWithSets: Exercise[] = [];
-        
-        // Alors on initialise les objets Exercise avec un tableau de série (vide).
-        if (myExercisesNames) {
-          for (let exo of myExercisesNames) {
-            myWorkoutExercisesWithSets.push( {name: exo, sets: []} )
-          }
-        }
-        
-        let workout: Workout = {name: this.myWorkout, exercises: myWorkoutExercisesWithSets};
-        let session: Session = {timestamp: chosenDate, workout: workout, totalLifted: 0};
+      // On récupère un objet Workout mais qui ne contient que les noms d'exo (et pas de série...)
+      const myExercisesNames: string[] = this.workoutService.getConfiguredExercises(this.myWorkout);
+      let myWorkoutExercisesWithSets: Exercise[] = [];
 
-        this.sessionService.save(session)
-          .then(() => {
-            this.currentSessionIndex = this.allSessions.findIndex(s => formatDate(s.timestamp, "dd-MM-yyyy", "en") === formatDate(chosenDate, "dd-MM-yyyy", "en"));
-            this.populateForms(this.allSessions[this.currentSessionIndex])
-          });
-      } else {
-        this.snackbarService.openSnackBar(`Une séance ${this.myWorkout} existe déjà pour le ${formatDate(chosenDate, "dd-MM-yyyy", "en")}`);
+      // Alors on initialise les objets Exercise avec un tableau de série (vide).
+      if (myExercisesNames) {
+        for (let exo of myExercisesNames) {
+          myWorkoutExercisesWithSets.push({ name: exo, sets: [] });
+        }
       }
+
+      let workout: Workout = { name: this.myWorkout, exercises: myWorkoutExercisesWithSets };
+      let session: Session = { timestamp: chosenDate, workout: workout, totalLifted: 0 };
+
+      this.sessionService.save(session).then(() => {
+        this.currentSessionIndex = this.allSessions.findIndex(
+          (s) =>
+            formatDate(s.timestamp, 'dd-MM-yyyy', 'en') ===
+            formatDate(chosenDate, 'dd-MM-yyyy', 'en')
+        );
+        this.populateForms(this.allSessions[this.currentSessionIndex]);
+      });
+    } else {
+      this.snackbarService.openSnackBar(
+        `Une séance ${this.myWorkout} existe déjà pour le ${formatDate(chosenDate, 'dd-MM-yyyy', 'en')}`
+      );
+    }
   }
 
-  deleteCurrentSession(){
+  deleteCurrentSession() {
     if (this.allSessions[this.currentSessionIndex]) {
       const dialogConfig = {
         data: {
           question: `Supprimer la séance du ${formatDate(this.allSessions[this.currentSessionIndex].timestamp, 'dd/MM/YYYY', 'en')} ?`,
-          choices: [
-            'Supprimer',
-            'Annuler'
-          ]
+          choices: ['Supprimer', 'Annuler']
         }
       };
-  
+
       this.dialog
         .open(MultiChoiceDialogComponent, dialogConfig)
         .afterClosed()
-        .subscribe( (choiceSelected) => {
-          switch(choiceSelected) {
+        .subscribe((choiceSelected) => {
+          switch (choiceSelected) {
             case dialogConfig.data.choices[0]:
-              this.sessionService.delete(this.allSessions[this.currentSessionIndex])
-              .then(() => {
-                this.snackbarService.openSnackBar("Séance supprimée.", "✔");
-              }).catch((err) => {
-                this.snackbarService.openSnackBar("Problème lors de la suppression de la séance.", err);
-              });
-  
+              this.sessionService
+                .delete(this.allSessions[this.currentSessionIndex])
+                .then(() => {
+                  this.snackbarService.openSnackBar('Séance supprimée.', '✔');
+                })
+                .catch((err) => {
+                  this.snackbarService.openSnackBar(
+                    'Problème lors de la suppression de la séance.',
+                    err
+                  );
+                });
+
             case dialogConfig.data.choices[1]:
-            default: 
+            default:
               break;
           }
         });
@@ -244,12 +257,17 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
   }
 
   goToSession(sessionDate: Date): void {
-    const indexOfSessionToGo = this.allSessions.findIndex(session => Utils.isSameDay(session.timestamp, sessionDate));
+    const indexOfSessionToGo = this.allSessions.findIndex((session) =>
+      Utils.isSameDay(session.timestamp, sessionDate)
+    );
     if (indexOfSessionToGo >= 0) {
-      const indexDifferential = (this.currentSessionIndex - indexOfSessionToGo);
+      const indexDifferential = this.currentSessionIndex - indexOfSessionToGo;
       this.switchSession(-indexDifferential);
     } else {
-      this.snackbarService.openSnackBar(`La séance du ${formatDate(sessionDate, "dd-MM-yyyy", "en")} n'existe pas.`, '❌');
+      this.snackbarService.openSnackBar(
+        `La séance du ${formatDate(sessionDate, 'dd-MM-yyyy', 'en')} n'existe pas.`,
+        '❌'
+      );
     }
   }
 
@@ -263,27 +281,29 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
     return false;
   }
 
-
   /** Pour faire disparaitre les "Avant" / "Après" */
   isSessionIndexExisting(addToIndex: number): boolean {
-    return (this.allSessions[this.currentSessionIndex + addToIndex] != undefined);
+    return this.allSessions[this.currentSessionIndex + addToIndex] != undefined;
   }
 
   pickSessionDate() {
-    this.dialog.open(DatePickerComponent).afterClosed()
-      .subscribe( chosenDate => {
+    this.dialog
+      .open(DatePickerComponent)
+      .afterClosed()
+      .subscribe((chosenDate) => {
         if (chosenDate) {
-          this.newSession(chosenDate)
+          this.newSession(chosenDate);
         }
       });
   }
 
   addExercise() {
-    this.dialog.open(ExercisePickerDialogComponent).afterClosed()
-      .subscribe((res :{exerciseName: string, addExoToConfiguration: boolean}) => 
-      {
+    this.dialog
+      .open(ExercisePickerDialogComponent)
+      .afterClosed()
+      .subscribe((res: { exerciseName: string; addExoToConfiguration: boolean }) => {
         if (res?.exerciseName) {
-          let exo: Exercise = {name: res.exerciseName, sets: []}; 
+          let exo: Exercise = { name: res.exerciseName, sets: [] };
           this.allSessions[this.currentSessionIndex].workout.exercises.push(exo);
           this.sessionService.save(this.allSessions[this.currentSessionIndex]);
 
@@ -297,19 +317,20 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
   deleteExercise(exerciseName: string) {
     const dialogConfig = {
       data: {
-        question: "Supprimer l\'exercice\n \'" + exerciseName +"\'\npour :",
-        choices: [
-          'Cette séance uniquement',
-          'Toutes les séances à venir'
-        ]
+        question: "Supprimer l'exercice\n '" + exerciseName + "'\npour :",
+        choices: ['Cette séance uniquement', 'Toutes les séances à venir']
       }
     };
 
-    this.dialog.open(MultiChoiceDialogComponent, dialogConfig).afterClosed()
-      .subscribe( (choiceSelected) => {
-        let deleteIndex = this.allSessions[this.currentSessionIndex].workout.exercises.findIndex(exo => exo.name === exerciseName);
+    this.dialog
+      .open(MultiChoiceDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((choiceSelected) => {
+        let deleteIndex = this.allSessions[this.currentSessionIndex].workout.exercises.findIndex(
+          (exo) => exo.name === exerciseName
+        );
 
-        switch(choiceSelected) {
+        switch (choiceSelected) {
           case dialogConfig.data.choices[0]:
             this.allSessions[this.currentSessionIndex].workout.exercises.splice(deleteIndex, 1);
             this.sessionService.save(this.allSessions[this.currentSessionIndex]);
@@ -318,61 +339,60 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
           case dialogConfig.data.choices[1]:
             this.allSessions[this.currentSessionIndex].workout.exercises.splice(deleteIndex, 1);
             this.sessionService.save(this.allSessions[this.currentSessionIndex]);
-            this.workoutService.deleteUserExercise(this.myWorkout, exerciseName)
+            this.workoutService.deleteUserExercise(this.myWorkout, exerciseName);
             break;
 
-          default: 
+          default:
             break;
         }
       });
   }
 
-
   /*************************
    ********** FORM *********
    *************************/
-  
+
   /** Crée et remplis tous les formulaires */
-  populateForms(seance: Session | any){
+  populateForms(seance: Session | any) {
     this.initAllForms(seance.workout);
     this.fillFormControls(seance.workout);
     this.sessionCommentary = seance.commentary;
   }
-  
-  /** 
+
+  /**
    * Initialise les formulaires à partir du workout (= la liste des exercices du muscle sélectionné) */
-  initAllForms(myWorkout: Workout){
+  initAllForms(myWorkout: Workout) {
     // Création du formulaire pour le muscle sélectionné
     this.workoutForm = this.fb.group({
       exercisesForms: this.fb.array([])
     });
 
     // On crée autant de formulaire qu'il y a d'exercices
-    for (let nbExo = 0 ; nbExo < myWorkout.exercises.length ; nbExo++){
+    for (let nbExo = 0; nbExo < myWorkout.exercises.length; nbExo++) {
       this.getExerciseForms().push(this.newExerciseForm());
 
       /* Si c'est un exercice pour lequel on n'a jamais saisi alors
        on ajoute une série pour pouvoir saisir directement. */
-      if (!myWorkout.exercises[nbExo].sets || myWorkout.exercises[nbExo].sets.length < 1){ 
+      if (!myWorkout.exercises[nbExo].sets || myWorkout.exercises[nbExo].sets.length < 1) {
         this.addSerieExercise(nbExo);
       }
     }
   }
-  
+
   fillFormControls(workout: Workout) {
     if (workout) {
-      for (let i = 0 ; i < workout.exercises.length ; i++) {
+      for (let i = 0; i < workout.exercises.length; i++) {
         const exo: Exercise = workout.exercises[i];
 
-        for (let j = 0 ; j < exo.sets?.length ; j++) {
-          const serieToInject = this.newSerie(exo.sets[j].repetition, (exo.sets[j].weight));
+        for (let j = 0; j < exo.sets?.length; j++) {
+          const serieToInject = this.newSerie(exo.sets[j].repetition, exo.sets[j].weight);
           this.getExerciseSeries(i).push(serieToInject);
         }
 
-        // Après avoir peuplé les séries déjà saisies, 
+        // Après avoir peuplé les séries déjà saisies,
         // on ajoute un formulaire de série pré-remplie pour la saisie
         if (exo.sets?.length > 0) {
-          const theSerie = this.getExerciseSeries(i).at( exo.sets?.length - 1 );
+          const theSerie = this.getExerciseSeries(i).at(exo.sets?.length - 1);
           const reps = theSerie.get('repetitionCtrl');
           const weight = theSerie.get('weightCtrl');
           this.addSerieExercise(i, reps.value, weight.value, true);
@@ -392,12 +412,15 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
   }
 
   getExerciseSeries(exerciceIndex: number): UntypedFormArray {
-    return this.getExerciseForms()
-      .at(exerciceIndex)
-      .get('serieForm') as UntypedFormArray;
+    return this.getExerciseForms().at(exerciceIndex).get('serieForm') as UntypedFormArray;
   }
 
-  addSerieExercise(exerciceIndex: number, repetitionValue?: number, weightValue?: number, preFilled?: boolean) {
+  addSerieExercise(
+    exerciceIndex: number,
+    repetitionValue?: number,
+    weightValue?: number,
+    preFilled?: boolean
+  ) {
     let serieToAdd = this.newSerie(repetitionValue, weightValue);
     if (preFilled) {
       serieToAdd.markAsDirty();
@@ -409,16 +432,22 @@ export class ExercisePickerComponent implements OnInit, OnDestroy {
   isPrefilled(exerciceIndex, serieIndex): boolean {
     return this.getExerciseSeries(exerciceIndex).at(serieIndex).dirty;
   }
-  
+
   newSerie(repetitionValue?: number, weightValue?: number): UntypedFormGroup {
-    return this.fb.group({
-      repetitionCtrl: repetitionValue ? repetitionValue : '',
-      weightCtrl: weightValue || weightValue === 0 ? weightValue : ''
-    }, RequiredValidator);
+    return this.fb.group(
+      {
+        repetitionCtrl: repetitionValue ? repetitionValue : '',
+        weightCtrl: weightValue || weightValue === 0 ? weightValue : ''
+      },
+      RequiredValidator
+    );
   }
 
   isSerieEmpty(exerciceIndex, serieIndex): boolean {
     const theSerie = this.getExerciseSeries(exerciceIndex).at(serieIndex);
-    return !( (theSerie.get('repetitionCtrl').value) && (theSerie.get('weightCtrl').value || theSerie.get('weightCtrl').value === 0));
+    return !(
+      theSerie.get('repetitionCtrl').value &&
+      (theSerie.get('weightCtrl').value || theSerie.get('weightCtrl').value === 0)
+    );
   }
 }

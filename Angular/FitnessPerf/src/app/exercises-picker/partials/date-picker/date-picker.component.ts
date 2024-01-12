@@ -11,7 +11,7 @@ export class DatePickerComponent {
   chosenDate: Date = new Date();
   maxDate: Date = new Date();
 
-  constructor(public dialogRef: MatDialogRef<DatePickerComponent>) { }
+  constructor(public dialogRef: MatDialogRef<DatePickerComponent>) {}
 
   setChosenDate(event: Date) {
     this.chosenDate = event;

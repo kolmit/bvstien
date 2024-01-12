@@ -9,17 +9,20 @@ import { Weight } from '../model/weight.model';
 import { Session } from '../model/session.model';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class WeightService extends BaseService {
-  constructor(firestore: AngularFirestore, private snackbarService: SnackbarService) {
+  constructor(
+    firestore: AngularFirestore,
+    private snackbarService: SnackbarService
+  ) {
     super(firestore);
   }
 
   save(weight: Weight): Promise<void> {
     if (this.formatAndValidateWeight(weight)) {
       return this.getUserDataDocuments().collection(Constants.USER_WEIGHT).doc().set(weight);
-    } 
+    }
     return Promise.reject('Les poids ou la date ne sont pas correctes.');
   }
 
@@ -29,7 +32,10 @@ export class WeightService extends BaseService {
 
   update(weight: Weight) {
     if (this.formatAndValidateWeight(weight)) {
-      return this.getUserDataDocuments().collection(Constants.USER_WEIGHT).doc(weight.id).update(weight);
+      return this.getUserDataDocuments()
+        .collection(Constants.USER_WEIGHT)
+        .doc(weight.id)
+        .update(weight);
     }
     return Promise.reject('Les poids ou la date ne sont pas correctes.');
   }
@@ -64,9 +70,11 @@ export class WeightService extends BaseService {
 
   private formatAndValidateWeight(weight: Weight): boolean {
     weight = this.formatWeightComa(weight);
-    return weight.date 
-      && weight.totalWeight
-      && typeof weight.totalWeight === 'number'
-      && (!weight.fatWeight || typeof weight.fatWeight === 'number');
+    return (
+      weight.date &&
+      weight.totalWeight &&
+      typeof weight.totalWeight === 'number' &&
+      (!weight.fatWeight || typeof weight.fatWeight === 'number')
+    );
   }
 }

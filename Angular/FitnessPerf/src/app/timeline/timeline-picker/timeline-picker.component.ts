@@ -1,10 +1,21 @@
-import { AfterContentChecked, AfterContentInit, AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { TimelineAbstractComponent, TimelineDay } from '../timeline-abstract/timeline-abstract.component';
+import {
+  AfterContentChecked,
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output
+} from '@angular/core';
+import {
+  TimelineAbstractComponent,
+  TimelineDay
+} from '../timeline-abstract/timeline-abstract.component';
 
 @Component({
   selector: 'app-timeline-picker',
   templateUrl: './timeline-picker.component.html',
-  styleUrls: ['./timeline-picker.component.scss'],
+  styleUrls: ['./timeline-picker.component.scss']
 })
 export class TimelinePickerComponent extends TimelineAbstractComponent {
   pickedDay: TimelineDay;

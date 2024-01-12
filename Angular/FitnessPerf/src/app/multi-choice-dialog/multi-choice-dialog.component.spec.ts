@@ -8,9 +8,8 @@ describe('MultiChoiceDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MultiChoiceDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [MultiChoiceDialogComponent]
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -1,12 +1,12 @@
-import { Workout } from "./workout.model";
+import { Workout } from './workout.model';
 
 export class Session {
-    timestamp: Date;
-    workout: Workout;
-    totalLifted: number
-    commentary?: string;
+  timestamp: Date;
+  workout: Workout;
+  totalLifted: number;
+  commentary?: string;
 
-    static convertTimestampToDate(seconds: number): Date {
-        return new Date(seconds*1000);
-    }
-}    
+  static convertTimestampToDate(seconds: number): Date {
+    return new Date(seconds * 1000);
+  }
+}

@@ -1,29 +1,29 @@
-import { Injectable } from "@angular/core";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { Observable, Subject, Subscription } from "rxjs";
-import { map } from "rxjs/operators";
-import { Program } from "../model/program.model";
-import { Session } from "../model/session.model";
-import { Constants } from "../utils/constants";
-import { BaseService } from "./base.service";
-import { SessionService } from "./session.service";
-import { SnackbarService } from "./snackbar.service";
+import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Program } from '../model/program.model';
+import { Session } from '../model/session.model';
+import { Constants } from '../utils/constants';
+import { BaseService } from './base.service';
+import { SessionService } from './session.service';
+import { SnackbarService } from './snackbar.service';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class ProgramService extends BaseService {
   configuredPrograms: Program[] = [];
   allProgramsSubscription: Subscription;
   selectedDefaultProgram: Program;
-  
+
   constructor(
     firestore: AngularFirestore,
     private snackbarService: SnackbarService,
     private sessionService: SessionService
   ) {
     super(firestore);
-    if (localStorage.getItem("login") !== null) {
+    if (localStorage.getItem('login') !== null) {
       this.fetchAllPrograms();
     }
   }
@@ -40,7 +40,7 @@ export class ProgramService extends BaseService {
         programName: programName,
         programIndex: this.configuredPrograms.length,
         workoutNames: exerciseList,
-        selectedProgram: defaultProgram,
+        selectedProgram: defaultProgram
       } as Partial<Program>);
   }
 
@@ -52,19 +52,13 @@ export class ProgramService extends BaseService {
   }
 
   deleteProgram(program: Program) {
-    this.getUserDataDocuments()
-      .collection(Constants.USER_PROGRAMS)
-      .doc(program.id)
-      .delete();
+    this.getUserDataDocuments().collection(Constants.USER_PROGRAMS).doc(program.id).delete();
   }
 
   getSessionsByProgram(program: Program): Map<string, Session[]> {
     let programSessionsMap: Map<string, Session[]> = new Map();
     for (let workoutName of program.workoutNames) {
-      programSessionsMap.set(
-        workoutName,
-        this.sessionService.getSessionsByWorkout(workoutName)
-      );
+      programSessionsMap.set(workoutName, this.sessionService.getSessionsByWorkout(workoutName));
     }
     return programSessionsMap;
   }
@@ -96,9 +90,7 @@ export class ProgramService extends BaseService {
   }
 
   addWorkoutToProgram(workoutName: string, programId: string) {
-    const programToUpdate = this.configuredPrograms.find(
-      (p) => p.id === programId
-    );
+    const programToUpdate = this.configuredPrograms.find((p) => p.id === programId);
     const isWorkoutNotAlreadyAdded =
       programToUpdate?.workoutNames.findIndex(
         (w) => w.toUpperCase() === workoutName.toUpperCase()
@@ -108,18 +100,15 @@ export class ProgramService extends BaseService {
       programToUpdate.workoutNames.push(workoutName);
       this.updateProgram(programToUpdate);
     } else {
-      this.snackbarService.openSnackBar("Ce muscle est déjà dans ce programme");
+      this.snackbarService.openSnackBar('Ce muscle est déjà dans ce programme');
     }
   }
 
   deleteWorkoutFromProgram(workoutName: string, programId: string) {
-    const programToUpdate = this.configuredPrograms.find(
-      (p) => p.id === programId
+    const programToUpdate = this.configuredPrograms.find((p) => p.id === programId);
+    const workoutIndexToDeleteFromProgram = programToUpdate.workoutNames.findIndex(
+      (w) => w.toUpperCase() === workoutName.toUpperCase()
     );
-    const workoutIndexToDeleteFromProgram =
-      programToUpdate.workoutNames.findIndex(
-        (w) => w.toUpperCase() === workoutName.toUpperCase()
-      );
 
     if (workoutIndexToDeleteFromProgram >= 0) {
       programToUpdate.workoutNames.splice(workoutIndexToDeleteFromProgram, 1);
@@ -129,11 +118,9 @@ export class ProgramService extends BaseService {
 
   updateProgramSelectedByDefault(newProgramSelected: Program) {
     this.selectedDefaultProgram.selectedProgram = false;
-    this.updateProgram(this.selectedDefaultProgram)
-    .then(() => {
+    this.updateProgram(this.selectedDefaultProgram).then(() => {
       newProgramSelected.selectedProgram = true;
-      this.updateProgram(newProgramSelected)
-      .then(() => {
+      this.updateProgram(newProgramSelected).then(() => {
         this.selectedDefaultProgram = newProgramSelected;
       });
     });

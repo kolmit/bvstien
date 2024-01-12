@@ -1,5 +1,8 @@
 import { Component, Inject, Input, OnInit, Output } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+} from '@angular/material/legacy-dialog';
 import { Subscription, BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { first, take } from 'rxjs/operators';
 import { Program } from 'src/app/model/program.model';
@@ -13,7 +16,10 @@ import { MultiChoiceDialogComponent } from '../../../multi-choice-dialog/multi-c
   templateUrl: './manage-workout-to-program-dialog.component.html',
   styleUrls: ['./manage-workout-to-program-dialog.component.scss']
 })
-export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComponent implements OnInit {
+export class ManageWorkoutToProgramDialogComponent
+  extends MultiChoiceDialogComponent
+  implements OnInit
+{
   addWorkoutTabActive: boolean = true;
   programId: string;
   currentProgram: Program;
@@ -29,11 +35,18 @@ export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComp
   addableWorkoutsName: string[] = [];
   deletableWorkoutsName: string[] = [];
 
-  constructor(private workoutService: WorkoutService,
-    private programService: ProgramService, 
-    public dialogRef: MatDialogRef<ManageWorkoutToProgramDialogComponent>, 
-    @Inject(MAT_DIALOG_DATA) public data: {question: string, choices?: string[], inputRequested?: boolean, programId: string}) 
-  {
+  constructor(
+    private workoutService: WorkoutService,
+    private programService: ProgramService,
+    public dialogRef: MatDialogRef<ManageWorkoutToProgramDialogComponent>,
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      question: string;
+      choices?: string[];
+      inputRequested?: boolean;
+      programId: string;
+    }
+  ) {
     super(dialogRef, data);
 
     this.allWorkoutsList = this.workoutService.getConfiguredWorkoutList;
@@ -43,15 +56,14 @@ export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComp
 
   ngOnInit(): void {
     let obs: Observable<any>[] = [
-      this.workoutService.fetchAllWorkouts().pipe(first()), 
+      this.workoutService.fetchAllWorkouts().pipe(first()),
       this.programService.fetchAllPrograms().pipe(first())
     ];
 
-    forkJoin(obs)
-    .subscribe( ([w, p])  => {
+    forkJoin(obs).subscribe(([w, p]) => {
       this.allWorkoutsList = w;
       this.allProgramList = p;
-      this.currentProgram = this.allProgramList.find(p => p.id === this.programId);
+      this.currentProgram = this.allProgramList.find((p) => p.id === this.programId);
       this.getAddabledWorkouts();
       this.getDeletabledWorkouts();
     });
@@ -61,16 +73,18 @@ export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComp
     this.addWorkoutTabActive = b;
     this.resetSelection();
   }
-  
+
   /** Liste les noms des workouts ajoutables */
   getAddabledWorkouts(): string[] {
     let workoutAlreadyInProgram: string[] = this.currentProgram.workoutNames;
     this.addableWorkoutsName = this.allWorkoutsList
-      .filter(w => 
-        !workoutAlreadyInProgram.some(workoutNameInProgram => w.name?.toUpperCase() === workoutNameInProgram.toUpperCase()
-        )
+      .filter(
+        (w) =>
+          !workoutAlreadyInProgram.some(
+            (workoutNameInProgram) => w.name?.toUpperCase() === workoutNameInProgram.toUpperCase()
+          )
       )
-      .map(w => w.name);
+      .map((w) => w.name);
     return this.addableWorkoutsName;
   }
 
@@ -82,7 +96,7 @@ export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComp
 
   selectWorkout(workoutName: string): void {
     // Si on clique sur un muscle sur lequel on a déjà cliqué, c'est qu'on le désélectionne.
-    if (this.isWorkoutStillSelected(workoutName)) { 
+    if (this.isWorkoutStillSelected(workoutName)) {
       this.selectedWorkoutName.next(null);
     } else {
       this.selectedWorkoutName.next(workoutName);
@@ -95,16 +109,17 @@ export class ManageWorkoutToProgramDialogComponent extends MultiChoiceDialogComp
     this.inputValue = this.selectedWorkoutName.getValue();
   }
 
-  /** 
+  /**
    * Cas d'un ajout : L'utilisateur clique sur un muscle affiché -----> Le nom du muscle s'affiche dans l'<input/>
-   * Si l'utilisateur modifie l'<input> (en tapant au clavier), pour faire en sorte que la classe change, 
+   * Si l'utilisateur modifie l'<input> (en tapant au clavier), pour faire en sorte que la classe change,
    * on vérifie que le nom du muscle sélectionné ET la valeur de l'input soit égales.
    */
   isWorkoutStillSelected(workoutName: string): boolean {
-    const stillSelected = this.selectedWorkoutName.getValue() 
-        && this.inputValue
-        && this.inputValue === this.selectedWorkoutName.getValue()
-        && this.selectedWorkoutName.getValue() === workoutName;
+    const stillSelected =
+      this.selectedWorkoutName.getValue() &&
+      this.inputValue &&
+      this.inputValue === this.selectedWorkoutName.getValue() &&
+      this.selectedWorkoutName.getValue() === workoutName;
 
     return stillSelected;
   }

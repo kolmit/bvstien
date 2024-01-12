@@ -12,14 +12,14 @@ export const environment = {
 };
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyCbx6F0I9DZMQScqCuofrL9kGTjkY0-iiw",
-  authDomain: "performance-1c306.firebaseapp.com",
-  databaseURL: "https://performance-1c306-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "performance-1c306",
-  storageBucket: "performance-1c306.appspot.com",
-  messagingSenderId: "674327477650",
-  appId: "1:674327477650:web:9218f8a35c75b3d91d954b",
-  measurementId: "G-N0GN3QFGSZ"
+  apiKey: 'AIzaSyCbx6F0I9DZMQScqCuofrL9kGTjkY0-iiw',
+  authDomain: 'performance-1c306.firebaseapp.com',
+  databaseURL: 'https://performance-1c306-default-rtdb.europe-west1.firebasedatabase.app',
+  projectId: 'performance-1c306',
+  storageBucket: 'performance-1c306.appspot.com',
+  messagingSenderId: '674327477650',
+  appId: '1:674327477650:web:9218f8a35c75b3d91d954b',
+  measurementId: 'G-N0GN3QFGSZ'
 };
 /*
  * For easier debugging in development mode, you can import the following file
@@ -28,4 +28,4 @@ export const firebaseConfig = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+import 'zone.js/plugins/zone-error'; // Included with Angular CLI.

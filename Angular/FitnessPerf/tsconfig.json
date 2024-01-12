@@ -16,6 +16,7 @@
     "typeRoots": [
       "node_modules/@types"
     ], 
+    "types": ["cypress", "jasmine"],
     "lib": [
       "es2018",
       "dom"

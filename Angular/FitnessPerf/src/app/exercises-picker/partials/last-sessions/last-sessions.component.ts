@@ -1,6 +1,9 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+} from '@angular/material/legacy-dialog';
 import { ExerciseHistoryTuple } from 'src/app/model/exercise-history-tuple.model';
 import { ExerciseHistory } from 'src/app/model/exercise-history.model';
 import { Session } from 'src/app/model/session.model';
@@ -8,25 +11,30 @@ import { SessionService } from 'src/app/services/session.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { Utils } from 'src/app/utils/utils';
 
-
 @Component({
   selector: 'app-last-sessions',
   templateUrl: './last-sessions.component.html',
   styleUrls: ['./last-sessions.component.scss'],
   animations: [
     trigger('expandCollapse', [
-      state('detailsClose', style({
-        height: '0',
-        overflow: 'hidden',
-        opacity: '0',
-      })),
-      state('detailsOpen', style({
-        height: '*',
-        overflow: 'visible',
-        opacity: '1',
-      })),
-      transition('detailsClose <=> detailsOpen', animate('300ms ease-in-out')),
-    ]),
+      state(
+        'detailsClose',
+        style({
+          height: '0',
+          overflow: 'hidden',
+          opacity: '0'
+        })
+      ),
+      state(
+        'detailsOpen',
+        style({
+          height: '*',
+          overflow: 'visible',
+          opacity: '1'
+        })
+      ),
+      transition('detailsClose <=> detailsOpen', animate('300ms ease-in-out'))
+    ])
   ]
 })
 export class LastSessionsComponent {
@@ -43,14 +51,14 @@ export class LastSessionsComponent {
   constructor(
     private sessionService: SessionService,
     private snackbarService: SnackbarService,
-    public dialogRef: MatDialogRef<LastSessionsComponent>, 
-    @Inject(MAT_DIALOG_DATA) public data: { myWorkout: string, allSessions: Session[] }
+    public dialogRef: MatDialogRef<LastSessionsComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { myWorkout: string; allSessions: Session[] }
   ) {
-      this.myWorkout = data.myWorkout;
-      this.workoutSessions = Utils.sortSessionsByDate(data.allSessions);
-      this.currentSessionIndex = this.workoutSessions?.length - 1;
-      this.buildCurrentSessionsHistory();
-    }
+    this.myWorkout = data.myWorkout;
+    this.workoutSessions = Utils.sortSessionsByDate(data.allSessions);
+    this.currentSessionIndex = this.workoutSessions?.length - 1;
+    this.buildCurrentSessionsHistory();
+  }
 
   closeDialog() {
     this.dialogRef.close();
@@ -61,14 +69,16 @@ export class LastSessionsComponent {
     this.currentHistory = [];
     let parallelSessionExercisesName: string[] = [];
     const startIndex: number = this.currentSessionIndex - this.maxParallelSessions + 1;
-    let parralelSessions = this.workoutSessions.slice(startIndex > 0 ? startIndex : 0, this.currentSessionIndex + 1);
-    
-    // On veut la liste des exo des n (= maxParallelSessions) dernières séances
-    for (let i = 0 ; i < this.maxParallelSessions ; i++) {
+    let parralelSessions = this.workoutSessions.slice(
+      startIndex > 0 ? startIndex : 0,
+      this.currentSessionIndex + 1
+    );
 
+    // On veut la liste des exo des n (= maxParallelSessions) dernières séances
+    for (let i = 0; i < this.maxParallelSessions; i++) {
       if (this.workoutSessions[this.currentSessionIndex - i]) {
         for (let exoToAdd of this.workoutSessions[this.currentSessionIndex - i].workout.exercises) {
-          if (parallelSessionExercisesName.findIndex(exoName => exoName === exoToAdd.name) < 0) {
+          if (parallelSessionExercisesName.findIndex((exoName) => exoName === exoToAdd.name) < 0) {
             parallelSessionExercisesName.push(exoToAdd.name);
           }
         }
@@ -78,38 +88,43 @@ export class LastSessionsComponent {
     for (let exerciseName of parallelSessionExercisesName) {
       let parallelHistoryForOneExercise: ExerciseHistoryTuple[] = [];
       // On récupère toutes les séries pour 1 exercice donné (exerciseName)
-      for (let i = 0 ; i < this.maxParallelSessions ; i++) {
+      for (let i = 0; i < this.maxParallelSessions; i++) {
         if (parralelSessions[i]) {
           parallelHistoryForOneExercise[i] = {
             date: parralelSessions[i].timestamp,
-            exercisesSets: parralelSessions[i].workout.exercises.find(e => e.name === exerciseName)?.sets,
-          }
+            exercisesSets: parralelSessions[i].workout.exercises.find(
+              (e) => e.name === exerciseName
+            )?.sets
+          };
         }
       }
 
       let historyForOneExercise: ExerciseHistory = {
-        exerciseName: exerciseName, 
+        exerciseName: exerciseName,
         setsHistory: parallelHistoryForOneExercise
-      }
+      };
       this.currentHistory.push(historyForOneExercise);
     }
   }
 
   /* Change de session et renvoie si la session existe ou non */
   switchSession(addToIndex: number): boolean {
-    const index = this.currentSessionIndex + (addToIndex*this.maxParallelSessions);
-    const sessionExist: boolean = (this.workoutSessions[index] != undefined);
+    const index = this.currentSessionIndex + addToIndex * this.maxParallelSessions;
+    const sessionExist: boolean = this.workoutSessions[index] != undefined;
 
     if (sessionExist) {
       this.currentSessionIndex = index;
-      this.buildCurrentSessionsHistory()
-    }  
+      this.buildCurrentSessionsHistory();
+    }
     return sessionExist;
   }
 
   /** Pour faire disparaitre les "Avant" / "Après" */
   isSessionIndexExisting(addToIndex: number): boolean {
-    return (this.workoutSessions[this.currentSessionIndex + (addToIndex*this.maxParallelSessions)] != undefined);
+    return (
+      this.workoutSessions[this.currentSessionIndex + addToIndex * this.maxParallelSessions] !=
+      undefined
+    );
   }
 
   getTotalPageNumber() {
@@ -117,16 +132,18 @@ export class LastSessionsComponent {
   }
 
   getCurrentPageNumber() {
-    return Math.floor(this.currentSessionIndex / this.maxParallelSessions) + 1 ;
+    return Math.floor(this.currentSessionIndex / this.maxParallelSessions) + 1;
   }
 
   selectHistoryDetails(history: ExerciseHistoryTuple) {
     this.historyDetailsSelected = history;
-    let foundWorkout = this.workoutSessions.find(w => w.timestamp === this.historyDetailsSelected.date);
+    let foundWorkout = this.workoutSessions.find(
+      (w) => w.timestamp === this.historyDetailsSelected.date
+    );
     if (foundWorkout) {
       this.historyDetailsSession = foundWorkout;
     } else {
-      this.snackbarService.openSnackBar('Vue détaillée impossible à afficher', '❌')
+      this.snackbarService.openSnackBar('Vue détaillée impossible à afficher', '❌');
     }
   }
 
@@ -138,6 +155,6 @@ export class LastSessionsComponent {
   state = 'detailsClose';
 
   toggleState() {
-    this.state = (this.state === 'detailsClose') ? 'detailsOpen' : 'detailsClose';
+    this.state = this.state === 'detailsClose' ? 'detailsOpen' : 'detailsClose';
   }
 }

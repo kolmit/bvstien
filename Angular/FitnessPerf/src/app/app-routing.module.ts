@@ -6,11 +6,10 @@ import { WorkoutPickerComponent } from './workout-picker/workout-picker.componen
 import { AuthGuard } from './auth/auth.guard';
 import { ConfigurationComponent } from './configuration/configuration.component';
 
-
 const routes: Routes = [
-  { path: 'workout', component: WorkoutPickerComponent, canActivate: [AuthGuard]  },
-  { path: 'exercises', component: ExercisePickerComponent, canActivate: [AuthGuard]  },
-  { path: 'configure', component: ConfigurationComponent, canActivate: [AuthGuard]  },
+  { path: 'workout', component: WorkoutPickerComponent, canActivate: [AuthGuard] },
+  { path: 'exercises', component: ExercisePickerComponent, canActivate: [AuthGuard] },
+  { path: 'configure', component: ConfigurationComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: '**', redirectTo: 'login' }
 ];
@@ -19,4 +18,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

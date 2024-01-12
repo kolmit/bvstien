@@ -8,9 +8,8 @@ describe('WeightDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WeightDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [WeightDialogComponent]
+    }).compileComponents();
   });
 
   beforeEach(() => {

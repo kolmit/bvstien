@@ -1,6 +1,6 @@
-import { ExerciseSet } from "./exercise-set.model";
+import { ExerciseSet } from './exercise-set.model';
 
 export class Exercise {
-    name: string;
-    sets?: ExerciseSet[];
-} 
+  name: string;
+  sets?: ExerciseSet[];
+}

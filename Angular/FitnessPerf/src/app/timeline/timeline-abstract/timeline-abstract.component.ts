@@ -1,6 +1,5 @@
 import { Session } from 'src/app/model/session.model';
 
-
 export class TimelineDay {
   date: Date;
   sessions: Session[];
@@ -11,15 +10,15 @@ export abstract class TimelineAbstractComponent {
   timelineDays: TimelineDay[] = [];
 
   NB_PAST_DAYS = 32;
-  WEEKDAYS = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
-  MONTHS = ["Jan","Fév","Mar","Avr", "Mai","Jun","Jui","Aou","Sep","Oct","Nov","Déc"];
+  WEEKDAYS = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+  MONTHS = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jui', 'Aou', 'Sep', 'Oct', 'Nov', 'Déc'];
 
-  constructor() { 
+  constructor() {
     this.generateLastDays();
   }
 
   generateLastDays() {
-    for (let i = 0 ; i < this.NB_PAST_DAYS ; i++) {
+    for (let i = 0; i < this.NB_PAST_DAYS; i++) {
       const pastDate: Date = new Date();
       pastDate.setDate(new Date().getDate() - i);
       this.timelineDays.push({

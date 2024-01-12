@@ -8,9 +8,8 @@ describe('WeightChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WeightChartComponent ]
-    })
-    .compileComponents();
+      declarations: [WeightChartComponent]
+    }).compileComponents();
   });
 
   beforeEach(() => {

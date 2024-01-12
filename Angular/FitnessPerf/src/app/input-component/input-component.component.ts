@@ -14,23 +14,23 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ]
 })
 export class InputComponent implements ControlValueAccessor {
+  constructor() {}
+  onChange: any = () => {};
+  onTouch: any = () => {};
+  inputValue = ''; // this is the updated value that the class accesses
 
-  constructor() { }
-  onChange: any = () => { }
-  onTouch: any = () => { }
-  inputValue = "" // this is the updated value that the class accesses
-  
   @Input()
-  inputType: string  
-    
-  @Input()
-  placeholder: string  
-      
-  @Input()
-  name: string  
+  inputType: string;
 
-  set value(value) {  // this value is updated by programmatic changes 
-    if(value !== undefined && this.value !== value) {
+  @Input()
+  placeholder: string;
+
+  @Input()
+  name: string;
+
+  set value(value) {
+    // this value is updated by programmatic changes
+    if (value !== undefined && this.value !== value) {
       this.inputValue = value;
       this.onChange(value);
       this.onTouch(value);
@@ -38,17 +38,17 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   // this method sets the value programmatically
-  writeValue(value: any){
-    this.value = value
+  writeValue(value: any) {
+    this.value = value;
   }
 
   // upon UI element value changes, this method gets triggered
-  registerOnChange(fn: any){
-    this.onChange = fn
+  registerOnChange(fn: any) {
+    this.onChange = fn;
   }
 
   // upon touching the element, this method gets triggered
-  registerOnTouched(fn: any){
-    this.onTouch = fn
+  registerOnTouched(fn: any) {
+    this.onTouch = fn;
   }
 }
