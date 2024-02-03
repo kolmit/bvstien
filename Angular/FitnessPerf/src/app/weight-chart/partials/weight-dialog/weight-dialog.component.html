@@ -1,29 +1,40 @@
 <div class="flex-column add-exercise-container">
-    <h3>Ajouter un poids</h3>
-    <hr class="separator" style="margin-bottom: 2rem;">
+  <h3>Ajouter un poids</h3>
+  <hr class="separator" style="margin-bottom: 2rem" />
 
-    <div class="flex-row weights">
-        <mat-form-field floatLabel="Poids total (kg)" style="width: 45%;">
-            <input matInput [(ngModel)]="weight.totalWeight" maxlength="5" placeholder="Poids total (kg)">
-        </mat-form-field>
-        <mat-form-field floatLabel="Gras (kg)" style="width: 45%;">
-            <input matInput [(ngModel)]="weight.fatWeight" maxlength="5" placeholder="Gras (kg)">
-        </mat-form-field>
-    </div>
-    
-    <mat-form-field class="flex-row">
-        <mat-label>Quand ?</mat-label>
-        <div class="flex-row">
-            <input matInput [(ngModel)]="weight.date" [matDatepicker]="picker">
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        </div>
-        <mat-datepicker #picker></mat-datepicker>
+  <div class="flex-row weights">
+    <mat-form-field floatLabel="Poids total (kg)" style="width: 45%">
+      <input
+        matInput
+        [(ngModel)]="weight.totalWeight"
+        maxlength="5"
+        placeholder="Poids total (kg)"
+      />
     </mat-form-field>
+    <mat-form-field floatLabel="Gras (kg)" style="width: 45%">
+      <input matInput [(ngModel)]="weight.fatWeight" maxlength="5" placeholder="Gras (kg)" />
+    </mat-form-field>
+  </div>
+
+  <mat-form-field class="flex-row">
+    <mat-label>Quand ?</mat-label>
+    <div class="flex-row">
+      <input matInput [(ngModel)]="weight.date" [matDatepicker]="picker" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    </div>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
 </div>
 
 <div class="flex-column choice-buttons">
-    <button mat-raised-button style="background-color: #376c9f; margin-bottom: 0.5rem;" (click)="submitWeight()">Ajouter</button>
-    <ng-container *ngIf="this.weight.id">
-        <button mat-raised-button color="warn" (click)="deleteWeight()">Supprimer</button>
-    </ng-container>
+  <button
+    mat-raised-button
+    style="background-color: #376c9f; margin-bottom: 0.5rem"
+    (click)="submitWeight()"
+  >
+    Ajouter
+  </button>
+  <ng-container *ngIf="this.weight.id">
+    <button mat-raised-button color="warn" (click)="deleteWeight()">Supprimer</button>
+  </ng-container>
 </div>

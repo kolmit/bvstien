@@ -1,41 +1,60 @@
+<app-wallpaper></app-wallpaper>
 <app-header [parentModel]="model"></app-header>
 <div class="flex-column">
-    <button mat-flat-button class="poids-btn"  color="primary" [class.poids-btn-expanded]="state === 'expanded'" (click)="toggleState()" >
-        <span>Mon poids</span>
-    </button>
+  <button
+    mat-flat-button
+    class="poids-btn"
+    color="primary"
+    [class.poids-btn-expanded]="state === 'expanded'"
+    (click)="toggleState()"
+  >
+    <span>Mon poids</span>
+  </button>
 </div>
 <div [@expandCollapse]="state" class="poids">
-    <app-weight-chart></app-weight-chart>
+  <app-weight-chart></app-weight-chart>
 </div>
-<mat-tab-group mat-align-tabs="center" 
-    [selectedIndex]="selectedProgramIndex"
-    #tabGroup>
-    <mat-tab>
-        <ng-template mat-tab-label>
-            <div class="add-program" (click)='addProgram()'>+</div>
-        </ng-template>
-    </mat-tab>
-    <mat-tab *ngFor='let program of programList; let i = index; trackBy:identifyProgram' label="{{program.programName}}">
-        
-        <app-timeline-program [program]="program" (goToSession)="goToExerciseOnDateSession($event)" (nextSessionSuggestion)="setNextSessionSuggestion($event)"></app-timeline-program>
+<mat-tab-group mat-align-tabs="center" [selectedIndex]="selectedProgramIndex" #tabGroup>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="add-program" (click)="addProgram()">+</div>
+    </ng-template>
+  </mat-tab>
+  <mat-tab
+    *ngFor="let program of programList; let i = index; trackBy: identifyProgram"
+    label="{{ program.programName }}"
+  >
+    <app-timeline-program
+      [program]="program"
+      (goToSession)="goToExerciseOnDateSession($event)"
+      (nextSessionSuggestion)="setNextSessionSuggestion($event)"
+    ></app-timeline-program>
 
-        <div class="flex-column workout-container">
-            <div class="flex-row workouts">
-                <div class="flex-column workout" *ngFor='let workoutName of program.workoutNames' (click)="goToExercise(workoutName)">
-                    <span>{{workoutName}}</span> 
-                    <span class="next-session" *ngIf="isNextSession(program, workoutName)">Prochaine séance</span>
-                </div>
-            </div>
-            
-            <button mat-mini-fab class="add-button" (click)="addOrDeleteWorkoutFromProgram(program.id)">+</button>
-            <div class="flex-row program-actions">
-                <div class="program-action" (click)="renameProgram(program)">Renommer</div>
-                <div class="program-action" (click)="deleteProgram(program)">Supprimer</div>
-                <div class="program-action" (click)="setDefaultProgram(program)">
-                    <span *ngIf="this.isDefaultProgram(program)" class="default-program-check">✔</span>
-                    <span>Par défaut</span>
-                </div>
-            </div>
+    <div class="flex-column workout-container">
+      <div class="flex-row workouts">
+        <div
+          class="flex-column workout"
+          *ngFor="let workoutName of program.workoutNames"
+          (click)="goToExercise(workoutName)"
+        >
+          <span>{{ workoutName }}</span>
+          <span class="next-session" *ngIf="isNextSession(program, workoutName)"
+            >Prochaine séance</span
+          >
         </div>
-    </mat-tab>
+      </div>
+
+      <button mat-mini-fab class="add-button" (click)="addOrDeleteWorkoutFromProgram(program.id)">
+        +
+      </button>
+      <div class="flex-row program-actions">
+        <div class="program-action" (click)="renameProgram(program)">Renommer</div>
+        <div class="program-action" (click)="deleteProgram(program)">Supprimer</div>
+        <div class="program-action" (click)="setDefaultProgram(program)">
+          <span *ngIf="this.isDefaultProgram(program)" class="default-program-check">✔</span>
+          <span>Par défaut</span>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
 </mat-tab-group>

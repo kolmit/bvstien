@@ -1,13 +1,13 @@
 /***************************
 **** Variables globales ****
 ***************************/
-$text: #B7C7D4;
+$text: #b7c7d4;
 
-$background: #0E1E2C;
+$background: #0e1e2c;
 $background-panel: #314a604a;
 $background-dialog: #141518;
 
-$button-valid: #2FAC69;
+$button-valid: #2fac69;
 $valid-darker: #20794a;
 $button: #416280;
 
@@ -19,149 +19,157 @@ $blue: #00b7ff;
 $blue-ligher: #67d4ff;
 
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    caret-color: $text;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  caret-color: $text;
 }
 
 html {
-    font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
 
-    background: $background;
-    color: $text;
-    min-height: calc(100% + env(safe-area-inset-top));
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    margin: 0;
-    box-sizing: border-box;
+  background: $background;
+  color: $text;
+  min-height: calc(100% + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .flex-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .flex-column {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .separator {
-    width: 100%;
-    opacity: 0.1;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+  width: 100%;
+  opacity: 0.1;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .header-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .header {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    justify-content: space-around;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  justify-content: space-around;
 }
 
 .add-button {
-    align-items: center;
-    margin: 1rem;
-    background-color: #ff8800;
-    font-size: 1.5rem;
-    color: white;
+  align-items: center;
+  margin: 1rem;
+  background-color: #ff8800;
+  font-size: 1.5rem;
+  color: white;
 }
 
 .add-del {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 50px;
-    width: 50px;
-    font-size: 2rem;
-    &:active{
-        filter: brightness(150%);
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 50px;
+  font-size: 2rem;
+  &:active {
+    filter: brightness(150%);
+  }
 }
 
 .del-btn {
-    box-shadow: inset -2rem 0 19px -11px rgba(0, 0, 0, 0.2);
-    background-color: #ff00001f;
-    border: 2px solid #980000;
-    border-radius: 0.5rem;
+  box-shadow: inset -2rem 0 19px -11px rgba(0, 0, 0, 0.2);
+  background-color: #ff00001f;
+  border: 2px solid #980000;
+  border-radius: 0.5rem;
 }
 
 .add-btn {
-    box-shadow: inset 2rem 0 19px -11px rgba(0, 0, 0, 0.2);
-    background-color: #00ff151f;
-    border: 2px solid #2e9800;
-    border-radius: 0.5rem;
+  box-shadow: inset 2rem 0 19px -11px rgba(0, 0, 0, 0.2);
+  background-color: #00ff151f;
+  border: 2px solid #2e9800;
+  border-radius: 0.5rem;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
 
 main {
-    height: 100%;
-    background: radial-gradient(#39516170, transparent);
+  height: 100%;
+  background: radial-gradient(#39516170, transparent);
 }
-
 
 /**************************************
 ********** OVERRIDE MATERIAL **********
 ***************************************/
 
 .input-label {
-    color: $orange;
+  color: $orange;
 }
 
-.mat-flat-button, .mat-raised-button, .mat-fab {
-    background-color: $button;
-    border: 1px solid $blue-ligher;
+.mat-flat-button,
+.mat-raised-button,
+.mat-fab {
+  background-color: $button;
+  border: 1px solid $blue-ligher;
 }
 
 .mat-dialog-container {
-    background-color: $background-dialog;
-    border: 1px solid white;
-    background: radial-gradient(circle at center, black, #0e1e2c);
+  background-color: $background-dialog;
+  border: 1px solid white;
+  background: radial-gradient(circle at center, black, #0e1e2c);
 }
 
 // DATEPICKER
 .mat-datepicker-toggle-active .mat-button-wrapper {
-    svg {
-        fill: $orange;
-    }
+  svg {
+    fill: $orange;
+  }
 }
 .mat-calendar-body-selected {
-    background-color: $orange;
-    color: #fff;
+  background-color: $orange;
+  color: #fff;
 }
 .mat-form-field {
-    &.mat-focused {
-        .mat-form-field-label {
-        color: $orange;
-        }
-        .mat-form-field-ripple {
-        background-color: $orange;
-        }
+  &.mat-focused {
+    .mat-form-field-label {
+      color: $orange;
     }
+    .mat-form-field-ripple {
+      background-color: $orange;
+    }
+  }
 }
 
 // INPUT DE L'EXERCISE PICKER (Repetition/Charge)
 :host {
-    ::ng-deep {
-      .mat-form-field {
-        &.mat-focused {
-          .mat-form-field-label {
-            color: $orange;
-          }
-          .mat-form-field-ripple {
-            background-color: $orange;
-          }
+  ::ng-deep {
+    .mat-form-field {
+      &.mat-focused {
+        .mat-form-field-label {
+          color: $orange;
+        }
+        .mat-form-field-ripple {
+          background-color: $orange;
         }
       }
     }
   }
+}

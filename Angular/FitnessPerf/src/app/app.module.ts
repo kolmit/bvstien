@@ -54,6 +54,7 @@ import { WeightChartComponent } from './weight-chart/weight-chart.component';
 import { WeightDialogComponent } from './weight-chart/partials/weight-dialog/weight-dialog.component';
 import { SessionDetailsComponent } from './exercises-picker/partials/session-details/session-details.component';
 import { MatIconModule } from '@angular/material/icon';
+import { WallpaperComponent } from './wallpaper/wallpaper.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { MatIconModule } from '@angular/material/icon';
     TimelinePickerComponent,
     WeightChartComponent,
     WeightDialogComponent,
-    SessionDetailsComponent
+    SessionDetailsComponent,
+    WallpaperComponent
   ],
   imports: [
     MatTabsModule,
