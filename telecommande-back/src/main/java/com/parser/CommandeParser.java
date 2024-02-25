@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class CommandeParser {
+	private final String SPLITTER = " ";
 
 	public List<String> parseString(String str){
-		return Arrays.stream(str.trim().split(" ")).collect(Collectors.toList());
+		return Arrays.stream(str.trim().split(SPLITTER)).collect(Collectors.toList());
 	}
-
 }

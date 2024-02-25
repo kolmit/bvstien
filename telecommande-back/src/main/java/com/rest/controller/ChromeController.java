@@ -18,9 +18,9 @@ import java.util.*;
 public class ChromeController {
 	
 	@Autowired
-	private CommandeParser parser;
+	CommandeParser parser;
 	@Autowired
-	private CommandeRunner commandRunner;
+	CommandeRunner commandRunner;
    	
    	private String currentMedia;
 	private boolean fullscreenOn = false;
@@ -62,7 +62,7 @@ public class ChromeController {
 		if (this.currentMedia != null) {
 			this.currentMedia = this.closeCurrentChromeTab() ? null : this.currentMedia;
 		}
-		this.currentMedia = commandRunner.executeV2(commandToExecute) ? chaine : this.currentMedia;
+		this.currentMedia = commandRunner.execute(commandToExecute) ? chaine : this.currentMedia;
 		
 		return (this.currentMedia != null);
     }
@@ -73,7 +73,7 @@ public class ChromeController {
 		String commandToParse = Constants.getCommand(Constants.CMD_CHROME, idVideo);
 		List<String> commandToExecute = this.parser.parseString(commandToParse);
 
-		return commandRunner.executeV2(commandToExecute);
+		return commandRunner.execute(commandToExecute);
     }
 
     
@@ -109,7 +109,7 @@ public class ChromeController {
 		String commandToParse = Constants.getCommand(Constants.CMD_KILL_CHROME);
 		List<String> cmdKillChrome = this.parser.parseString(commandToParse);
 		
-		return commandRunner.executeV2(cmdKillChrome);
+		return commandRunner.execute(cmdKillChrome);
     }
     
     
