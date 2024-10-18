@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PopupToJavaService } from '../../service/popup-to-java.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { PopupAlttabComponent } from './popup-alttab/popup-alttab.component';
 
 @Component({

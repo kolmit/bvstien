@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -7,7 +7,13 @@ import { TelecommandeComponent } from './telecommande/telecommande.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar'; 
-import { MatCardModule, MatDialogModule, MatInputModule, MatSliderModule, MatSlideToggleModule, MatSelectModule, MatListModule } from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -86,6 +92,7 @@ import { DesktopStreamComponent } from './desktop/desktop-stream/desktop-stream.
     ScrollingModule,
     MatSelectModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    HammerModule,
   ],
   providers: [HttpClient, PopupToJavaService, ImageService, WINDOW_PROVIDERS
   ],

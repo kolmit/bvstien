@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { PopupYoutubeComponent } from '../popup-youtube/popup-youtube.component';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { PopupRemoteTvComponent } from '../popup-remote-tv/popup-remote-tv.component';
 
 @Component({

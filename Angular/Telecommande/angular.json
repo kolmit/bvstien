@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "Telecommande"
+  "defaultProject": "Telecommande",
+  "cli": {
+    "analytics": false
+  }
 }

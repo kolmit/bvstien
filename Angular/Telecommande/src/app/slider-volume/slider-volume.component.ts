@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSliderChange } from '@angular/material';
+import { MatSliderChange } from '@angular/material/slider';
 import { PopupToJavaService } from '../service/popup-to-java.service';
 
 @Component({

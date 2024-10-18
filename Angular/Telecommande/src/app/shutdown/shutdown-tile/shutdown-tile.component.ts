@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { PopupToJavaService } from 'src/app/service/popup-to-java.service';
 import { StateService } from 'src/app/service/state.service';
 import { PopupShutdownComponent } from '../popup-shutdown/popup-shutdown.component';
