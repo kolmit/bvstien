@@ -10,8 +10,8 @@ export class VocalTileComponent {
   keyboardInputValue: string = '';
   inputDisplayed: boolean = true;
   commandTimer: any;
-  @ViewChild('vocalCommandInput', {static: false}) vocalCommandInput: ElementRef<any>;
-  @ViewChild('vocalTile', {static: false}) vocalTile: ElementRef<any>;
+  @ViewChild('vocalCommandInput') vocalCommandInput: ElementRef<any>;
+  @ViewChild('vocalTile') vocalTile: ElementRef<any>;
 
   constructor(private javaService: PopupToJavaService) { }
 
