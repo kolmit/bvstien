@@ -37,6 +37,7 @@ import { DesktopViewComponent } from './desktop/desktop-view/desktop-view.compon
 import { CameraViewComponent } from './camera/camera-view/camera-view.component';
 import { HeaderComponent } from './header/header.component';
 import { VocalTileComponent } from './vocal-tile/vocal-tile.component';
+import { DesktopStreamComponent } from './desktop/desktop-stream/desktop-stream.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { VocalTileComponent } from './vocal-tile/vocal-tile.component';
     DesktopViewComponent,
     CameraViewComponent,
     HeaderComponent,
-    VocalTileComponent
+    VocalTileComponent,
+    DesktopStreamComponent
   ],
   exports: [
     YoutubeUnitComponent,

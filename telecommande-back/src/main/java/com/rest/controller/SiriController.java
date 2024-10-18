@@ -7,21 +7,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController()
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-//@RequestMapping(path = "/siri/")
 public class SiriController {
 
     @Autowired
     private SiriService siriService;
 
     @GetMapping("/siri/shutdown/now")
-    public Integer sendShutdown() {
+    public ShutdownCommand sendShutdown() {
         ShutdownCommand shutdownCommand = new ShutdownCommand(true, 0);
-        return this.siriService.sendShutdown(shutdownCommand);
-    }
-
-    @GetMapping("/siri/shutdown/{duration}")
-    public int higherVolume(@PathVariable(name = "duration") int beforeShutdown) {
-        ShutdownCommand shutdownCommand = new ShutdownCommand(true, beforeShutdown);
         return this.siriService.sendShutdown(shutdownCommand);
     }
 

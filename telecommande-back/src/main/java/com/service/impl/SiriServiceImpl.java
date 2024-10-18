@@ -17,7 +17,7 @@ public class SiriServiceImpl implements SiriService {
     private VolumeService volumeService;
 
     @Override
-    public Integer sendShutdown(ShutdownCommand shutdownCommand) {
+    public ShutdownCommand sendShutdown(ShutdownCommand shutdownCommand) {
        return this.commandeService.sendShutdown(shutdownCommand);
     }
 

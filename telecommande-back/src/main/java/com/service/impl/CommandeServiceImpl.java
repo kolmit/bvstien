@@ -26,7 +26,7 @@ public class CommandeServiceImpl implements CommandeService {
     private CommandeRunner commandRunner;
 
     @Override
-    public Integer sendShutdown(ShutdownCommand shutdownCommand) {
+    public ShutdownCommand sendShutdown(ShutdownCommand shutdownCommand) {
         String commandType = shutdownCommand.isShutdown() ? Constants.CMD_SHUTDOWN : Constants.CMD_STANDBY;
         String commandToParse = Constants.getCommand(commandType, shutdownCommand.getTime() != null ? shutdownCommand.getTime().toString() : null);
         List<String> commandToExecute = this.parser.parseString(commandToParse);
@@ -39,7 +39,9 @@ public class CommandeServiceImpl implements CommandeService {
             this.shutdownRequestHour = LocalDateTime.now();
             this.shutdownIn = shutdownCommand.getTime();
         }
-        return shutdownIn;
+        shutdownCommand.setShutdownRequestHour(this.shutdownRequestHour);
+        
+        return shutdownCommand;
     }
 
     @Override

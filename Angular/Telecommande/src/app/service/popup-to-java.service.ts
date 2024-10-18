@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { ConfigService } from '../config.service';
-import { environment } from 'src/environments/environment';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable, of } from "rxjs";
+import { ConfigService } from "../config.service";
+import { environment } from "src/environments/environment";
+import { ShutdownCommand } from "../shutdown/shutdown-command.model";
+import { map, switchMap } from "rxjs/operators";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class PopupToJavaService {
-
   private shutdownUrl: string;
   private shutdownCancelUrl: string;
   private volumeUrl: string;
@@ -28,28 +29,32 @@ export class PopupToJavaService {
   private vocalCommandUrl: string;
 
   constructor(private http: HttpClient, private configService: ConfigService) {
-    this.shutdownUrl = environment.BACKEND_URL + '/shutdown';
-    this.shutdownCancelUrl = environment.BACKEND_URL + '/shutdown/cancel';
-    this.volumeUrl = environment.BACKEND_URL + '/volume';
-    this.isMutedUrl = environment.BACKEND_URL + '/muted';
-    this.muteUrl = environment.BACKEND_URL + '/muteVolume';
-    this.switchSoundDeviceUrl = environment.BACKEND_URL + '/switchSoundDevice';
-    this.tvUrl = environment.BACKEND_URL + '/tv';
-    this.youtubeVideo = environment.BACKEND_URL + '/youtube';
-    this.netflixTab = environment.BACKEND_URL + '/netflix';
-    this.switchPause = environment.BACKEND_URL + '/switchPause';
-    this.fullScreen = environment.BACKEND_URL + '/fullscreen';
-    this.closeTab = environment.BACKEND_URL + '/closeCurrentChromeTab';
-    this.currentMedia = environment.BACKEND_URL + '/currentMedia';
-    this.switchMonitor = environment.BACKEND_URL + '/switchMonitor';
-    this.leftClick = environment.BACKEND_URL + '/leftclick';
-    this.pressKeyboardKey = environment.BACKEND_URL + '/pressKeyboardKey';
-    this.vocalCommandUrl = environment.BACKEND_URL + '/vocalCommand';
+    this.shutdownUrl = environment.BACKEND_URL + "/shutdown";
+    this.shutdownCancelUrl = environment.BACKEND_URL + "/shutdown/cancel";
+    this.volumeUrl = environment.BACKEND_URL + "/volume";
+    this.isMutedUrl = environment.BACKEND_URL + "/muted";
+    this.muteUrl = environment.BACKEND_URL + "/muteVolume";
+    this.switchSoundDeviceUrl = environment.BACKEND_URL + "/switchSoundDevice";
+    this.tvUrl = environment.BACKEND_URL + "/tv";
+    this.youtubeVideo = environment.BACKEND_URL + "/youtube";
+    this.netflixTab = environment.BACKEND_URL + "/netflix";
+    this.switchPause = environment.BACKEND_URL + "/switchPause";
+    this.fullScreen = environment.BACKEND_URL + "/fullscreen";
+    this.closeTab = environment.BACKEND_URL + "/closeCurrentChromeTab";
+    this.currentMedia = environment.BACKEND_URL + "/currentMedia";
+    this.switchMonitor = environment.BACKEND_URL + "/switchMonitor";
+    this.leftClick = environment.BACKEND_URL + "/leftclick";
+    this.pressKeyboardKey = environment.BACKEND_URL + "/pressKeyboardKey";
+    this.vocalCommandUrl = environment.BACKEND_URL + "/vocalCommand";
   }
 
   public manageShutdown(time: number, isShutdown: boolean): Observable<number> {
-    let command: any = { isShutdown: isShutdown, time: time}
-    return this.http.post<number>(this.shutdownUrl, command);
+    let command: ShutdownCommand = { isShutdown: isShutdown, time: time };
+    return this.http.post<ShutdownCommand>(this.shutdownUrl, command).pipe(
+      map((shutdownCmd) => {
+        return shutdownCmd.time;
+      })
+    );
   }
 
   public cancelShutdown(): Observable<boolean> {
@@ -81,7 +86,8 @@ export class PopupToJavaService {
   }
 
   public getYoutubeVideo(idVideo: string) {
-    return this.http.get<string>(this.youtubeVideo + "?idVideo=" + idVideo)
+    return this.http
+      .get<string>(this.youtubeVideo + "?idVideo=" + idVideo)
       .subscribe(
         (res) => {
           console.log("Youtube: ", res);
@@ -89,7 +95,7 @@ export class PopupToJavaService {
         (error) => {
           console.error("Erreur youtube !", error);
         }
-    );
+      );
   }
 
   // TODO : En faire une méthode POST
@@ -108,18 +114,18 @@ export class PopupToJavaService {
   }
 
   getCurrentMedia(): Observable<string> {
-    return this.http.get(this.currentMedia, {responseType: 'text'});
+    return this.http.get(this.currentMedia, { responseType: "text" });
   }
 
-  getSwitchPause(): Observable<boolean>  {
+  getSwitchPause(): Observable<boolean> {
     return this.http.get<boolean>(this.switchPause);
   }
 
-  postFullScreen(): Observable<Object>  {
-    return this.http.post(this.fullScreen, [{"fullscreen":"on"}]);
+  postFullScreen(): Observable<Object> {
+    return this.http.post(this.fullScreen, [{ fullscreen: "on" }]);
   }
 
-  getCloseTab(): Observable<boolean>   {
+  getCloseTab(): Observable<boolean> {
     return this.http.get<boolean>(this.closeTab);
   }
 
@@ -128,11 +134,11 @@ export class PopupToJavaService {
   }
 
   sendLeftClick(xPosition: any, yPosition: any): Observable<Object> {
-    let params = {"xPosition":xPosition, "yPosition": yPosition };
+    let params = { xPosition: xPosition, yPosition: yPosition };
     return this.http.post<any>(this.leftClick, params);
   }
 
-  typeKeyboardKey(key: string): Observable<string>  {
+  typeKeyboardKey(key: string): Observable<string> {
     return this.http.post<any>(this.pressKeyboardKey, key);
   }
 

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface SiriService {
-    Integer sendShutdown(ShutdownCommand shutdownCommand);
+    ShutdownCommand sendShutdown(ShutdownCommand shutdownCommand);
     boolean muteVolume();
     boolean unmuteVolume();
     int lowerVolume();

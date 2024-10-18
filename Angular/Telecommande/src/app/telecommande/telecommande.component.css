@@ -1,38 +1,39 @@
 .remote-container {
-  flex-wrap: wrap;
-  user-select: none;
-  user-zoom: none;
-  padding: 0 1vh 0 1vh;
+	display: flex;
+	flex-wrap: wrap;
+	user-select: none;
+	user-zoom: none;
+	padding: 0 4vw; /* 4vw, ça rentre, car on a maximum 30+30+30 = 90 (+ 2x4vw de chaque côté) = 98vw (+ 1px de margin) */
 }
 
-
-
-.tuile_1x1{
-  border-radius: 17px 17px 17px 17px;
-  margin: 0.5px;
-  height: 33%;
-  width: 33%;
-  max-height: 100px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.tuile_1x1,
+.tuile_2x1 {
+	margin: 1px;
+	border-radius: 17px 17px 17px 17px;
+	height: 33vw;
+	max-height: 100px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 }
 
-.tuile_2x1{
-  border-radius: 17px 17px 17px 17px;
-  height: 33%;
-  width: 66%;
-  max-height: 100px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.tuile_1x1 {
+	width: 30vw;
 }
 
-.material-icons{
-  opacity: 95%;
+.tuile_2x1 {
+	width: 60vw;
+}
+
+.material-icons {
+	opacity: 95%;
 }
 
 .disabled-tile {
-  opacity: 50%;
-  background-color:powderblue;
+	opacity: 50%;
+	background-color: powderblue;
+}
+
+.desktop-view-sample {
+	margin: 20px;
 }

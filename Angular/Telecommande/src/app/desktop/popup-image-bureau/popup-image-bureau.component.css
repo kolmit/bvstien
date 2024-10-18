@@ -1,24 +1,24 @@
 .screenshot-bureau {
-    width: auto;
-    height: auto;
+	width: auto;
+	height: auto;
 }
 
-.displaySelector h1 { 
-    font-size: 5em 
+.displaySelector h1 {
+	font-size: 5em;
 }
-  
+
 .menu-bar {
-  bottom: 0;
-  position: fixed;
+	bottom: 0;
+	position: fixed;
 }
 
 .menu-input {
-  position: fixed;
-  margin: 1em 1em 1em 1em;
+	margin: 1em 1em 1em 1em;
+	width: 50px;
 }
 
 .keyboard-input {
-  width: 80%;
-  position: fixed;
-  margin-left: 4em;
+	width: 70%;
+	position: fixed;
+	margin-bottom: 1rem;
 }

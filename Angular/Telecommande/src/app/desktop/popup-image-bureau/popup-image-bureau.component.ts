@@ -1,54 +1,32 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { ImageService } from '../../service/image-service.service';
-import { PopupToJavaService } from '../../service/popup-to-java.service';
+import { Component, OnInit, HostListener, Input } from "@angular/core";
+import { ImageService } from "../../service/image-service.service";
+import { PopupToJavaService } from "../../service/popup-to-java.service";
 
 @Component({
-  selector: 'app-popup-image-bureau',
-  templateUrl: './popup-image-bureau.component.html',
-  styleUrls: ['./popup-image-bureau.component.css']
+	selector: "app-popup-image-bureau",
+	templateUrl: "./popup-image-bureau.component.html",
+	styleUrls: ["./popup-image-bureau.component.css"],
 })
-export class PopupImageBureauComponent implements OnInit {
+export class PopupImageBureauComponent {
+	constructor(private imageService: ImageService, private javaService: PopupToJavaService) {}
 
-  constructor(
-    private imageService: ImageService,
-    private javaService: PopupToJavaService) { }
+	blobData: any;
+	displayKeyboard: boolean = false;
+	keyboardInputValue: string = "";
+	private myCaptureDevice: string = "imageBureau";
 
-  blobData: any;
-  displayKeyboard: boolean = false;
-  keyboardInputValue: string = '';
-  private myCaptureDevice: string = 'imageBureau'
+	@HostListener("document:keyup", ["$event"])
+	keyboardKeyPressed(event: KeyboardEvent) {
+		if (event.isTrusted) {
+			this.javaService.typeKeyboardKey(event.key).subscribe((res) => {});
+		}
+	}
 
-  @HostListener('document:keyup', ['$event'])
-  keyboardKeyPressed(event: KeyboardEvent){
-    console.log('-->up ', event);
-    if (event.isTrusted){
-      this.javaService.typeKeyboardKey(event.key).subscribe((res) => {
-      });
-    }
-  }
+	toggleKeyboard() {
+		this.displayKeyboard = !this.displayKeyboard;
+	}
 
-  toggleKeyboard() {
-    this.displayKeyboard = !this.displayKeyboard;
-  }
-
-  getDesktopBlobUrl() {
-    return this.imageService.getDesktopBlobUrl();
-  }
-  
-  ngOnInit() {
-    this.imageService.startCapture(this.myCaptureDevice);
-  }
-  
-  ngOnDestroy() {
-    this.imageService.stopCapture(this.myCaptureDevice);
-  }
-
-  getClickPosition(e) {
-    var xPosition = e.offsetX;
-    var yPosition = e.offsetY;
-    console.log("(", xPosition, " ; ", yPosition, ")", e);
-
-    this.javaService.sendLeftClick(xPosition, yPosition).subscribe((res) => {
-    });
-  }
+	getDesktopBlobUrl() {
+		return this.imageService.getDesktopBlobUrl();
+	}
 }

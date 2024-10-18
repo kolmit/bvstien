@@ -1,8 +1,11 @@
 package com.model;
 
+import java.time.LocalDateTime;
+
 public class ShutdownCommand {
     private Boolean isShutdown;
-    private final Integer time;
+    private LocalDateTime shutdownRequestHour;
+    private Integer time;
 
     public ShutdownCommand(Boolean isShutdown, Integer time) {
         this.isShutdown = isShutdown;
@@ -23,5 +26,13 @@ public class ShutdownCommand {
 
     public void setTime(Integer time) {
         time = time;
+    }
+
+    public LocalDateTime getShutdownRequestHour() {
+        return shutdownRequestHour;
+    }
+
+    public void setShutdownRequestHour(LocalDateTime shutdownRequestHour) {
+        this.shutdownRequestHour = shutdownRequestHour;
     }
 }

@@ -1,33 +1,40 @@
 <div *ngIf="!videoSurveillanceMode">
-    <app-header [swipeLeft]="desktopView" [swipeLeftIcon]="swipeLeftIcon" [swipeRight]="cameraView" [swipeRightIcon]="swipeRightIcon"></app-header>
+	<app-header
+		[swipeLeft]="desktopView"
+		[swipeLeftIcon]="swipeLeftIcon"
+		[swipeRight]="cameraView"
+		[swipeRightIcon]="swipeRightIcon"
+	></app-header>
 
-    <div class="remote-container">
-        <div>
-            <app-shutdown-tile></app-shutdown-tile>
-        </div>
-        <div>
-            <app-volume-switch-tile></app-volume-switch-tile>
-            <app-slider-volume></app-slider-volume>
-        </div>
-        <div>
-            <app-television-tile></app-television-tile>
-            <app-youtube-tile></app-youtube-tile>
-        </div>
-
-        <!--<app-vocal-tile></app-vocal-tile>-->
-    </div>
+	<div class="remote-container">
+		<app-shutdown-tile></app-shutdown-tile>
+		<app-slider-volume></app-slider-volume>
+		<app-volume-switch-tile></app-volume-switch-tile>
+		<app-television-tile></app-television-tile>
+		<app-desktop-tile></app-desktop-tile>
+		<app-camera-tile></app-camera-tile>
+		<app-youtube-tile></app-youtube-tile>
+	</div>
+	<div class="desktop-view-sample">
+		<app-desktop-stream [resize]="true" [updateFrequency]="1500"></app-desktop-stream>
+	</div>
 </div>
 
 <div *ngIf="videoSurveillanceMode">
-    <app-header [swipeLeft]="desktopView" [swipeLeftIcon]="swipeLeftIcon" [swipeRight]="cameraView" [swipeRightIcon]="swipeRightIcon"></app-header>
+	<app-header
+		[swipeLeft]="desktopView"
+		[swipeLeftIcon]="swipeLeftIcon"
+		[swipeRight]="cameraView"
+		[swipeRightIcon]="swipeRightIcon"
+	></app-header>
 
-    <div class="remote-container">
-        <div class="tuile_1x1 disabled-tile">Désactivé</div>
-        <div class="tuile_2x1 disabled-tile">Désactivé</div>
-        <div class="tuile_1x1 disabled-tile">Désactivé</div>
-        <div class="tuile_1x1 disabled-tile">Désactivé</div>
-        <div class="tuile_1x1 disabled-tile">Désactivé</div>
-        <div class="tuile_1x1 disabled-tile">Désactivé</div>
-        <div class="tuile_1x1 disabled-tile">Désactivé</div>
-    </div>
+	<div class="remote-container">
+		<div class="tuile_1x1 disabled-tile">Désactivé</div>
+		<div class="tuile_2x1 disabled-tile">Désactivé</div>
+		<div class="tuile_1x1 disabled-tile">Désactivé</div>
+		<div class="tuile_1x1 disabled-tile">Désactivé</div>
+		<div class="tuile_1x1 disabled-tile">Désactivé</div>
+		<div class="tuile_1x1 disabled-tile">Désactivé</div>
+		<div class="tuile_1x1 disabled-tile">Désactivé</div>
+	</div>
 </div>

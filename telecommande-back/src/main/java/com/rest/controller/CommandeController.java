@@ -21,7 +21,7 @@ public class CommandeController {
 	}
 
 	@PostMapping("/shutdown")
-	public Integer sendShutdown(@RequestBody ShutdownCommand shutdownCommand) {
+	public ShutdownCommand sendShutdown(@RequestBody ShutdownCommand shutdownCommand) {
    		return this.commandeService.sendShutdown(shutdownCommand);
 	}
 
