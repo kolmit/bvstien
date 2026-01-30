@@ -1,0 +1,30 @@
+<div style="height: 2000px">
+    <app-header
+        [swipeLeft]="desktopView"
+        [swipeLeftIcon]="swipeLeftIcon"
+        [swipeRight]="cameraView"
+        [swipeRightIcon]="swipeRightIcon"
+    ></app-header>
+
+    <div class="remote-container">
+        <app-shutdown-tile></app-shutdown-tile>
+        <app-slider-volume></app-slider-volume>
+        <app-volume-switch-tile></app-volume-switch-tile>
+        <app-television-tile></app-television-tile>
+        <app-desktop-tile></app-desktop-tile>
+        <app-camera-tile></app-camera-tile>
+        <app-youtube-tile></app-youtube-tile>
+    </div>
+    <div class="desktop-view-sample" #desktopMiniature>
+        @defer (on viewport) {
+            <app-desktop-stream [resize]="true"
+                                [updateFrequency]="3500"
+                                [ratioWidth]="ratioWidth"
+                                [ratioHeight]="ratioHeigth"
+                                (imageLoaded)="desktopImageLoaded()">
+            </app-desktop-stream>
+        } @placeholder () {
+            <div class="tuile_3x1 disabled-tile">Chargement...</div>
+        }
+    </div>
+</div>

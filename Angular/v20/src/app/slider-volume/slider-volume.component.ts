@@ -1,0 +1,34 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatSliderModule } from '@angular/material/slider';
+import { PopupToJavaService } from '../service/popup-to-java.service';
+
+@Component({
+  selector: 'app-slider-volume',
+  templateUrl: './slider-volume.component.html',
+  styleUrls: ['./slider-volume.component.css', '../telecommande/telecommande.component.css'],
+  standalone: true,
+  imports: [CommonModule, MatSliderModule]
+})
+export class SliderVolumeComponent {
+    autoTicks = false;
+    disabled = false;
+    invert = false;
+    max = 100;
+    min = 0;
+    step = 1;
+    thumbLabel = false;
+    currentVolume = 50;
+    vertical = false;
+    
+    constructor(private javaService: PopupToJavaService){
+    }
+
+    getCurrentVolume(){
+      this.javaService.getCurrentVolume();
+    }
+
+    onChangeVolume(value: number){
+      this.javaService.postVolume(value.toString()).subscribe(() => this.currentVolume = value);
+    }
+}

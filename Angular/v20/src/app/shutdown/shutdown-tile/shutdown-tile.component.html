@@ -1,0 +1,11 @@
+@if (stateService.getShutdownActive()) {
+    <div class="tuile_1x1" style="background-color: lightcoral" (click)="openShutdown()">
+        <h4>
+            {{ stateService.displayTimeLeft() }}
+        </h4>
+    </div>
+} @else {
+    <div class="tuile_1x1 material-icons" style="background-color: lightcoral" (click)="openShutdown()">
+        <h1>power_settings_new</h1>
+    </div>
+}

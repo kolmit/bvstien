@@ -1,0 +1,23 @@
+.menu {
+    height: 200px;
+    width: 200px;
+    border: 5px solid lightgrey;
+  }
+  
+  .example-item {
+    height: 50px;
+  }
+  
+  .shutdown-text{
+    text-align: center;
+  }
+
+  .shutdown-action {
+    font-size: 10vw;
+    width: 25vw;
+    height: 25vw;
+  }
+  
+  .pressed {
+    background-color: lightslategray;
+  }

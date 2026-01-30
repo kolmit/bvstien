@@ -1,0 +1,30 @@
+<div style="margin-bottom: 5em">
+  <mat-dialog-content>
+    <app-desktop-stream></app-desktop-stream>
+  </mat-dialog-content>
+  <div></div>
+</div>
+@if (!resize()) {
+  <div class="menu-bar">
+    <img src="assets/keyboard-svgrepo-com.svg" class="menu-input" (click)="toggleKeyboard()"/>
+    @if (displayKeyboard) {
+
+      <mat-form-field
+        class="menu-bar keyboard-input"
+        style="background-color: hsla(0, 0%, 100%, 0.384); border: black 1px solid"
+      >
+
+        <input matInput [(ngModel)]="keyboardInputValue"/>
+        @if (keyboardInputValue) {
+          <button
+            mat-button
+            matSuffix
+            aria-label="Clear"
+            (click)="keyboardInputValue = ''">
+            x
+          </button>
+        }
+      </mat-form-field>
+    }
+  </div>
+}

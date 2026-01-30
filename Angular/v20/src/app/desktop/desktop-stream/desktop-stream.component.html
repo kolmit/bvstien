@@ -1,0 +1,10 @@
+<div (click)="getClickPosition($event)">
+        @if (!!getDesktopBlobUrl()) {
+            <img
+                [src]="getDesktopBlobUrl()"
+                class="screenshot-bureau"
+                [ngClass]="{ 'resize-img': resize() }"
+                alt="Screenshot du bureau recuperee temps-reel"
+            />
+        }
+</div>
