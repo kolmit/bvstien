@@ -15,8 +15,13 @@
 		<app-camera-tile></app-camera-tile>
 		<app-youtube-tile></app-youtube-tile>
 	</div>
-	<div class="desktop-view-sample">
-		<app-desktop-stream [resize]="true" [updateFrequency]="1500"></app-desktop-stream>
+	<div class="desktop-view-sample" #desktopMiniature>
+		<app-desktop-stream [resize]="true"
+							[updateFrequency]="1500"
+							[ratioWidth]="ratioWidth"
+							[ratioHeight]="ratioHeigth"
+							(imageLoaded)="desktopImageLoaded()">
+		</app-desktop-stream>
 	</div>
 </div>
 

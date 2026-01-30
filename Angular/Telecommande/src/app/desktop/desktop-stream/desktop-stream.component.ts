@@ -1,6 +1,7 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
 import { ImageService } from "src/app/service/image-service.service";
 import { PopupToJavaService } from "src/app/service/popup-to-java.service";
+import {Subscription} from "rxjs";
 
 @Component({
 	selector: "app-desktop-stream",
@@ -10,6 +11,12 @@ import { PopupToJavaService } from "src/app/service/popup-to-java.service";
 export class DesktopStreamComponent implements OnInit, OnDestroy {
 	@Input() resize = false;
 	@Input() updateFrequency = 750;
+	@Input() ratioWidth = 1;
+	@Input() ratioHeight = 1;
+
+	@Output() imageLoaded = new EventEmitter<void>();
+
+	captureSubscription: Subscription = null;
 
 	constructor(private imageService: ImageService, private javaService: PopupToJavaService) {}
 
@@ -21,15 +28,17 @@ export class DesktopStreamComponent implements OnInit, OnDestroy {
 		var xPosition = e.offsetX;
 		var yPosition = e.offsetY;
 		console.log("(", xPosition, " ; ", yPosition, ")", e);
+		console.log("(", xPosition*this.ratioWidth, " ; ", yPosition*this.ratioHeight, ")", e);
 
-		this.javaService.sendLeftClick(xPosition, yPosition).subscribe((res) => {});
+		this.javaService.sendLeftClick(xPosition*this.ratioWidth, yPosition*this.ratioHeight).subscribe();
 	}
 
 	ngOnInit() {
-		this.imageService.startCapture("imageBureau", this.updateFrequency);
+		this.captureSubscription = this.imageService.startCapture("imageBureau", this.updateFrequency)
+			.subscribe(() => this.imageLoaded.emit());
 	}
 
 	ngOnDestroy() {
-		this.imageService.stopCapture("imageBureau");
+		this.captureSubscription.unsubscribe()
 	}
 }

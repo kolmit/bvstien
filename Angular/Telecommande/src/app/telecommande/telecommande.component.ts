@@ -1,18 +1,28 @@
-import { Component } from "@angular/core";
-import { environment } from "src/environments/environment";
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {environment} from 'src/environments/environment';
 
 @Component({
-	selector: "app-telecommande",
-	templateUrl: "./telecommande.component.html",
-	styleUrls: ["./telecommande.component.css"],
+	selector: 'app-telecommande',
+	templateUrl: './telecommande.component.html',
+	styleUrls: ['./telecommande.component.css'],
 })
 export class TelecommandeComponent {
-	desktopView: string = "desktop-view";
-	swipeLeftIcon: string = "desktop_windows";
-	cameraView: string = "camera-view";
-	swipeRightIcon: string = "camera_alt";
+	desktopView = 'desktop-view';
+	swipeLeftIcon = 'desktop_windows';
+	cameraView = 'camera-view';
+	swipeRightIcon = 'camera_alt';
+
+	ratioWidth: number = 1;
+	ratioHeigth: number = 1;
 
 	videoSurveillanceMode: boolean = environment.videoSurveillance;
+	@ViewChild('desktopMiniature', { static: false }) private view!: ElementRef<any>;
 
-	constructor() {}
+	desktopImageLoaded() {
+		const width = this.view.nativeElement.offsetWidth;
+		const height = this.view.nativeElement.offsetHeight;
+
+		this.ratioWidth = 6000/width;
+		this.ratioHeigth = 1440/height;
+	}
 }
