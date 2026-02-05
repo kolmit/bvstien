@@ -1,7 +1,5 @@
 package com.model;
 
-import javax.persistence.Entity;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Position {

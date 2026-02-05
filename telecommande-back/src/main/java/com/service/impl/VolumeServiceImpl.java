@@ -26,8 +26,7 @@ public class VolumeServiceImpl implements VolumeService {
     private boolean muted;
 
     private final double tickVolume = 655.35; // 65535/100 (100 étant le nombre de pas sur le slider du front)
-    private final String speakersOutput = "\"Haut-parleurs\"";
-    private final String headsetOutput = "\"Casque\"";
+    private final String speakersOutput = "\"Haut-parleurs (Realtek(R) Audio)\"";
     private String currentSoundDevice;
 
     /**

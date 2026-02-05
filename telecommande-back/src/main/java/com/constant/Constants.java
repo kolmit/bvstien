@@ -10,8 +10,7 @@ public class Constants {
     public static final String CMD_STANDBY = "nircmd standby";
 
     public static final String CMD_CANCEL_SHUTDOWN = "shutdown -a";
-
-    public static final String PATH_CHROME = "\"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome\"";
+    public static final String PATH_CHROME = "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome\"";
     public static final String CMD_CHROME = Constants.PATH_CHROME + " -fullscreen";
     public static final String CMD_KILL_CHROME = "taskkill /F /IM chrome* /T";
 

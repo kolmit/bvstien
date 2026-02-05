@@ -22,7 +22,6 @@ public class KeyboardController {
 
     @PostMapping(value="/pressKeyboardKey")
     public boolean pressKeyboardKey(@RequestBody String key) throws NoSuchFieldException, IllegalAccessException {
-
         List<Integer> keyToPress = new ArrayList<>();
 
         // Si c'est une majuscule, on va devoir appuyer sur SHIFT.

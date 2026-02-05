@@ -23,7 +23,7 @@ import java.util.TimerTask;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ImageController {
-	
+
 	@Autowired
 	CommandeRunner commandRunner;
 
@@ -48,14 +48,21 @@ public class ImageController {
 			}
 		}
 		byte [] data = bos.toByteArray();
-	    StreamingResponseBody body = (outputStream) -> {
-                outputStream.write(data);
-                outputStream.flush();
-	        };
+		StreamingResponseBody body;
+
+			body = (outputStream) -> {
+				try {
+					outputStream.write(data);
+					outputStream.flush();
+				} catch (Exception e) {
+					outputStream.close();
+				}
+			};
+
 	    return new ResponseEntity<StreamingResponseBody>(body, HttpStatus.OK);
 	}
 
-	
+
 	@PostMapping(value="/leftclick", consumes = "application/json")
 	public void sendLeftClick(@RequestBody Position body) {
 		commandRunner.doLeftClick(body.getxPosition(), body.getyPosition());
@@ -135,6 +142,6 @@ public class ImageController {
 
 	@GetMapping(value = "/closeWebcam")
 	public boolean closeWebcam() {
-		return this.webcam.close();
+		return this.webcam != null && this.webcam.close();
 	}
 }
